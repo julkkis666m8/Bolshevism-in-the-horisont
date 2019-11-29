@@ -4,9 +4,9 @@ import constants.Constants;
 
 public class PopNeeds {
 
-	private double wheat = 0.0001;
-	private double iron = 0.00001;
-	private double steel = 0.0001;
+	private double wheat = 0.005;
+	private double iron = 0.0001;
+	private double steel = 0.001;
 	
 	
 	public PopNeeds(int job) {

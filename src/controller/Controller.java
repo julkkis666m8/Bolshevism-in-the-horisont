@@ -1,7 +1,4 @@
 package controller;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import main.Main;
@@ -55,9 +52,11 @@ public class Controller {
 						
 						//temp:
 						
-						pop.jobCounter(nation, state);
+						pop.jobCounter(nation, state);//has sell for RGO
 						Taxes.taxMe(pop, nation);
+						//supplyHandler();
 						pop.buy(nation, state);
+						//demandHandler();
 						
 						//System.out.println(itteration);
 						

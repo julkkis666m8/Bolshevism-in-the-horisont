@@ -222,9 +222,9 @@ public class Pop {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
 		}
 		else if (job == Constants.ARTISAN) {
-			goods.addAll(PopSellHandler.artesanJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket);
-			goods.removeAll(goods);
+			//goods.addAll(PopSellHandler.artesanJob(this, state));
+			//income = PopSellHandler.sell(this, goods, state.localMarket);
+			//goods.removeAll(goods);
 		}
 		else if (job == Constants.SOLDIER) {
 			income =  nation.getNationCash(nation.getSoldierPay()*population);
