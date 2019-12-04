@@ -47,7 +47,7 @@ public class Main {
 		
 		//testing nation w/ 3 states
 		for (int i = 0; i < 3; i++) {
-			germany.addState(new State("State "+i));
+			germany.addState(new State("State "+i, germany));
 		}
 
 

@@ -9,7 +9,7 @@ public class Germany {
 	
 	public Germany(int states) {
 		for (int i = 0; i < states; i++) {
-			this.states.add(new State("GermanState "+i));
+			//this.states.add(new State("GermanState "+i/*, Nation*/));
 		}
 	}
 	public String getInfo() {

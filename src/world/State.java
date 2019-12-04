@@ -32,7 +32,9 @@ private double fertility;
 		return string;
 	}
 
-	public State(String name) {
+	public State(String name, Nation nation) {
+		
+		this.nation = nation;
 		
 		//TODO: temp
 		clerkWage = 0.50;
@@ -161,12 +163,12 @@ private double fertility;
 		return capitalists;
 	}
 
-	public void AddEducation(int population) {
+	public void AddEducation(int population, double effect) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void convert(int population) {
+	public void convert(int population, double effect) {
 		// TODO Auto-generated method stub
 		
 	}

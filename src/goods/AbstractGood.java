@@ -45,13 +45,13 @@ public abstract class AbstractGood {
 		if (amount < 1) {
 			daysOnPos = 0;
 			daysOnNeg++;
-			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001*(daysOnNeg*0.001)));
+			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001/**(daysOnNeg*0.001)*/));
 			
 		}
 		else {
 			daysOnNeg = 0;
 			daysOnPos++;
-			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001*(daysOnPos*0.001)));
+			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001/**(daysOnPos*0.001)*/));
 			
 		}
 	}

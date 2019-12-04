@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import constants.Constants;
+import constants.Functions;
 import goods.AbstractGood;
 import market.Taxes;
 
@@ -27,15 +28,17 @@ public class Pop {
 	private double incomeTaxable = 0;
 	private double needsFurfilled = 1;
 	private State state;
-	private double fertility = 0.0001;
+	private double fertility = 0.01;
+	private double growthOMatic = 0;
 
 	
 	
 	
 	
 	public Pop(int population, int sex, int race, int religion, float age, int job, Ideology ideology,
-			double averageWealth) {
-		
+			double averageWealth, State state) {
+
+		this.state = state;
 
 		goods = new LinkedList<AbstractGood>();
 
@@ -62,6 +65,8 @@ public class Pop {
 	
 	public Pop(int population, int religion, int race, int job, double averageWealth, State state) {
 
+		this.state = state;
+		
 		goods = new LinkedList<AbstractGood>();
 		
 		this.population = population;
@@ -212,9 +217,11 @@ public class Pop {
 			income = 100*population;
 		}
 		else if (job == Constants.CLERGYMAN) {
+			double neededInc = nation.getCleregymanPay()*population;
 			income = nation.getNationCash(nation.getCleregymanPay()*population);
-			state.AddEducation(population);
-			state.convert(population);
+			double effect = income/neededInc;
+			state.AddEducation(population, effect);
+			state.convert(population, effect);
 		}
 		else if (job == Constants.CLERK) {
 			income = state.getClerkPay(state.getClerkWage()*population);
@@ -383,13 +390,46 @@ public class Pop {
 
 		if (getStrata() == Constants.LOWER_STRATA) {
 			if (getAverageWealth() > 10000 && needsFurfilled >= 1) {
-				int growth = (int)((population*fertility)+1);
-				double toPay = growth * (5000*population);
+				int growth = (int)((fertility)+1);
+				double toPay = growth * (5000);
 				System.out.println(growth+" BIRTHs "+toPay);
 				pay(toPay);
+				state.nation.births += growth;
 				population += growth;
 				
-			}			
+			}
+			/*if (getAverageWealth() > (2*state.nation.getBabyPrice()) && needsFurfilled >= 0.9) {
+				int growth = 0;
+				while(growthOMatic >= 1) {
+					System.out.println("BIRTHS!½!!");
+					if(growthOMatic  >= 1) {
+						growthOMatic--;
+						growth++;
+					}
+				}
+				int i = (int)((getTotalWealth()/5)/state.nation.getBabyPrice());
+				while(getTotalWealth() > (10*state.nation.getBabyPrice()) && needsFurfilled >= 0.9) {
+					i++;
+					System.out.println( Functions.formatNum(getAverageWealth())+" v "+growthOMatic+" s "+(state.nation.getBabyPrice()));
+					pay(state.nation.getBabyPrice());
+					growthOMatic += fertility;
+					if(i < 0) {
+						break;
+					}
+				}
+				//System.out.println(growth+" BIRTHs "+state.nation.getBabyPrice());
+				state.nation.births += growth;
+				System.out.println(state.nation.births+", "+growth);
+				population += growth;
+				
+			}*/
+		}
+		if(job == Constants.ARTISAN) {
+			if(getAverageWealth() > (10*state.nation.getBabyPrice()) && needsFurfilled >= 0.9) {
+				population++;
+				//state.nation.births += 1;
+				pay(state.nation.getBabyPrice());
+			}
 		}
 		
 	}

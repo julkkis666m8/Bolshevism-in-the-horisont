@@ -23,6 +23,8 @@ public class Nation {
 	private NationalMarket nationalMarket;
 	private double cleregymanPay;
 	private double soldierPay;
+	public double babyPrice = 500;
+	public int births = 0; //for statistics
 	
 	//TODO: add lists for discriminated races/etc and perfered races/etc
 	
@@ -45,8 +47,8 @@ public class Nation {
 		
 		
 		coffers = 1000000000;
-		taxEfficency = 1;
-		taxPercentage = 0.75;
+		taxEfficency = 0.9;
+		taxPercentage = 0.24;
 		states = new LinkedList<State>();
 		coreRaces = new LinkedList<Integer>();
 		acceptedRaces = new LinkedList<Integer>();
@@ -188,6 +190,11 @@ public class Nation {
 		return money;
 	}
 	
+	private int getBirths() {
+		int temp = births;
+		//births = 0;
+		return temp;
+	}
 
 	public String getInfo() {
 		String string = nameADJ+" information:";
@@ -197,6 +204,7 @@ public class Nation {
 		string += "\nAccepted Pop: "+getAcceptedPop();
 		string += "\nHated Pop:    "+getHatedPop();
 		string += "\nOther Pop:    "+getOtherPop();
+		string += "\ngrowth Pop:   "+getBirths();
 		string += "\npop wealth: "+Functions.formatNum(getTotalMoney())+"£";
 		string += "\nstate weal:  "+Functions.formatNum(coffers)+"£";
 		string += "\nTotal weth:  "+Functions.formatNum(getTotalMoney()+coffers)+"£";
@@ -303,9 +311,20 @@ public class Nation {
 	}
 
 	public double getNationCash(double money) {
-		//TODO: chek negative money situation
-		coffers -= money;
-		return money;
+		if (coffers >= money) {
+			coffers -= money;
+			return money;			
+		}
+		else if (coffers > 0) {
+			double adjustedMoney = coffers;
+			coffers = 0;
+			return adjustedMoney;
+		}
+		else {
+			return 0;
+		}
+		
+
 	}
 
 	public double getSoldierPay() {
@@ -322,6 +341,12 @@ public class Nation {
 
 	private void setNationalMarket(NationalMarket nationalMarket) {
 		this.nationalMarket = nationalMarket;
+	}
+
+
+
+	public double getBabyPrice() {
+		return babyPrice;
 	}
 
 	
