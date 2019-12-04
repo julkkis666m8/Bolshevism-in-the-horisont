@@ -27,6 +27,7 @@ public class Pop {
 	private double incomeTaxable = 0;
 	private double needsFurfilled = 1;
 	private State state;
+	private double fertility = 0.0001;
 
 	
 	
@@ -208,7 +209,7 @@ public class Pop {
 		double income = 0;
 		
 		if (job == Constants.CAPITALIST) {
-			income = 10;
+			income = 100*population;
 		}
 		else if (job == Constants.CLERGYMAN) {
 			income = nation.getNationCash(nation.getCleregymanPay()*population);
@@ -222,21 +223,21 @@ public class Pop {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
 		}
 		else if (job == Constants.ARTISAN) {
-			//goods.addAll(PopSellHandler.artesanJob(this, state));
-			//income = PopSellHandler.sell(this, goods, state.localMarket);
-			//goods.removeAll(goods);
+			goods.addAll(PopSellHandler.artesanJob(this, state));
+			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+			goods.removeAll(goods);
 		}
 		else if (job == Constants.SOLDIER) {
 			income =  nation.getNationCash(nation.getSoldierPay()*population);
 		}
 		else if (job == Constants.LABORER) {
 			goods.addAll(PopSellHandler.labourerJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket);
+			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
 			goods.removeAll(goods);
 		}
 		else if (job == Constants.FARMER) {
 			goods.addAll(PopSellHandler.farmerJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket);
+			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
 			goods.removeAll(goods);
 		}
 		
@@ -339,18 +340,24 @@ public class Pop {
 
 	public void buy(Nation nation, State state) {
 		
-		double[] needs = popNeeds.getNeeds(population);
+		double[] needs = popNeeds.getNeeds(population, job);
+		double[] buyTheseNeeds = new double[needs.length];
+		for(int i = 0; i < needs.length; i++) {
+			buyTheseNeeds[i] = needs[i];
+		}
 		
-		double[] buyTheseNeeds = needs;
 		
+		//"buy" from self
+		buyTheseNeeds = PopSellHandler.buyFromSelf(this, buyTheseNeeds);
 		
+		//buy from local market
 		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), state.localMarket);
 		
 		
 		//TODO: add global market
 		
 		
-		needsFurfilled = constants.Functions.divideArrays(buyTheseNeeds, needs);
+		setNeedsFurfilled(constants.Functions.divideArrays(buyTheseNeeds, needs));
 		
 	}
 
@@ -359,6 +366,38 @@ public class Pop {
 		List<Pop> pops = new ArrayList<>();
 		pops.add(this);
 		return pops;
+	}
+
+
+	public double getNeedsFurfilled() {
+		return needsFurfilled;
+	}
+
+
+	public void setNeedsFurfilled(double needsFurfilled) {
+		this.needsFurfilled = needsFurfilled;
+	}
+
+
+	public void birthControll() {
+
+		if (getStrata() == Constants.LOWER_STRATA) {
+			if (getAverageWealth() > 10000 && needsFurfilled >= 1) {
+				int growth = (int)((population*fertility)+1);
+				double toPay = growth * (5000*population);
+				System.out.println(growth+" BIRTHs "+toPay);
+				pay(toPay);
+				population += growth;
+				
+			}			
+		}
+		
+	}
+
+
+	private int getStrata() {
+		return Constants.jobToClass(job);
+
 	}
 
 

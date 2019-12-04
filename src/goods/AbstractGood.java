@@ -1,18 +1,21 @@
 package goods;
 
+import constants.Functions;
 import market.AbstractMarket;
 import world.State;
 
 public abstract class AbstractGood {
 
-	public static final double baseValue = 20;
+	public double baseValue = 1;
 	public double valueMultiplyer = 1;
-	public static double MAX_PRICE = 1000000000;
-	public static double MIN_PRICE = 0.01;
+	public static double MAX_PRICE = 100000;
+	public static double MIN_PRICE = 0.000001;
 	public State originState;
 	private double amount;
 	protected String goodName;
 	protected int constant = -1;
+	private int daysOnNeg = 0;
+	private int daysOnPos = 0;
 	
 	
 	public AbstractGood(double amount, State originState) {
@@ -23,15 +26,34 @@ public abstract class AbstractGood {
 	
 	@Override
 	public String toString() {
-		return goodName+": "+getValue(1)+" * "+amount;
+		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "+Functions.formatNum(amount)+" units, multiplyer: "+Functions.formatNum(valueMultiplyer);
 	}
-	
+
+	public double getValue(double amount) {
+		//setValueMultiplyer(valueMultiplyer);
+		return amount*(baseValue*valueMultiplyer);
+	}
 	
 	public double sellGood(double amount, AbstractMarket market) {
 		
 		return market.add(this,amount);
 		
 		
+	}
+	
+	public void calculateAviliability() {
+		if (amount < 1) {
+			daysOnPos = 0;
+			daysOnNeg++;
+			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001*(daysOnNeg*0.001)));
+			
+		}
+		else {
+			daysOnNeg = 0;
+			daysOnPos++;
+			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001*(daysOnPos*0.001)));
+			
+		}
 	}
 	
 	
@@ -46,8 +68,12 @@ public abstract class AbstractGood {
 //		
 //	}
 	
+	/**
+	 * used to get new price with maximum and minimum prices in mind
+	 * @param newMultiplyer
+	 */
 	private void setValueMultiplyer(double newMultiplyer) {
-		System.out.println(getName()+": "+newMultiplyer);
+		//System.out.println(getName()+": "+newMultiplyer);
 		if((baseValue*newMultiplyer) > MAX_PRICE) {
 			valueMultiplyer = (MAX_PRICE / baseValue);
 			return;
@@ -56,13 +82,10 @@ public abstract class AbstractGood {
 			valueMultiplyer = (MIN_PRICE / baseValue);
 			return;
 		}
+		
 		valueMultiplyer = newMultiplyer;
 	}
 	
-	public double getValue(double amount) {
-		setValueMultiplyer(valueMultiplyer);
-		return amount*(baseValue*valueMultiplyer);
-	}
 	
 	public double getAmount() {
 		return amount;
@@ -102,13 +125,13 @@ public abstract class AbstractGood {
 	
 
 	public void addAmount(double amount) {
-		setValueMultiplyer(valueMultiplyer+(amount/this.amount));
+		//setValueMultiplyer(valueMultiplyer+(amount/this.amount));
 		this.amount += amount;
 	}
 
 
 	public void removeAmount(double amount) {
-		setValueMultiplyer(valueMultiplyer-(amount/this.amount));
+		//setValueMultiplyer(valueMultiplyer-(amount/this.amount));
 		this.amount -= amount;
 		if(amount < 0) {
 			amount = 0;

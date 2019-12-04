@@ -14,7 +14,7 @@ import market.NationalMarket;
 
 public class PopSellHandler {
 
-	public static double sell(Pop pop, List<AbstractGood> goods, AbstractMarket market) {
+	public static double sell(Pop pop, List<AbstractGood> goods, AbstractMarket market, Nation nation) {
 		
 		double money = 0;
 		
@@ -24,12 +24,41 @@ public class PopSellHandler {
 			money += good.sellGood(amount, market);
 			
 		}
+		
+		nation.coffers -= money; //TEMPORARY TEST WHATEVER
 
 		return money;
 		
 	}
-	
-	
+
+
+	public static double[] buyFromSelf(Pop pop, double[] buyTheseNeeds) {
+
+		for(int goodConst = 0; goodConst < Constants.AMOUNT_OF_GOODS; goodConst++) {
+
+			List<AbstractGood> goods = pop.getGoods();
+
+			try {
+				for(AbstractGood good : goods) {
+					if (good.getAmount() > 0) {
+
+						double adjustedAmount = buyTheseNeeds[goodConst];
+
+						if(adjustedAmount > good.getAmount()) {
+							adjustedAmount = good.getAmount();
+						}
+						buyTheseNeeds[goodConst] -= adjustedAmount;
+						good.removeAmount(adjustedAmount);
+					}
+				}
+			}
+			catch(NullPointerException e) {
+				System.out.println(e);
+			}	
+		}
+		return buyTheseNeeds;
+	}
+
 
 	public static double[] buy(Pop pop, double[] buyTheseNeeds, double totalMoney, AbstractMarket market) {
 		
@@ -51,10 +80,12 @@ public class PopSellHandler {
 							}
 							
 							double goodPrice = good.getValue(adjustedAmount);
-							
+							//System.out.println("adjustedAmount "+adjustedAmount);
 							if(goodPrice < money) {
 								money -= goodPrice;
+								//System.out.println("goodConst b4"+buyTheseNeeds[goodConst]);
 								buyTheseNeeds[goodConst] -= adjustedAmount;
+								//System.out.println("after"+buyTheseNeeds[goodConst]);
 								good.removeAmount(adjustedAmount);
 							}
 							else {
@@ -135,7 +166,7 @@ public class PopSellHandler {
 		
 		
 		//efficency calculator
-		double amount = population * 0.001;
+		double amount = population * 0.05;
 		
 		List<AbstractGood> buyGoods = state.localMarket.getGood(constants.Constants.IRON, amount);
 		
@@ -150,7 +181,9 @@ public class PopSellHandler {
 		}
 
 		
-		double adjustedAmount =0;
+		double EFFICENCY = 0.05;
+		
+		double adjustedAmount = EFFICENCY * adjustedAmountBougth;
 				 
 				 
 		goods.add(new Steel(adjustedAmount, state));
@@ -159,6 +192,8 @@ public class PopSellHandler {
 		
 		return goods;
 	}
+
+
 	
 	
 }

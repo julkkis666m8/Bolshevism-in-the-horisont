@@ -1,5 +1,7 @@
 package market;
 
+import constants.Functions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class AbstractMarket {
 	
 
 	public String getStockpileString() {
-		return "size is "+stockPile.size()+" and string is: "+stockPile.toString();
+		return "size is "+ Functions.formatNum(stockPile.size())+" and string is: "+stockPile.toString();
 	}
 	
 	
@@ -40,6 +42,18 @@ public class AbstractMarket {
 		double money = newGood.getValue(amount);
 		//System.out.println(money);
 		return money;
+		
+	}
+	
+	public void updateGoods(){
+		
+		
+		for(AbstractGood g : stockPile) {
+			
+			g.calculateAviliability();
+			
+		}
+		
 		
 	}
 

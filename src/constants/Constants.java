@@ -100,7 +100,7 @@ public class Constants {
 
 		return title;
 	}
-	public static int JobToClass(int job) {
+	public static int jobToClass(int job) {
 
 		int strata = 0;
 

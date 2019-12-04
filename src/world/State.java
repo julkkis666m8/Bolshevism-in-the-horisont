@@ -125,7 +125,7 @@ private double fertility;
 			return 2;
 		}
 		else if (job == Constants.ARTISAN) {
-			return 6;
+			return 600;
 		}
 		else if (job == Constants.SOLDIER) {
 			return 1;

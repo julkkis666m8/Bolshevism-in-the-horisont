@@ -52,11 +52,11 @@ public class Main {
 
 
 
-	      new Thread("PopWindow"){
+	      /*new Thread("PopWindow"){
 	        public void run(){
 	    		Application.launch(view.PopWindow.class, args);
 	        }
-	      }.start();
+	      }.start();*/
 		
 		while (true) {
 			

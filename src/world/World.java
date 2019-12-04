@@ -33,6 +33,14 @@ public class World {
 		}
 		return allStates;
 	}
+	
+	public List<Pop> getAllPops() {
+		List<Pop> pops = new ArrayList<Pop>();
+		for (State s : getAllStates()) {
+			pops.addAll(s.getPops());
+		}
+		return pops;
+	}
 
 	public List<Nation> getNations() {
 		return nations;

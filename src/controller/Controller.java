@@ -23,9 +23,8 @@ public class Controller {
 		
 		for(int itteration = 0; itteration < simNum; itteration++) {
 			
-			//tickStates(Main.world.getAllStates());
-
-			//List<State> states = Main.world.getAllStates();
+			updateWorldsGoodPrices();
+			updatePopNeeds();
 			
 			List<Nation> nations = Main.world.getNations();
 			
@@ -35,7 +34,6 @@ public class Controller {
 				
 
 				for(int stateIndex = 0; stateIndex < states.size(); stateIndex++) {
-					//tickPops(states.get(i).pops);
 					State state = states.get(stateIndex);
 					List<Pop> pops = state.pops;
 					
@@ -48,15 +46,11 @@ public class Controller {
 							i--;
 						}
 						
-						//PopTicker.tick(pop);
-						
-						//temp:
-						
 						pop.jobCounter(nation, state);//has sell for RGO
-						Taxes.taxMe(pop, nation);
-						//supplyHandler();
+						Taxes.taxMe(pop, nation); //income tax
 						pop.buy(nation, state);
-						//demandHandler();
+						
+						pop.birthControll();
 						
 						//System.out.println(itteration);
 						
@@ -72,40 +66,26 @@ public class Controller {
 			
 		}
 	}
-	
-	
-	
-/*
-	private void tickStates(List<State> states) {
-		//run tick on every state
-		for(int i = 0; i < states.size(); i++) {
-			tickPops(states.get(i).pops);
-		}
-	}
-	
-	
-	
 
-	private void tickPops(LinkedList<Pop> pops) {
-		//use itterator here to run over all pops in for-loop
-		//remove empty pops from list
+	/**
+	 * sets pop-needs to default for start of itteration
+	 */
+	private void updatePopNeeds() {
 		
-		
-		
-		for(int i = 0; i < pops.size(); i++) {
-			
-			Pop pop = pops.get(i);
-			
-			if (pop.getPopulation() <= 0) {
-				pops.remove(i);
-				i--; //TODO: BUGCHEK IF THIS WORKS AS INTENDED
-			}
-			
-			
-			PopTicker.tick(pop);
+		for (Pop p : main.Main.world.getAllPops()) {
 			
 		}
+		
 	}
-*/
+
+	/**
+	 * prices go up if no goods left in market, down if
+	 */
+	private void updateWorldsGoodPrices() {
+		for (State s : main.Main.world.getAllStates()){
+			s.localMarket.updateGoods();
+		}
+	}
+	
 	
 }

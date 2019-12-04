@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import constants.Constants;
+import constants.Functions;
 import goods.AbstractGood;
 import main.Main;
 import market.NationalMarket;
@@ -43,9 +44,9 @@ public class Nation {
 		setNationalMarket(new NationalMarket(this, main.Main.world.getGlobalMarket()));
 		
 		
-		coffers = 1000000;
-		taxEfficency = 0.90;
-		taxPercentage = 0.24;
+		coffers = 1000000000;
+		taxEfficency = 1;
+		taxPercentage = 0.75;
 		states = new LinkedList<State>();
 		coreRaces = new LinkedList<Integer>();
 		acceptedRaces = new LinkedList<Integer>();
@@ -191,13 +192,14 @@ public class Nation {
 	public String getInfo() {
 		String string = nameADJ+" information:";
 
-		string += "\nTotal Pop: "+getTotalPop();
-		string += "\nCore Pop: "+getCorePop();
+		string += "\nTotal Pop:    "+getTotalPop();
+		string += "\nCore Pop:     "+getCorePop();
 		string += "\nAccepted Pop: "+getAcceptedPop();
-		string += "\nHated Pop: "+getHatedPop();
-		string += "\nOther Pop: "+getOtherPop();
-		string += "\nTotal pop weath: "+getTotalMoney()+"£";
-		string += "\nTotal money in bank: "+coffers+"£";
+		string += "\nHated Pop:    "+getHatedPop();
+		string += "\nOther Pop:    "+getOtherPop();
+		string += "\npop wealth: "+Functions.formatNum(getTotalMoney())+"£";
+		string += "\nstate weal:  "+Functions.formatNum(coffers)+"£";
+		string += "\nTotal weth:  "+Functions.formatNum(getTotalMoney()+coffers)+"£";
 		
 //		for (int i = 0; i < states.size(); i++) {
 //			string += states.get(i).getInfo();
@@ -233,26 +235,37 @@ public class Nation {
 		
 		double justSpent = 0;
 		double incomeTaxable = 0; 
+		int itterations = 0;
+		double needsFurfilled = 0;
 		
 		for (int i = 0; i < pops.size(); i++) {
+			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
 			totalWealth += pop.totalCash();
 			justSpent += pop.getJustSpent();
 			incomeTaxable += pop.getIncomeTaxable();
+			needsFurfilled += pop.getNeedsFurfilled();
 		}
+		
+		needsFurfilled = (needsFurfilled / itterations)*100;//%
+		
+		
 
 		if(population != 0) {
-			string += "\npopulation: "+population+" | ";	
+			string += "population: "+population+" | ";	
 		}
 		if(totalWealth != 0) {
-			string += "\ntotalWealth: "+totalWealth+"£ | ";	
+			string += "totalWealth: "+Functions.formatNum(totalWealth)+"£ | ";	
 		}
 		if(justSpent != 0) {
-			string += "justSpent: "+justSpent+"£ | ";	
+			string += "justSpent: "+Functions.formatNum(justSpent)+"£ | ";	
 		}
 		if(incomeTaxable != 0) {
-			string += "incomeTaxable: "+incomeTaxable+"£ | ";	
+			string += "incomeTaxable: "+Functions.formatNum(incomeTaxable)+"£ | ";	
+		}
+		if(itterations != 0) {
+			string += "needsFurfilled: "+Functions.formatNum(needsFurfilled)+"% | ";	
 		}
 		
 		
