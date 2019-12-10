@@ -6,8 +6,10 @@ import java.util.List;
 
 import constants.Constants;
 import goods.AbstractGood;
+import goods.Cotton;
 import goods.Iron;
 import goods.Steel;
+import goods.Timber;
 import goods.Wheat;
 import market.AbstractMarket;
 import market.NationalMarket;
@@ -128,9 +130,10 @@ public class PopSellHandler {
 		
 		
 		//efficency calculator
-		double amount = population * 0.01;
+		double amount = population * 0.025;
 		
 		goods.add(new Iron(amount, state));
+		goods.add(new Timber(amount, state));
 		
 		
 		
@@ -146,9 +149,10 @@ public class PopSellHandler {
 		
 		
 		//efficency calculator
-		double amount = population * 0.1;
-		
+		double amount = population * 0.025 * state.getFertility();
+
 		goods.add(new Wheat(amount, state));
+		goods.add(new Cotton(amount, state));
 		
 		
 		
@@ -166,11 +170,11 @@ public class PopSellHandler {
 		
 		
 		//efficency calculator
-		double amount = population * 0.05;
+		double amount = population * 0.01;
 		
 		List<AbstractGood> buyGoods = state.localMarket.getGood(constants.Constants.IRON, amount);
 		
-		double adjustedAmountBougth = 0;;
+		double adjustedAmountBougth = 0;
 		
 		for(AbstractGood good : buyGoods) {
 			double bougth = good.buyForMaxMoney(amount, pop.totalCash());
@@ -181,7 +185,7 @@ public class PopSellHandler {
 		}
 
 		
-		double EFFICENCY = 0.05;
+		double EFFICENCY = 0.5;
 		
 		double adjustedAmount = EFFICENCY * adjustedAmountBougth;
 				 

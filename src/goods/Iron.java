@@ -8,7 +8,7 @@ public class Iron extends AbstractGood {
 	public Iron(double amount, State originState) {
 		super(amount, originState);
 
-		baseValue = 20;
+		baseValue = 7;
 		//MAX_PRICE = 20;
 		this.goodName = "iron";
 		this.constant = Constants.IRON;

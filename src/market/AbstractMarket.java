@@ -1,11 +1,13 @@
 package market;
 
+import constants.Constants;
 import constants.Functions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import goods.AbstractGood;
+import world.State;
 
 public class AbstractMarket {
 
@@ -57,6 +59,57 @@ public class AbstractMarket {
 		
 	}
 
+	/**
+	 * minimum price for a good on a market
+	 * @param goodConst
+	 * @param amount
+	 * @return
+	 */
+	public double getGoodMinPrice(int goodConst, double amount) {
+		List<AbstractGood> goods = getAllOfGood(goodConst);
+		double newValue;
+		double minPrice = -1; //prices can't be negative
+		//finds average price for good on market
+		for (AbstractGood g : goods) {
+			if ((newValue = g.getValue(amount)) < minPrice || minPrice == -1) {
+				minPrice = newValue; 
+			}
+		}
+		
+		//TODO: what if item not in market yet?
+		
+		if(minPrice != -1) {
+		return minPrice;
+		}
+		else {
+			return 9999; //to make artesans make one of each to start the economic calc. 
+		}
+
+	}
+	/**
+	 * maximum price for a good on a market
+	 * @param goodConst
+	 * @param amount
+	 * @return
+	 */
+	public double getGoodMaxPrice(int goodConst, double amount) {
+		List<AbstractGood> goods = getAllOfGood(goodConst);
+		double maxPrice = -1; //prices can't be negative
+		//finds average price for good on market
+		for (AbstractGood g : goods) {
+			if ((g.getValue(amount)) > maxPrice) {
+				maxPrice = g.getValue(amount); 
+			}
+		}
+
+		if(maxPrice != -1) {
+			return maxPrice;
+		}
+		else {
+			return 9999; //to make artesans make one of each to start the economic calc.
+		}
+	}
+
 
 	public List<AbstractGood> getGood(int goodConst, double d) {
 		
@@ -78,6 +131,19 @@ public class AbstractMarket {
 		}
 		
 		marketNeed(goodConst, stillNeeded);
+		return goods;
+	}
+	
+	public List<AbstractGood> getAllOfGood(int goodConst){
+
+		List<AbstractGood> goods = new ArrayList<>();
+		for(AbstractGood good : stockPile) {
+			if(good.isGoodToBuy(goodConst)) {
+				goods.add(good);
+			}
+		}
+		
+		
 		return goods;
 	}
 

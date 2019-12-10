@@ -1,21 +1,29 @@
 package goods;
 
+import constants.Constants;
 import constants.Functions;
 import market.AbstractMarket;
 import world.State;
 
 public abstract class AbstractGood {
 
-	public double baseValue = 1;
+	public double baseValue = 5;
 	public double valueMultiplyer = 1;
-	public static double MAX_PRICE = 100000;
-	public static double MIN_PRICE = 0.000001;
+	public double sumModifier = 0;
+	public static double MAX_PRICE = 100;
+	public static double MIN_PRICE = 0.01;
+	public static double NON_PRICE = 0.000001;
 	public State originState;
 	private double amount;
 	protected String goodName;
 	protected int constant = -1;
+	public int getConstant() {
+		return constant;
+	}
 	private int daysOnNeg = 0;
 	private int daysOnPos = 0;
+	
+	
 	
 	
 	public AbstractGood(double amount, State originState) {
@@ -23,15 +31,27 @@ public abstract class AbstractGood {
 		this.originState = originState;
 	}
 	
+	/**
+	 * constructor that gives specific item according to it's constant
+	 * @param amount
+	 * @param originState
+	 * @param constant
+	 */
+	public AbstractGood getAbstractGoodOfConst(double amount, State originState, int constant) {
+		return Constants.getGood(amount, originState, constant);
+	}
+	
 	
 	@Override
 	public String toString() {
-		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "+Functions.formatNum(amount)+" units, multiplyer: "+Functions.formatNum(valueMultiplyer);
+		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "
+				+Functions.formatNum(amount)+" units, multiplyer: "+Functions.formatNum(valueMultiplyer)+" Summer: "+Functions.formatNum(sumModifier);
 	}
 
 	public double getValue(double amount) {
 		//setValueMultiplyer(valueMultiplyer);
-		return amount*(baseValue*valueMultiplyer);
+		//return amount*(baseValue*valueMultiplyer);
+		return amount*(baseValue + sumModifier );
 	}
 	
 	public double sellGood(double amount, AbstractMarket market) {
@@ -45,13 +65,15 @@ public abstract class AbstractGood {
 		if (amount < 1) {
 			daysOnPos = 0;
 			daysOnNeg++;
-			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001/**(daysOnNeg*0.001)*/));
+			//setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001/**(daysOnNeg*0.001)*/));
+			setValueSumModifier(sumModifier+0.01);
 			
 		}
 		else {
 			daysOnNeg = 0;
 			daysOnPos++;
-			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001/**(daysOnPos*0.001)*/));
+			//setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001/**(daysOnPos*0.001)*/));
+			setValueSumModifier(sumModifier-0.01);
 			
 		}
 	}
@@ -68,6 +90,20 @@ public abstract class AbstractGood {
 //		
 //	}
 	
+	private void setValueSumModifier(double newModifier) {
+		//System.out.println(getName()+": "+newMultiplyer);
+		if((baseValue+sumModifier) > MAX_PRICE) {
+			sumModifier = (MAX_PRICE - baseValue);
+			return;
+		}
+		if((baseValue+newModifier) < MIN_PRICE) {
+			sumModifier = (NON_PRICE - baseValue);
+			return;
+		}
+		
+		sumModifier = newModifier;
+	}
+
 	/**
 	 * used to get new price with maximum and minimum prices in mind
 	 * @param newMultiplyer
@@ -79,7 +115,7 @@ public abstract class AbstractGood {
 			return;
 		}
 		if((baseValue*newMultiplyer) < MIN_PRICE) {
-			valueMultiplyer = (MIN_PRICE / baseValue);
+			valueMultiplyer = (NON_PRICE / baseValue);
 			return;
 		}
 		

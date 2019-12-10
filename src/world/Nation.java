@@ -207,7 +207,8 @@ public class Nation {
 		string += "\ngrowth Pop:   "+getBirths();
 		string += "\npop wealth: "+Functions.formatNum(getTotalMoney())+"£";
 		string += "\nstate weal:  "+Functions.formatNum(coffers)+"£";
-		string += "\nTotal weth:  "+Functions.formatNum(getTotalMoney()+coffers)+"£";
+		double totpop = getTotalMoney();
+		string += "\nTotal weth:  "+Functions.formatNum((coffers+totpop))+"£";
 		
 //		for (int i = 0; i < states.size(); i++) {
 //			string += states.get(i).getInfo();
@@ -250,7 +251,7 @@ public class Nation {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.totalCash();
+			totalWealth += pop.getAverageWealth();
 			justSpent += pop.getJustSpent();
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();

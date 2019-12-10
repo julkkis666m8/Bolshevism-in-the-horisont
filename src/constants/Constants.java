@@ -1,15 +1,66 @@
 package constants;
 
+import goods.AbstractGood;
+import goods.Clothing;
+import goods.Cotton;
+import goods.Furnuature;
+import goods.Iron;
+import goods.Steel;
+import goods.Timber;
+import goods.Wheat;
+import world.State;
+
 public class Constants {
 	
 	
 	
 	//TODO: UPDATE WHEN GOODS ADDED
-	public static final int AMOUNT_OF_GOODS = 3;
+	public static final int AMOUNT_OF_GOODS = 7;
 	
 	public static final int WHEAT = 0;
-	public static final int IRON = 1;
-	public static final int STEEL = 2;
+	public static final int COTTON = 1;
+	public static final int CLOTHING = 2;
+	public static final int TIMBER = 3;
+	public static final int FURNUATURE = 4;
+	public static final int IRON = 5;
+	public static final int STEEL = 6;
+	
+	//TODO: UPDATE ME TOO
+	public static AbstractGood getGood(double amount, State originState, int constant) {
+
+		AbstractGood good;
+		
+		switch (constant) {
+		case WHEAT:
+			good = new Wheat(amount, originState);
+			break;
+		case COTTON:
+			good = new Cotton(amount, originState);
+			break;
+		case CLOTHING:
+			good = new Clothing(amount, originState);
+			break;
+		case TIMBER:
+			good = new Timber(amount, originState);
+			break;
+		case FURNUATURE:
+			good = new Furnuature(amount, originState);
+			break;
+		case IRON:
+			good = new Iron(amount, originState);
+			break;
+		case STEEL:
+			good = new Steel(amount, originState);
+			break;
+		default:
+			System.out.println("ERROR, CONSTANTS OF GOODS ARE NOT GOOD!!!");
+			good = new Wheat(amount, originState); //should never happen
+			break;
+		}
+		
+		
+		return good;
+	}
 	
 	
 	
@@ -216,6 +267,9 @@ public class Constants {
 	public final static int ARABIAN = 8;
 	public final static int BLACK = 9;
 	public final static int NATIVE_AMERICAN = 10;
+
+
+
 
 	public static String raceToString(int race) {
 

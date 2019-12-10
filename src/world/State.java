@@ -37,8 +37,8 @@ private double fertility;
 		this.nation = nation;
 		
 		//TODO: temp
-		clerkWage = 0.50;
-		craftsmanWage = 0.15;
+		clerkWage = 50;
+		craftsmanWage = 15;
 		
 		
 		fertility = (Math.random() * 10 + 1);
@@ -115,28 +115,28 @@ private double fertility;
 	 */
 	public static double wealthCalculator(int job) { 
 		if (job == Constants.CAPITALIST) {
-			return 1000;
+			return 100;
 		}
 		else if (job == Constants.CLERGYMAN) {
-			return 10;
+			return 0;
 		}
 		else if (job == Constants.CLERK) {
-			return 4;
+			return 5;
 		}
 		else if (job == Constants.CRAFTSMAN) {
-			return 2;
+			return 0;
 		}
 		else if (job == Constants.ARTISAN) {
-			return 600;
+			return 60;
 		}
 		else if (job == Constants.SOLDIER) {
 			return 1;
 		}
 		else if (job == Constants.LABORER) {
-			return 2.5;
+			return 0;
 		}
 		else if (job == Constants.FARMER) {
-			return 0.7;
+			return 0;
 		}
 		return 0;
 	}
