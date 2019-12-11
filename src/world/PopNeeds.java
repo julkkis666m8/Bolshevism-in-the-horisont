@@ -29,7 +29,7 @@ public class PopNeeds {
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
 			wheat += 0.549;
-			steel += 0.001;
+			//steel += 0.001;
 			break;
 		case Constants.LOWER_STRATA:
 			//low ppl needs

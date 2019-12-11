@@ -35,7 +35,7 @@ public class Main {
 	public static void main(String[] args) {
 		controller = new Controller();
 		world = new World();
-		tickAmount = 100;
+		tickAmount = 1;
 		
 		
 		
@@ -70,18 +70,18 @@ public class Main {
 
 
 
-	      /*new Thread("PopWindow"){
+	      new Thread("PopWindow"){
 	        public void run(){
 	    		Application.launch(view.PopWindow.class, args);
 	        }
-	      }.start();*/
+	      }.start();
 		
 		while (true) {
 			
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			JOptionPane.showMessageDialog(null, germany.getInfo());
-			JOptionPane.showMessageDialog(null, poland.getInfo());
+			//JOptionPane.showMessageDialog(null, poland.getInfo());
 			
 			view.PopWindow.tickUpdate();
 			
@@ -91,9 +91,9 @@ public class Main {
 			for(State s : germany.getStates()) {
 				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());				
 			}
-			for(State s : poland.getStates()) {
-				System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());				
-			}
+			//for(State s : poland.getStates()) {
+			//	System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());				
+			//}
 
 		}
 	}

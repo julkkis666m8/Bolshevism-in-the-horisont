@@ -35,7 +35,7 @@ public class ArtesanJobs {
 		int population = pop.getPopulation();
 
 		double inputInEfficency = 10;
-		double outputEfficency = 0.5;
+		double outputEfficency = 0.9;
 		
 		
 		List<AbstractGood> goodList = new ArrayList<AbstractGood>();
@@ -132,8 +132,13 @@ public class ArtesanJobs {
 		for(int i = 0; i < outGoodsConst.length; i++) {
 			outCost += state.localMarket.getGoodMinPrice(outGoodsConst[i], outAmounts[i]);			
 		}
+		if(Math.random() >0.5) {
+			return outCost - inCost;	
+		}
+		else {
+			return -inCost;
+		}
 		
-		return outCost - inCost;
 	}
 	
 	

@@ -41,7 +41,7 @@ private double fertility;
 		craftsmanWage = 15;
 		
 		
-		fertility = (Math.random() * 10 + 1);
+		fertility = 1;//(Math.random() * 10 + 1);
 		
 		
 		

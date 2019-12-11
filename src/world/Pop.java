@@ -410,6 +410,9 @@ public class Pop {
 				state.nation.births += growth;
 				population += growth;
 			}
+			else if (job == Constants.ARTISAN) {
+				population += 1;
+			}
 		//}
 		
 	}

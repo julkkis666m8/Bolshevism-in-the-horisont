@@ -11,7 +11,7 @@ public abstract class AbstractGood {
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public static double MAX_PRICE = 100;
-	public static double MIN_PRICE = 0.01;
+	public static double MIN_PRICE = 0.00001;
 	public static double NON_PRICE = 0.000001;
 	public State originState;
 	private double amount;
@@ -65,14 +65,14 @@ public abstract class AbstractGood {
 		if (amount < 1) {
 			daysOnPos = 0;
 			daysOnNeg++;
-			//setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.001/**(daysOnNeg*0.001)*/));
+			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.01)));
 			setValueSumModifier(sumModifier+0.01);
 			
 		}
 		else {
 			daysOnNeg = 0;
 			daysOnPos++;
-			//setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.001/**(daysOnPos*0.001)*/));
+			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.01*(daysOnPos*0.01)));
 			setValueSumModifier(sumModifier-0.01);
 			
 		}
