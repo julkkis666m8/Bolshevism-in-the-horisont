@@ -40,15 +40,15 @@ public class Nation {
 		
 		
 		//temp
-		cleregymanPay = 0.09;
-		soldierPay = 0.05;
+		cleregymanPay = 0.9;
+		soldierPay = 0.5;
 		
 		setNationalMarket(new NationalMarket(this, main.Main.world.getGlobalMarket()));
 		
 		
 		coffers = 1000000000;
 		taxEfficency = 0.9;
-		taxPercentage = 0.24;
+		taxPercentage = 0.0024;
 		states = new LinkedList<State>();
 		coreRaces = new LinkedList<Integer>();
 		acceptedRaces = new LinkedList<Integer>();

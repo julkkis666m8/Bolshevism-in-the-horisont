@@ -67,7 +67,7 @@ public class ArtesanJobs {
 				index = i;
 			}
 		}
-		//System.out.println("ARTESAN INDEX: "+index);
+		System.out.println("ARTESAN INDEX: "+index);
 
 		double adjustedAmountBougth = 0;
 		double amountNeeded = 0;
@@ -132,13 +132,9 @@ public class ArtesanJobs {
 		for(int i = 0; i < outGoodsConst.length; i++) {
 			outCost += state.localMarket.getGoodMinPrice(outGoodsConst[i], outAmounts[i]);			
 		}
-		if(Math.random() >0.5) {
-			return outCost - inCost;	
-		}
-		else {
-			return -inCost;
-		}
-		
+
+		return outCost - inCost;
+
 	}
 	
 	

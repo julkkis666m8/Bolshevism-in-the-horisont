@@ -5,12 +5,13 @@ import constants.Constants;
 public class PopNeeds {
 
 	private double wheat = 0.01;
-	private double clothing = 0.005;
-	private double furnuature = 0.001;
-	private double iron = 0.001;
-	private double steel = 0.00;
+	private double clothing = 0.00005;
+	private double furnuature = 0.00001;
+	private double iron = 0.000001;
+	private double steel = 0.000001;
+	private double cotton = 0.000001;
 	
-	private double needsFurfilled = 0;
+	private double needsFurfilled = 1;
 	
 	public PopNeeds(int job) {
 		// TODO: make diference on job
@@ -22,13 +23,13 @@ public class PopNeeds {
 		switch(Constants.jobToClass(job)) {
 		case Constants.UPPER_STRATA:
 			//rich people needs
-			wheat = wheat * 1.49;
-			steel += 0.01;
-			iron += 0.49;
+			//wheat = wheat * 1.49;
+			//steel += 0.01;
+			//iron += 0.49;
 			break;
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
-			wheat += 0.549;
+			//wheat += 0.549;
 			//steel += 0.001;
 			break;
 		case Constants.LOWER_STRATA:
@@ -56,6 +57,7 @@ public class PopNeeds {
 		needs[Constants.STEEL] = steel * population;
 		needs[Constants.CLOTHING] = clothing * population;
 		needs[Constants.FURNUATURE] = furnuature * population;
+		needs[Constants.COTTON] = cotton * population;
 		
 		return needs;	
 	}

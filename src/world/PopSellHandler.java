@@ -24,10 +24,11 @@ public class PopSellHandler {
 			AbstractGood good = goods.get(i);
 			double amount = good.getAmount();
 			money += good.sellGood(amount, market);
+			System.out.println(good.getAmount());
 			
 		}
 		
-		nation.coffers -= money; //TEMPORARY TEST WHATEVER
+		nation.coffers -= money; //TODO: TEMPORARY TEST WHATEVER
 
 		return money;
 		

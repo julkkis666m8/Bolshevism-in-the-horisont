@@ -4,12 +4,14 @@ import constants.Constants;
 
 public class PopWants {
 
-	private double wheat = 0.002;
+	private double wheat = 0.01;
+	private double clothing = 0.005;
 	private double furnuature = 0.001;
-	private double iron = 0.000;
-	private double steel = 0.00;
+	private double iron = 0.0001;
+	private double steel = 0.0001;
+	private double cotton = 0.0001;
 	
-	private double wantsFurfilled = 0;
+	private double wantsFurfilled = 1;
 	
 	
 	public PopWants(int job) {
@@ -22,14 +24,18 @@ public class PopWants {
 		switch(Constants.jobToClass(job)) {
 		case Constants.UPPER_STRATA:
 			//rich people needs
-			//wheat = wheat * 1.49;
+			wheat = wheat * 1.49;
 			steel += 0.01;
+			furnuature += 0.001;
+			clothing += 0.001;
 			//iron += 0.49;
 			break;
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
 			//wheat += 0.549;
-			//steel += 0.001;
+			steel += 0.001;
+			furnuature += 0.0001;
+			clothing += 0.001;
 			break;
 		case Constants.LOWER_STRATA:
 			//low ppl needs
@@ -46,14 +52,16 @@ public class PopWants {
 	 * 
 	 * @return
 	 */
-	public double[] getNeeds(int population, int job){
+	public double[] getWants(int population, int job){
 		
 		double[] needs = new double[Constants.AMOUNT_OF_GOODS];
 
-		
 		needs[Constants.WHEAT] = wheat * population;
 		needs[Constants.IRON] = iron * population;
 		needs[Constants.STEEL] = steel * population;
+		needs[Constants.CLOTHING] = clothing * population;
+		needs[Constants.FURNUATURE] = furnuature * population;
+		needs[Constants.COTTON] = cotton * population;
 		
 		return needs;	
 	}

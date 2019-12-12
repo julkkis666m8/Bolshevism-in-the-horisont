@@ -68,55 +68,65 @@ public class PopWindow extends Application {
 	
 
 	private static double popInfo(List<Pop> pops) {
-		String string = "";
 		
-		
-
 		int population = 0;
 		double totalWealth = 0;
 		
-		double justSpent = 0;
+		double justSpent = 1;
 		double incomeTaxable = 1; 
 		int itterations = 0;
-		double needsFurfilled = 0;
+		double needsFurfilled = 1;
 		
 		for (int i = 0; i < pops.size(); i++) {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.getTotalWealth();
+			totalWealth += pop.getAverageWealth();
 			justSpent += pop.getJustSpent();
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();
 		}
 		
-		needsFurfilled = (needsFurfilled / itterations)*100;//%
+		return population;
+	}
+	private static double popInfoTotalWealth(List<Pop> pops) {
 		
+		double totalWealth = 0;
 		
-
-		if(population != 0) {
-			string += "population: "+population+" | ";	
-		}
-		if(totalWealth != 0) {
-			string += "totalWealth: "+Functions.formatNum(totalWealth)+"£ | ";	
-		}
-		if(justSpent != 0) {
-			string += "justSpent: "+Functions.formatNum(justSpent)+"£ | ";	
-		}
-		if(incomeTaxable != 0) {
-			string += "incomeTaxable: "+Functions.formatNum(incomeTaxable)+"£ | ";	
-		}
-		if(itterations != 0) {
-			string += "needsFurfilled: "+Functions.formatNum(needsFurfilled)+"% | ";	
+		for (int i = 0; i < pops.size(); i++) {
+		
+			Pop pop = pops.get(i);
+			totalWealth += pop.getAverageWealth();
 		}
 		
+		return totalWealth;
+	}
+	
+	
+	private static double popInfoNeedsPercentage(List<Pop> pops) {
+		
+		int itterations = 0;
+		double needsFurfilled = 0.01;
+		
+		for (int i = 0; i < pops.size(); i++) {
+			itterations++;
+			Pop pop = pops.get(i);
+			needsFurfilled += pop.getNeedsFurfilled();
+		}
 		
 		
+		return needsFurfilled/itterations;
+	}
+	private static double popInfoPop(List<Pop> pops) {
 		
+		int population = 0;
 		
+		for (int i = 0; i < pops.size(); i++) {
+			Pop pop = pops.get(i);
+			population += pop.getPopulation();
+		}
 		
-		
-		return incomeTaxable;
+		return population;
 	}
 
 	
@@ -147,6 +157,7 @@ public class PopWindow extends Application {
 						container.hide();
 					}
 					caption.setText(String.valueOf(data.getPieValue()) + "%");
+					container.setText(caption.toString());
 					container.show(stage, e.getScreenX(), e.getScreenY());
 					updatePop();
 					System.out.println("123");
@@ -250,13 +261,20 @@ public class PopWindow extends Application {
     }
 	
 	
-	public static void tickUpdate() {
+	public synchronized static void tickUpdate() {
 
-		//updatePop();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		updatePop();
 
 
 		
-		System.out.println("GRAPHICS UPDATED");
+		//System.out.println("GRAPHICS UPDATED");
 		
 		//stuff
 		

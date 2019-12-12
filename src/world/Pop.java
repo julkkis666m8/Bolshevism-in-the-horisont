@@ -36,6 +36,12 @@ public class Pop {
 	private double growthOMatic = 0;
 
 	
+	@Override
+	public String toString() {
+		return Constants.raceToString(race)+" "+Constants.ReligionToString(religion)+
+				" "+Constants.JobToString(job)+" from "+state.toString();
+	}
+	
 	
 	
 	
@@ -83,6 +89,7 @@ public class Pop {
 		
 		
 		popNeeds = new PopNeeds(job);
+		popWants = new PopWants(job);
 
 		if(job == Constants.CAPITALIST) {
 			taxEvasion = 0.5;
@@ -249,7 +256,15 @@ public class Pop {
 		}
 		else if (job == Constants.FARMER) {
 			goods.addAll(PopSellHandler.farmerJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+			for(AbstractGood good : goods) {
+				if(state.localMarket.getGoodMaxPrice(good.getConstant(), 1) > good.MIN_PRICE) {
+					income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+					//goods.remove(good);					
+				}
+			}
+			
+			
+			//income = PopSellHandler.sell(this, goods, state.localMarket, nation);
 			goods.removeAll(goods);
 		}
 		
@@ -278,7 +293,14 @@ public class Pop {
 		
 		for(int i = 0; i < pops.size(); i++) {
 			Pop pop = pops.get(i);
-			double percentage = pop.getPopulation() / populationThatPays;
+			double percentage = 0;
+			try {
+				percentage = pop.getPopulation() / populationThatPays;
+			} catch (Exception e) {
+				System.out.println("someone's dead");
+			}
+			
+
 			double toPay = percentage * payThis;
 			double payed = 0;
 			
@@ -350,9 +372,9 @@ public class Pop {
 	}
 
 
-	public void buy(Nation nation, State state) {
+	public void buy(Nation nation, State state, double[] needs) {
 		
-		double[] needs = popNeeds.getNeeds(population, job);
+		
 		double[] buyTheseNeeds = new double[needs.length];
 		for(int i = 0; i < needs.length; i++) {
 			buyTheseNeeds[i] = needs[i];
@@ -394,33 +416,58 @@ public class Pop {
 	public void birthControll() {
 
 		//if (getStrata() == Constants.LOWER_STRATA) {
-			if (getNeedsFurfilled() >= 1) {
-				int growth = (int)((fertility*population)+1);
+			if (getNeedsFurfilled() >= 1 && growthOMatic > 1) {
+				 
+				int growth = (int)growthOMatic;
+				growthOMatic -= growth;
 				double toPay = growth * (5000);
 				System.out.println(growth+" BIRTHs of "+Constants.JobToString(job));
 				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
 				population += growth;
 			}
-			else if (getNeedsFurfilled() < 0.5 && (job == Constants.FARMER || job == Constants.LABORER)) {
-				int growth = (int)((-fertility)-1);
+			else if (getNeedsFurfilled() < 0.25 && population > 0 /*&& (job == Constants.FARMER || job == Constants.LABORER)*/) {
+				int growth = -1;
 				double toPay = growth * (5000);
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
 				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
-				population += growth;
+				//population += growth;
 			}
-			else if (job == Constants.ARTISAN) {
-				population += 1;
+			else if(getwantsFurfilled() >= 0.75) {
+				//System.out.println(growthOMatic+" growths of "+Constants.JobToString(job));
+				growthOMatic += fertility*population;
 			}
 		//}
 		
 	}
 
 
+	private double getwantsFurfilled() {
+		// TODO Auto-generated method stub
+		return popWants.getWantsFurfilled();
+	}
+
+
+
+
 	private int getStrata() {
 		return Constants.jobToClass(job);
 
+	}
+
+
+
+
+	public double[] getNeeds() {
+		return popNeeds.getNeeds(population, job);
+	}
+
+
+
+
+	public double[] getWants() {
+		return popWants.getWants(population, job);
 	}
 
 

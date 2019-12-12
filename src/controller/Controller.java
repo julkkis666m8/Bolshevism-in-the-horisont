@@ -40,22 +40,30 @@ public class Controller {
 					for(int i = 0; i < pops.size(); i++) {
 						
 						Pop pop = pops.get(i);
-						
+
+						//System.out.println(pops.size());
 						if (pop.getPopulation() <= 0) {
+							System.out.println("REMOVE DEAD PEOPLE "+pop.toString());
 							pops.remove(i);
 							i--;
 						}
-						
-						pop.jobCounter(nation, state);//has sell for RGO
-						Taxes.taxMe(pop, nation); //income tax
-						pop.buy(nation, state);
-						
-						pop.birthControll();
-						
-						//System.out.println(itteration);
-						
-						
-						//pop.removePeople( (( (int)(Math.round((pop.getPopulation())*0.1)) ) + 150) );
+						else {
+							//System.out.println(pop.toString());
+
+							pop.jobCounter(nation, state);//has sell for RGO
+							Taxes.taxMe(pop, nation); //income tax
+							pop.buy(nation, state, pop.getNeeds());
+							pop.buy(nation, state, pop.getWants());		
+
+
+							pop.birthControll();
+							
+							//System.out.println(itteration);
+							
+							
+							//pop.removePeople( (( (int)(Math.round((pop.getPopulation())*0.1)) ) + 150) );
+								
+						}
 						
 					}
 				}

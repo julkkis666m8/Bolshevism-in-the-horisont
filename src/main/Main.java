@@ -1,4 +1,6 @@
 package main;
+import java.sql.Time;
+
 import javax.swing.JOptionPane;
 
 import constants.Constants;
@@ -22,7 +24,7 @@ public class Main {
 	
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
-	public static JobParameters germanJob = new JobParameters(0, 0, 50, 50, 5, 5, 10, 2, 1, 2, 1, 1);
+	public static JobParameters germanJob = new JobParameters(0, 0, 50, 50, 5, 50, 10, 2, 1, 2, 1, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(0, 0, 50, 50, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
@@ -75,21 +77,54 @@ public class Main {
 	    		Application.launch(view.PopWindow.class, args);
 	        }
 	      }.start();
-		
+	      
+	      try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	      
+	      new Thread("PopWindowUpdater"){
+				public void run(){
+					try {
+						while(true) {
+							view.PopWindow.tickUpdate();	
+						}
+										
+					}catch (Exception e) {
+						System.out.println("GuiNotLoaded");
+					}
+				}
+			}.start();
+
+		      try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		while (true) {
+
+		 
+			controller.tick(tickAmount);
+			
+
+			
+
+
 			
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
 
-			JOptionPane.showMessageDialog(null, germany.getInfo());
+			//JOptionPane.showMessageDialog(null, germany.getInfo());
 			//JOptionPane.showMessageDialog(null, poland.getInfo());
 			
-			view.PopWindow.tickUpdate();
 			
 			//JOptionPane.showMessageDialog(null, germany.getPopInfo());
-			controller.tick(tickAmount);
 
 			for(State s : germany.getStates()) {
-				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());				
+				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());	
+				break;
 			}
 			//for(State s : poland.getStates()) {
 			//	System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());				
