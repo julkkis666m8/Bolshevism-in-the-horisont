@@ -432,7 +432,7 @@ public class Pop {
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
 				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
-				//population += growth;
+				population += growth;
 			}
 			else if(getwantsFurfilled() >= 0.75) {
 				//System.out.println(growthOMatic+" growths of "+Constants.JobToString(job));

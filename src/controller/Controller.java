@@ -52,10 +52,8 @@ public class Controller {
 
 							pop.jobCounter(nation, state);//has sell for RGO
 							Taxes.taxMe(pop, nation); //income tax
-							pop.buy(nation, state, pop.getNeeds());
-							pop.buy(nation, state, pop.getWants());		
 
-
+							
 							pop.birthControll();
 							
 							//System.out.println(itteration);

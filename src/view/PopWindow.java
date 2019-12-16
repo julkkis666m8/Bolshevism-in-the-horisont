@@ -143,8 +143,8 @@ public class PopWindow extends Application {
 		PieChart chart = new PieChart(pieChartData);
 		chart.setTitle("Population");
 		final Label caption = new Label("");
-		caption.setTextFill(Color.BLACK);
-		caption.setStyle("-fx-font: 24 arial;");
+		//caption.setTextFill(Color.BLACK);
+		//caption.setStyle("-fx-font: 42 arial;");
 		for (final PieChart.Data data : chart.getData()) {
 			data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED,
 					new EventHandler<MouseEvent>()
@@ -156,10 +156,10 @@ public class PopWindow extends Application {
 					{
 						container.hide();
 					}
-					caption.setText(String.valueOf(data.getPieValue()) + "%");
-					container.setText(caption.toString());
+					//caption.setText(data.getName()+"s have "+data.getPieValue() + " people");
+					container.setText(data.getName()+"s have "+data.getPieValue() + " people");
 					container.show(stage, e.getScreenX(), e.getScreenY());
-					updatePop();
+					//updatePop();
 					System.out.println("123");
 				}
 			});
@@ -264,7 +264,7 @@ public class PopWindow extends Application {
 	public synchronized static void tickUpdate() {
 
 		try {
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
