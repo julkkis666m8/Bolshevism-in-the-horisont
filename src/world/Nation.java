@@ -7,6 +7,7 @@ import constants.Functions;
 import goods.AbstractGood;
 import main.Main;
 import market.NationalMarket;
+import nationalEconomyManagers.SoldierPay;
 
 public class Nation {
 	
@@ -22,7 +23,8 @@ public class Nation {
 	
 	private NationalMarket nationalMarket;
 	private double cleregymanPay;
-	private double soldierPay;
+	//private double soldierPay;
+	private SoldierPay soldierPay;
 	public double babyPrice = 500;
 	public int births = 0; //for statistics
 	
@@ -41,14 +43,14 @@ public class Nation {
 		
 		//temp
 		cleregymanPay = 0.9;
-		soldierPay = 0.5;
+		soldierPay = new SoldierPay(10000, this);
 		
 		setNationalMarket(new NationalMarket(this, main.Main.world.getGlobalMarket()));
 		
 		
 		coffers = 1000000000;
 		taxEfficency = 0.9;
-		taxPercentage = 0.0024;
+		taxPercentage = 0.024;
 		states = new LinkedList<State>();
 		coreRaces = new LinkedList<Integer>();
 		acceptedRaces = new LinkedList<Integer>();
@@ -68,6 +70,9 @@ public class Nation {
 	public void addHatedRace(int race){
 		hatedRaces.add(race);
 	}
+	
+	
+	
 	
 	
 	
@@ -298,6 +303,26 @@ public class Nation {
 		
 		return popsOfJob;
 	}
+	
+	/**
+	 * gets all pops of nation with specific job type
+	 * @param job
+	 * @return
+	 */
+	public List<Pop> getJob(int job) {
+		List<Pop> popsOfJob = new LinkedList<>();
+		
+		List<Pop> allPops = getAllPops();
+		
+		for (int i = 0; i < allPops.size(); i++) {
+			Pop pop = allPops.get(i);
+			if(pop.job == job) {
+				popsOfJob.add(pop);
+			}
+		}
+		
+		return popsOfJob;
+	}
 
 	public void addToCoffers(double taxMoney) {
 		coffers += taxMoney;
@@ -328,10 +353,11 @@ public class Nation {
 
 	}
 
+	/*
 	public double getSoldierPay() {
 		return soldierPay;
 	}
-
+	*/
 
 
 	public NationalMarket getNationalMarket() {
@@ -348,6 +374,12 @@ public class Nation {
 
 	public double getBabyPrice() {
 		return babyPrice;
+	}
+
+
+
+	public SoldierPay getSoldierPay() {
+		return soldierPay;
 	}
 
 	

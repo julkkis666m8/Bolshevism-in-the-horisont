@@ -247,7 +247,7 @@ public class Pop {
 			goods.removeAll(goods);
 		}
 		else if (job == Constants.SOLDIER) {
-			income =  nation.getNationCash(nation.getSoldierPay()*population);
+			income =  nation.getSoldierPay().paySoldier(population);
 		}
 		else if (job == Constants.LABORER) {
 			goods.addAll(PopSellHandler.labourerJob(this, state));
