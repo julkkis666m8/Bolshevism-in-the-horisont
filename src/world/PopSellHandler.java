@@ -24,7 +24,7 @@ public class PopSellHandler {
 			AbstractGood good = goods.get(i);
 			double amount = good.getAmount();
 			money += good.sellGood(amount, market);
-			System.out.println(good.getAmount());
+			//System.out.println(good.getAmount());
 			
 		}
 		

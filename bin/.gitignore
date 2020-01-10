@@ -1,12 +1,4 @@
-/Germany.class
-/Ideology.class
-/PopTicker.class
-/constants/
-/controller/
-/factories/
-/goods/
-/main/
-/market/
 /view/
 /world/
-/nationalEconomyManagers/
+/main/
+/factories/

@@ -117,10 +117,10 @@ public class Main {
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
-			//JOptionPane.showMessageDialog(null, poland.getInfo());
+			JOptionPane.showMessageDialog(null, poland.getInfo());
 			
 			
-			//JOptionPane.showMessageDialog(null, germany.getPopInfo());
+			JOptionPane.showMessageDialog(null, germany.getPopInfo());
 
 			for(State s : germany.getStates()) {
 				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());	

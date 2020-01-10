@@ -414,7 +414,7 @@ public class Pop {
 
 
 	public void birthControll() {
-
+/*
 		//if (getStrata() == Constants.LOWER_STRATA) {
 			if (getNeedsFurfilled() >= 1 && growthOMatic > 1) {
 				 
@@ -426,7 +426,7 @@ public class Pop {
 				state.nation.births += growth;
 				population += growth;
 			}
-			else if (getNeedsFurfilled() < 0.25 && population > 0 /*&& (job == Constants.FARMER || job == Constants.LABORER)*/) {
+			else if (getNeedsFurfilled() < 0.25 && population > 0 /*&& (job == Constants.FARMER || job == Constants.LABORER)) {
 				int growth = -1;
 				double toPay = growth * (5000);
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
@@ -439,7 +439,7 @@ public class Pop {
 				growthOMatic += fertility*population;
 			}
 		//}
-		
+	*/	
 	}
 
 

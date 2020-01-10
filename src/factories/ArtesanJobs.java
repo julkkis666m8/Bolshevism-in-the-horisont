@@ -67,7 +67,7 @@ public class ArtesanJobs {
 				index = i;
 			}
 		}
-		System.out.println("ARTESAN INDEX: "+index);
+		//System.out.println("ARTESAN INDEX: "+index);
 
 		double adjustedAmountBougth = 0;
 		double amountNeeded = 0;

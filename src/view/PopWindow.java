@@ -33,6 +33,8 @@ public class PopWindow extends Application {
 	static Scene scene;
 	static ObservableList<PieChart.Data> pieChartData;
 	static Stage stage;
+	static Tooltip tooltip = new Tooltip();
+	static PieChart.Data lastData;
 
 
 
@@ -135,7 +137,7 @@ public class PopWindow extends Application {
 
 
 	private static PieChart createChart(List<Pop> pops) {
-		Tooltip container = new Tooltip();
+		
 
 
 		pieChartData = FXCollections.observableArrayList();
@@ -152,13 +154,15 @@ public class PopWindow extends Application {
 				@Override
 				public void handle(MouseEvent e)
 				{
-					if (container.isShowing())
+					if (tooltip.isShowing())
 					{
-						container.hide();
+						tooltip.hide();
 					}
+					lastData = data; //so that we can update our tooltip with new pie-updates!
+					
 					//caption.setText(data.getName()+"s have "+data.getPieValue() + " people");
-					container.setText(data.getName()+"s have "+data.getPieValue() + " people");
-					container.show(stage, e.getScreenX(), e.getScreenY());
+					tooltip.setText(data.getName()+"s have "+data.getPieValue() + " people");
+					tooltip.show(stage, e.getScreenX(), e.getScreenY());
 					//updatePop();
 					System.out.println("123");
 				}
@@ -206,6 +210,14 @@ public class PopWindow extends Application {
 
 			addData(name, value);
 			
+		}
+		
+		try {
+			tooltip.setText(lastData.getName()+"s have "+lastData.getPieValue() + " people");
+			//tooltip.show(stage, e.getScreenX(), e.getScreenY());
+		}
+		catch(Exception e) {
+			System.out.println(e);
 		}
 
 	}
