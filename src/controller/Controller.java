@@ -24,43 +24,38 @@ public class Controller {
 		for(int itteration = 0; itteration < simNum; itteration++) {
 			
 			updateWorldsGoodPrices();
+			
 			updatePopNeeds();
+			
 			
 			List<Nation> nations = Main.world.getNations();
 			
 			for(int nationInt = 0; nationInt < nations.size(); nationInt++) {
-				Nation nation = nations.get(nationInt);
-				List<State> states = (nation.getStates());
 				
-
+				Nation nation = nations.get(nationInt);
+				nation.tick();
+				
+				
+				List<State> states = (nation.getStates());
 				for(int stateIndex = 0; stateIndex < states.size(); stateIndex++) {
 					State state = states.get(stateIndex);
-					List<Pop> pops = state.pops;
+					state.tick();
 					
+					
+					List<Pop> pops = state.pops;
 					for(int i = 0; i < pops.size(); i++) {
 						
 						Pop pop = pops.get(i);
-
-						//System.out.println(pops.size());
+						
 						if (pop.getPopulation() <= 0) {
 							System.out.println("REMOVE DEAD PEOPLE "+pop.toString());
 							pops.remove(i);
 							i--;
 						}
 						else {
-							//System.out.println(pop.toString());
 
-							pop.jobCounter(nation, state);//has sell for RGO
-							Taxes.taxMe(pop, nation); //income tax
-
+							pop.tick(nation);
 							
-							pop.birthControll();
-							
-							//System.out.println(itteration);
-							
-							
-							//pop.removePeople( (( (int)(Math.round((pop.getPopulation())*0.1)) ) + 150) );
-								
 						}
 						
 					}
@@ -90,6 +85,7 @@ public class Controller {
 	private void updateWorldsGoodPrices() {
 		for (State s : main.Main.world.getAllStates()){
 			s.localMarket.updateGoods();
+			s.localMarket.resetMarketNeedForTheTurn();
 		}
 	}
 	

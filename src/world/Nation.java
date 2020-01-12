@@ -382,5 +382,12 @@ public class Nation {
 		return soldierPay;
 	}
 
+
+
+	public void tick() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

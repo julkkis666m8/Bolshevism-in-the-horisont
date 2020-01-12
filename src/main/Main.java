@@ -65,6 +65,10 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			germany.addState(new State("State "+i, germany));
 		}
+		
+		
+		
+		
 		//testing nation w/ 3 states
 		for (int i = 0; i < 3; i++) {
 			poland.addState(new State("State "+i, poland));
@@ -114,13 +118,13 @@ public class Main {
 
 
 			
-			//JOptionPane.showMessageDialog(null, germany.getInfo());
+			JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
-			JOptionPane.showMessageDialog(null, poland.getInfo());
+			//JOptionPane.showMessageDialog(null, poland.getInfo());
 			
 			
-			JOptionPane.showMessageDialog(null, germany.getPopInfo());
+			//JOptionPane.showMessageDialog(null, germany.getPopInfo());
 
 			for(State s : germany.getStates()) {
 				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());	

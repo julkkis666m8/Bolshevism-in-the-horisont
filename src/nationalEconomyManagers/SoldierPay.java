@@ -6,9 +6,18 @@ import constants.Constants;
 import world.Nation;
 import world.Pop;
 
+
+/**
+ * should be used as a sort of ministery of soldier wages
+ * @author julkkis666
+ *
+ */
 public class SoldierPay {
 	
+	
+	
 	private double totalBudget;
+	
 	private int soldierPop;
 	private Nation nation;
 	
@@ -26,6 +35,7 @@ public class SoldierPay {
 		
 		updateSoldierPop();
 		
+		
 	}
 	
 
@@ -38,12 +48,9 @@ public class SoldierPay {
 	}
 
 
-	private void paySoldiers() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
+	/**
+	 * used once a tick to get how much a state wants to pay to its soliders
+	 */
 	private void getSoldierPay() {
 		// TODO Auto-generated method stub
 		
@@ -60,8 +67,12 @@ public class SoldierPay {
 
 
 	public double paySoldier(int population) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		double pay = 0;
+		
+		pay = nation.getTotalMoney();
+		
+		return pay;
 	}
 	
 	

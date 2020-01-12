@@ -188,6 +188,16 @@ private double fertility;
 	public void setFertility(double fertility) {
 		this.fertility = fertility;
 	}
+
+	public void setName(String string) {
+		name = string;
+		
+	}
+
+	public void tick() {
+		localMarket.tick();
+		
+	}
 	
 
 }

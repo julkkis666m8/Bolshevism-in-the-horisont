@@ -144,8 +144,28 @@ public class Pop {
 	public int getPopulation() {
 		return population;
 	}
-	public void tick() {
-		// TODO Auto-generated method stub
+	public void tick(Nation nation) {
+
+
+		popStockpileRotter();
+		cleanGoods(); //removes items with size 0.000000001
+		
+		
+		//System.out.println(pop.toString());
+
+		jobCounter(nation, state);//has sell for RGO
+		Taxes.taxMe(this, nation); //income tax
+
+		buy(nation, state, getNeeds());
+		buy(nation, state, getWants());
+
+		
+		birthControll();
+		
+		
+		//System.out.println(itteration);
+		//pop.removePeople( (( (int)(Math.round((pop.getPopulation())*0.1)) ) + 150) );
+			
 		
 	}
 
@@ -215,6 +235,21 @@ public class Pop {
 	public List<AbstractGood> getGoods() {
 		return goods;
 	}
+	
+	/**
+	 * call me at start of each tick
+	 */
+	public void popStockpileRotter() {
+		if(goods.size() > Constants.AMOUNT_OF_GOODS) { //for easy bug cheking
+			System.out.println("if you see this, then there's a leak of some sort, or maybe global trade is working :^)");
+			System.out.println(goods.size());
+			System.out.println(goods);
+		}
+	
+		for(AbstractGood good : goods) {
+			good.rot();
+		}
+	}
 
 	/**
 	 * "ticks" a pop to make them do what their "jobs" do.
@@ -242,34 +277,49 @@ public class Pop {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
 		}
 		else if (job == Constants.ARTISAN) {
-			goods.addAll(ArtesanJobs.artesanJob(this, state));
+			goodAdder(ArtesanJobs.artesanJob(this, state));
 			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
-			goods.removeAll(goods);
 		}
 		else if (job == Constants.SOLDIER) {
-			income =  nation.getSoldierPay().paySoldier(population);
+			income = nation.getSoldierPay().paySoldier(population);
 		}
 		else if (job == Constants.LABORER) {
 			goods.addAll(PopSellHandler.labourerJob(this, state));
 			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
-			goods.removeAll(goods);
 		}
 		else if (job == Constants.FARMER) {
 			goods.addAll(PopSellHandler.farmerJob(this, state));
-			for(AbstractGood good : goods) {
-				if(state.localMarket.getGoodMaxPrice(good.getConstant(), 1) > good.MIN_PRICE) {
-					income = PopSellHandler.sell(this, goods, state.localMarket, nation);
-					//goods.remove(good);					
-				}
-			}
-			
-			
-			//income = PopSellHandler.sell(this, goods, state.localMarket, nation);
-			goods.removeAll(goods);
+			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
 		}
 		
 		this.setIncomeTaxable(income);
 		averageWealth = income/population;
+	}
+	
+
+	private void goodAdder(List<AbstractGood> newGoods) {
+
+		
+		List<AbstractGood> newGoodsAddList = new ArrayList<>();
+		
+		for (AbstractGood newGood : newGoods) {
+			boolean has = false;
+			for (AbstractGood good : goods) {
+				if (newGood.compare(good)) {
+					good.addAmount(newGood.getAmount());
+					has = true;
+					break;
+				}
+			}
+			
+			if (!has) {
+				//System.out.println("has "+(goods.size()+1));
+				newGoodsAddList.add(newGood);				
+			}
+		}
+		
+		goods.addAll(newGoodsAddList);
+		
 	}
 
 
@@ -468,6 +518,22 @@ public class Pop {
 
 	public double[] getWants() {
 		return popWants.getWants(population, job);
+	}
+
+
+
+
+	public void cleanGoods() {
+		List<AbstractGood> removeList = new ArrayList<>();
+		for (AbstractGood good : goods) {
+			if (good.getAmount() < 0.000000001){
+				removeList.add(good);
+			}
+		}
+		for (AbstractGood removableGood : removeList) {
+			goods.remove(removableGood);			
+		}
+
 	}
 
 

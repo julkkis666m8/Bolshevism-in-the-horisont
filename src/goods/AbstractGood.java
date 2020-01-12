@@ -7,12 +7,13 @@ import world.State;
 
 public abstract class AbstractGood {
 
+	private static final double ROTTING_COEFICENT = 0.35;
 	public double baseValue = 5;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public static double MAX_PRICE = 100;
-	public static double MIN_PRICE = 0.00001;
-	public static double NON_PRICE = 0.000001;
+	public static double MIN_PRICE = 0.1;
+	public static double NON_PRICE = 0.01; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
 	protected String goodName;
@@ -56,13 +57,13 @@ public abstract class AbstractGood {
 	
 	public double sellGood(double amount, AbstractMarket market) {
 		
-		return market.add(this,amount);
+		return market.add(getAbstractGoodOfConst(amount, this.originState, this.getConstant()),amount);
 		
 		
 	}
 	
 	public void calculateAviliability() {
-		if (amount < 1) {
+		if (amount < 1000) {
 			daysOnPos = 0;
 			daysOnNeg++;
 			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.01)));
@@ -139,7 +140,7 @@ public abstract class AbstractGood {
 
 
 
-		if (this.goodName.equals(g.goodName) /*&& this.originState.equals(g.originState)*/) {
+		if (this.goodName.equals(g.goodName) && this.originState.equals(g.originState)) {
 			return true;
 		}
 		
@@ -198,6 +199,26 @@ public abstract class AbstractGood {
 		removeAmount(canAfordAmount);
 
 		return canAfordAmount;
+	}
+
+	/**
+	 * TODO: make a rotting value for each item?
+	 */
+	public void rot() {
+		amount = amount * ROTTING_COEFICENT;
+	}
+	public void rot(double coeficient) {
+		amount = amount * coeficient;
+	}
+
+	public void setAmount(double d) {
+		amount = d;
+		
+	}
+
+	public void tick() {
+		rot(0.9999);
+		
 	}
 	
 	

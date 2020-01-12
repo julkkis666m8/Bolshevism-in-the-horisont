@@ -5,11 +5,11 @@ import constants.Constants;
 public class PopNeeds {
 
 	private double wheat = 0.01;
-	private double clothing = 0.00005;
-	private double furnuature = 0.00001;
-	private double iron = 0.000001;
-	private double steel = 0.000001;
-	private double cotton = 0.000001;
+	private double clothing = 0.0000;
+	private double furnuature = 0.0000;
+	private double iron = 0.00000;
+	private double steel = 0.00000;
+	private double cotton = 0.00000;
 	
 	private double needsFurfilled = 1;
 	

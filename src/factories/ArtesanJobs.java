@@ -5,6 +5,7 @@ import java.util.List;
 
 import constants.Constants;
 import goods.AbstractGood;
+import market.AbstractMarket;
 import world.Pop;
 import world.State;
 
@@ -34,7 +35,7 @@ public class ArtesanJobs {
 		
 		int population = pop.getPopulation();
 
-		double inputInEfficency = 10;
+		double inputInEfficency = 1;
 		double outputEfficency = 0.9;
 		
 		
@@ -135,6 +136,31 @@ public class ArtesanJobs {
 
 		return outCost - inCost;
 
+	}
+	
+	
+	
+	/**
+	 * TODO: WORK NEEDS TO BE DONE HERE½!!!!
+	 * @param state
+	 * @return
+	 */
+	public static int mostNeededGood(State state) {
+		
+		int goodConst = 6;
+		
+		AbstractMarket market = state.localMarket;
+		
+		
+		
+		
+		List<Double> needs = new ArrayList<>(); 
+		
+		//needs.addAll(market.getNeeds());
+		
+		
+		
+		return goodConst;
 	}
 	
 	

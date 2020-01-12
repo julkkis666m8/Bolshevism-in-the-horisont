@@ -12,6 +12,7 @@ import world.State;
 public class AbstractMarket {
 
 	protected List<AbstractGood> stockPile;
+	private double[] marketNeeds = new double[Constants.AMOUNT_OF_GOODS];
 	
 	public AbstractMarket() {
 		stockPile = new ArrayList<>();
@@ -19,7 +20,21 @@ public class AbstractMarket {
 	
 
 	public String getStockpileString() {
-		return "size is "+ Functions.formatNum(stockPile.size())+" and string is: "+stockPile.toString();
+		
+		String marketNeedsString = "";
+		
+		for(double d : marketNeeds) {
+			marketNeedsString +="\n"+d;
+		}
+		
+		return "size is "+ Functions.formatNum(stockPile.size())+" and string is: "+stockPile.toString() + 
+				"\nneeds are"+ marketNeedsString;
+	}
+	
+	public void tick() {
+		for(AbstractGood good : stockPile) {
+			good.tick();
+		}
 	}
 	
 	
@@ -149,8 +164,21 @@ public class AbstractMarket {
 
 
 	private void marketNeed(int goodConst, double stillNeeded) {
-		// TODO Auto-generated method stub
-		
+		marketNeeds[goodConst] += stillNeeded;
+		//System.out.println(goodConst +" "+ marketNeeds[goodConst]);
+	}
+	
+	public void resetMarketNeedForTheTurn() {
+		int i = 0;
+		for (double thisNeed : marketNeeds) {
+			marketNeeds[i] = 0;
+			i++;
+		}
+	}
+
+
+	public double[] getNeeds() {
+		return marketNeeds;
 	}
 	
 }

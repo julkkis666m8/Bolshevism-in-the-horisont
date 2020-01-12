@@ -16,17 +16,42 @@ import market.NationalMarket;
 
 public class PopSellHandler {
 
+	
+	
 	public static double sell(Pop pop, List<AbstractGood> goods, AbstractMarket market, Nation nation) {
 		
 		double money = 0;
 		
 		for (int i = 0; i < goods.size(); i++) {
 			AbstractGood good = goods.get(i);
+			
 			double amount = good.getAmount();
+			
+			
 			money += good.sellGood(amount, market);
 			//System.out.println(good.getAmount());
-			
+		
 		}
+		
+		
+		for(AbstractGood good : goods) {
+			
+			if(market.getGoodMaxPrice(good.getConstant(), 1) > good.MIN_PRICE) {
+				double amount = good.getAmount();
+				amount = amount - pop.getNeeds()[good.getConstant()];
+				
+				if (amount < 0) {
+					amount = 0;
+				}
+				
+				money = money += good.sellGood(amount, market);
+				good.setAmount(good.getAmount() - amount);					
+			}
+		}
+		
+		
+		
+		
 		
 		nation.coffers -= money; //TODO: TEMPORARY TEST WHATEVER
 
