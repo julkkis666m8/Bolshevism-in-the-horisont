@@ -25,6 +25,42 @@ public class Constants {
 	public static final int IRON = 5;
 	public static final int STEEL = 6;
 	
+	
+	//TODO: UPDATE ME AND MY FRIEND DOWN SOUTH TOO
+	public static String GoodToString(int goodIndex) {
+
+		String title = "";
+
+		switch (goodIndex) {
+		case WHEAT:
+			title = "wheat";
+			break;
+		case COTTON:
+			title = "cotton";
+			break;
+		case CLOTHING:
+			title = "clothing";
+			break;
+		case TIMBER:
+			title = "timber";
+			break;
+		case FURNUATURE:
+			title = "furnuature";
+			break;
+		case IRON:
+			title = "iron";
+			break;
+		case STEEL:
+			title = "steel";
+			break;
+		default:
+			title = "unobtanium";
+			break;
+		}
+
+		return title;
+	}
+	
 	//TODO: UPDATE ME TOO
 	public static AbstractGood getGood(double amount, State originState, int constant) {
 

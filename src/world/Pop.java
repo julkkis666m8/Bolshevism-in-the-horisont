@@ -156,8 +156,11 @@ public class Pop {
 		jobCounter(nation, state);//has sell for RGO
 		Taxes.taxMe(this, nation); //income tax
 
-		buy(nation, state, getNeeds());
-		buy(nation, state, getWants());
+		setNeedsFurfilled(buy(nation, state, getNeeds()));
+		if(getNeedsFurfilled() > 0.6) {
+			setWantsFurfilled(buy(nation, state, getWants()));			
+		}
+
 
 		
 		birthControll();
@@ -256,12 +259,12 @@ public class Pop {
 	 * @param nation
 	 * @param state
 	 */
-	public void jobCounter(Nation nation, State state) { 
+	public void jobCounter(Nation nation, State state) {
 		
 		double income = 0;
 		
 		if (job == Constants.CAPITALIST) {
-			income = 100*population;
+			income = 10*population;
 		}
 		else if (job == Constants.CLERGYMAN) {
 			double neededInc = nation.getCleregymanPay()*population;
@@ -422,7 +425,7 @@ public class Pop {
 	}
 
 
-	public void buy(Nation nation, State state, double[] needs) {
+	public double buy(Nation nation, State state, double[] needs) {
 		
 		
 		double[] buyTheseNeeds = new double[needs.length];
@@ -440,8 +443,9 @@ public class Pop {
 		
 		//TODO: add global market
 		
+
 		
-		setNeedsFurfilled(constants.Functions.divideArrays(buyTheseNeeds, needs));
+		return constants.Functions.divideArrays(buyTheseNeeds, needs);
 		
 	}
 
@@ -457,9 +461,16 @@ public class Pop {
 		return popNeeds.getNeedsFurfilled();
 	}
 
+	public double getWantsFurfilled() {
+		return popWants.getWantsFurfilled();
+	}
 
 	public void setNeedsFurfilled(double needsFurfilled) {
 		popNeeds.setNeedsFurfilled(needsFurfilled);
+	}
+
+	public void setWantsFurfilled(double wantsFurfilled) {
+		popWants.setWantsFurfilled(wantsFurfilled);
 	}
 
 
@@ -535,6 +546,10 @@ public class Pop {
 		}
 
 	}
+
+
+
+
 
 
 	

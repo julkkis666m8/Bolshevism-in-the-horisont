@@ -35,8 +35,8 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
-		controller = new Controller();
 		world = new World();
+		controller = new Controller(world);
 		tickAmount = 1;
 		
 		

@@ -32,6 +32,10 @@ public abstract class AbstractGood {
 		this.originState = originState;
 	}
 	
+	public void marketPriceAdder(int factor) {
+		
+	}
+	
 	/**
 	 * constructor that gives specific item according to it's constant
 	 * @param amount

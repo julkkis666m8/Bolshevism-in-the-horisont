@@ -16,14 +16,15 @@ public class SoldierPay {
 	
 	
 	
-	private double totalBudget;
+	private double totalBudgetOrigin = 0;
+	private double budget = 0;
 	
 	private int soldierPop;
 	private Nation nation;
 	
 
 	public SoldierPay(double totalBudget, Nation nation) {
-		this.totalBudget = totalBudget;
+		this.totalBudgetOrigin = totalBudget;
 		this.nation = nation;
 	}
 	
@@ -48,21 +49,19 @@ public class SoldierPay {
 	}
 
 
-	/**
-	 * used once a tick to get how much a state wants to pay to its soliders
-	 */
 	private void getSoldierPay() {
-		// TODO Auto-generated method stub
+		
+		budget += nation.getNationCash(totalBudgetOrigin);
 		
 	}
 
 
 	public double getTotalBudget() {
-		return totalBudget;
+		return totalBudgetOrigin;
 	}
 
 	public void setTotalBudget(double totalBudget) {
-		this.totalBudget = totalBudget;
+		this.totalBudgetOrigin = totalBudget;
 	}
 
 
@@ -70,9 +69,42 @@ public class SoldierPay {
 		
 		double pay = 0;
 		
-		pay = nation.getTotalMoney();
+		pay = giveMoneyToSoldier(population);
 		
 		return pay;
+	}
+	
+	
+
+
+	//TODO: make multithreadable by splitting budgets per state
+	private synchronized double giveMoneyToSoldier(int population) {
+
+		double pay = 0;
+		
+		double toBePayed = payPerSoldier(population);
+
+		if(budget > toBePayed) {
+			this.budget = budget - toBePayed;
+			pay = toBePayed;
+		}
+		else {
+			pay = budget;
+			budget = 0;
+		}
+		
+		
+		return pay;
+	}
+
+
+	private double payPerSoldier(int population) {
+		
+		double pay = (totalBudgetOrigin / soldierPop) * population;
+		
+		return pay;
+		
+		
 	}
 	
 	

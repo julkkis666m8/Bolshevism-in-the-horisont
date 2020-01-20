@@ -22,9 +22,11 @@ public class AbstractMarket {
 	public String getStockpileString() {
 		
 		String marketNeedsString = "";
-		
+		int i = 0;
 		for(double d : marketNeeds) {
-			marketNeedsString +="\n"+d;
+			
+			marketNeedsString +="\n"+Constants.GoodToString(i)+": "+d;
+			i++;
 		}
 		
 		return "size is "+ Functions.formatNum(stockPile.size())+" and string is: "+stockPile.toString() + 

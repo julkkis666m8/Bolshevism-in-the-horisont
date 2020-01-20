@@ -89,7 +89,7 @@ public class PopWindow extends Application {
 			needsFurfilled += pop.getNeedsFurfilled();
 		}
 		
-		return population;
+		return totalWealth;
 	}
 	private static double popInfoTotalWealth(List<Pop> pops) {
 		
@@ -211,14 +211,14 @@ public class PopWindow extends Application {
 			addData(name, value);
 			
 		}
-		
+		/*
 		try {
 			tooltip.setText(lastData.getName()+"s have "+lastData.getPieValue() + " people");
 			//tooltip.show(stage, e.getScreenX(), e.getScreenY());
 		}
 		catch(Exception e) {
 			System.out.println(e);
-		}
+		}*/
 
 	}
 

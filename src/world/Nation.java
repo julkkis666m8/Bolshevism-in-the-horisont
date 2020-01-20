@@ -251,18 +251,21 @@ public class Nation {
 		double incomeTaxable = 0; 
 		int itterations = 0;
 		double needsFurfilled = 0;
+		double wantsFurfilled = 0;
 		
 		for (int i = 0; i < pops.size(); i++) {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
 			totalWealth += pop.getAverageWealth();
-			justSpent += pop.getJustSpent();
+			justSpent += pop.getJustSpent()*population;
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();
+			wantsFurfilled += pop.getWantsFurfilled();
 		}
-		
+
 		needsFurfilled = (needsFurfilled / itterations)*100;//%
+		wantsFurfilled = (wantsFurfilled / itterations)*100;//%
 		
 		
 
@@ -280,6 +283,9 @@ public class Nation {
 		}
 		if(itterations != 0) {
 			string += "needsFurfilled: "+Functions.formatNum(needsFurfilled)+"% | ";	
+		}
+		if(itterations != 0) {
+			string += "wantsFurfilled: "+Functions.formatNum(wantsFurfilled)+"% | ";	
 		}
 		
 		
@@ -385,7 +391,7 @@ public class Nation {
 
 
 	public void tick() {
-		// TODO Auto-generated method stub
+		soldierPay.tick();
 		
 	}
 
