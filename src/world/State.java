@@ -10,13 +10,18 @@ import market.LocalMarket;
 
 
 public class State {
-public LinkedList<Pop> pops;
-public String name;
-public LocalMarket localMarket;
-public Nation nation;
-private double clerkWage;
-private double craftsmanWage;
-private double fertility;
+	public LinkedList<Pop> pops;
+	public String name;
+	public LocalMarket localMarket;
+	public Nation nation;
+	private double clerkWage;
+	private double craftsmanWage;
+	private double fertility;
+
+	@Override
+	public String toString() {
+		return name+" of "+nation.toString();
+	}
 
 	public String getInfo() {
 		String string = "\n"+name+": ";

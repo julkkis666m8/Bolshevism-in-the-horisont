@@ -59,6 +59,11 @@ public class Nation {
 		this.nameADJ = nameADJ;
 	}
 	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 	
 
 	public void addCoreRace(int race){
