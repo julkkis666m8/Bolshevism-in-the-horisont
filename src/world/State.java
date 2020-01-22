@@ -4,12 +4,13 @@ import java.util.List;
 
 import constants.*;
 import market.LocalMarket;
+import nationalEconomyManagers.AristocratCashPool;
 
 
 
 
 
-public class State {
+public class State extends World {
 	public LinkedList<Pop> pops;
 	public String name;
 	public LocalMarket localMarket;
@@ -17,6 +18,7 @@ public class State {
 	private double clerkWage;
 	private double craftsmanWage;
 	private double fertility;
+	private AristocratCashPool aristocratCashPool;
 
 	@Override
 	public String toString() {
@@ -52,6 +54,7 @@ public class State {
 		
 		pops = new LinkedList<Pop>();
 		localMarket = new LocalMarket();
+		setAristocratCashPool(new AristocratCashPool(nation, this));
 		
 		this.name = name;
 		
@@ -201,7 +204,16 @@ public class State {
 
 	public void tick() {
 		localMarket.tick();
+		aristocratCashPool.tick();
 		
+	}
+
+	public AristocratCashPool getAristocratCashPool() {
+		return aristocratCashPool;
+	}
+
+	public void setAristocratCashPool(AristocratCashPool aristocratCashPool) {
+		this.aristocratCashPool = aristocratCashPool;
 	}
 	
 

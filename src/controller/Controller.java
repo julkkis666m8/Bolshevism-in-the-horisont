@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
+import constants.Constants;
 import main.Main;
 import market.Taxes;
 import world.Nation;
@@ -82,12 +83,29 @@ public class Controller {
 	}
 
 	/**
-	 * sets pop-needs to default for start of itteration
+	 * set pop needs and wants to market
 	 */
 	private void updatePopNeeds() {
 		
 		for (Pop p : main.Main.world.getAllPops()) {
+			double[] allNeeds = new double[Constants.AMOUNT_OF_GOODS];
+			double[] needs1 = p.getNeeds();
+			double[] needs2 = p.getWants();
+			//TODO: add luxury wants etc here too
 			
+			int i = 0;
+			for (double d : allNeeds) {
+				d = needs1[i];
+				d += needs2[i];
+				//d += needs3[i];
+
+				allNeeds[i] += d;
+				
+				i++;
+			}
+			
+			
+			p.getState().localMarket.modMarketNeeds(allNeeds);
 		}
 		
 	}

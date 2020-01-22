@@ -9,7 +9,7 @@ import main.Main;
 import market.NationalMarket;
 import nationalEconomyManagers.SoldierPay;
 
-public class Nation {
+public class Nation extends World {
 	
 	private String name;
 	private String nameADJ;

@@ -89,7 +89,7 @@ public class PopWindow extends Application {
 			needsFurfilled += pop.getNeedsFurfilled();
 		}
 		
-		return totalWealth;
+		return population;
 	}
 	private static double popInfoTotalWealth(List<Pop> pops) {
 		

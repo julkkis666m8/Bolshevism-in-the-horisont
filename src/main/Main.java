@@ -24,9 +24,9 @@ public class Main {
 	
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
-	public static JobParameters germanJob = new JobParameters(0, 0, 50, 50, 5, 50, 10, 2, 1, 2, 1, 1);
+	public static JobParameters germanJob = new JobParameters(0, 0, 50, 10, 5, 5, 10, 2, 1, 2, 1, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
-	public static JobParameters jewishJob = new JobParameters(0, 0, 50, 50, 0, 20, 0, 1, 5, 1, 0, 0);
+	public static JobParameters jewishJob = new JobParameters(0, 0, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
 	public static JobParameters polishJob = new JobParameters(0, 0, 70, 10, 5, 5, 0, 1, 0, 2, 1, 1);
 	private static Nation poland;

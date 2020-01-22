@@ -281,19 +281,63 @@ public class Pop {
 		}
 		else if (job == Constants.ARTISAN) {
 			goodAdder(ArtesanJobs.artesanJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+			income = PopSellHandler.sell(this, state.localMarket, nation);
 		}
 		else if (job == Constants.SOLDIER) {
 			income = nation.getSoldierPay().paySoldier(population);
 		}
 		else if (job == Constants.LABORER) {
 			goods.addAll(PopSellHandler.labourerJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+			income = PopSellHandler.sell(this, state.localMarket, nation);
+			
+			
+			double ariMoney = income*0.1;
+			income = income-ariMoney;
+			
+			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
+			
 		}
 		else if (job == Constants.FARMER) {
 			goods.addAll(PopSellHandler.farmerJob(this, state));
-			income = PopSellHandler.sell(this, goods, state.localMarket, nation);
+			income = PopSellHandler.sell(this, state.localMarket, nation);
+			
+			
+			double ariMoney = income*0.1;
+			income = income-ariMoney;
+			
+			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
+			
 		}
+		else if (job == Constants.ARISTOCRAT) {
+			income = state.getAristocratCashPool().payAristocrat(population);
+		}
+		else if (job == Constants.SERF) {
+
+			goods.addAll(PopSellHandler.farmerJob(this, state));
+			income = PopSellHandler.sell(this, state.localMarket, nation);
+			
+			
+			double ariMoney = income*0.75;
+			income = income-ariMoney;
+			
+			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
+			
+		}
+		else if (job == Constants.SLAVE) {
+
+			goods.addAll(PopSellHandler.farmerJob(this, state));
+			income = PopSellHandler.sell(this, state.localMarket, nation);
+			
+			
+			double ariMoney = income*0.99;
+			income = income-ariMoney;
+			
+			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
+			
+		}
+		
+		
+		
 		
 		this.setIncomeTaxable(income);
 		averageWealth = income/population;
@@ -475,7 +519,7 @@ public class Pop {
 
 
 	public void birthControll() {
-/*
+
 		//if (getStrata() == Constants.LOWER_STRATA) {
 			if (getNeedsFurfilled() >= 1 && growthOMatic > 1) {
 				 
@@ -487,7 +531,7 @@ public class Pop {
 				state.nation.births += growth;
 				population += growth;
 			}
-			else if (getNeedsFurfilled() < 0.25 && population > 0 /*&& (job == Constants.FARMER || job == Constants.LABORER)) {
+			else if (getNeedsFurfilled() < 0.25 && population > 0 && (job == Constants.FARMER || job == Constants.LABORER)) {
 				int growth = -1;
 				double toPay = growth * (5000);
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
@@ -500,7 +544,7 @@ public class Pop {
 				growthOMatic += fertility*population;
 			}
 		//}
-	*/	
+	
 	}
 
 
@@ -545,6 +589,13 @@ public class Pop {
 			goods.remove(removableGood);			
 		}
 
+	}
+
+
+
+
+	public State getState() {
+		return state;
 	}
 
 

@@ -23,7 +23,7 @@ public class AbstractMarket {
 		
 		String marketNeedsString = "";
 		int i = 0;
-		for(double d : marketNeeds) {
+		for(double d : getMarketNeeds()) {
 			
 			marketNeedsString +="\n"+Constants.GoodToString(i)+": "+d;
 			i++;
@@ -166,21 +166,62 @@ public class AbstractMarket {
 
 
 	private void marketNeed(int goodConst, double stillNeeded) {
-		marketNeeds[goodConst] += stillNeeded;
+		getMarketNeeds()[goodConst] += stillNeeded;
 		//System.out.println(goodConst +" "+ marketNeeds[goodConst]);
 	}
 	
 	public void resetMarketNeedForTheTurn() {
 		int i = 0;
-		for (double thisNeed : marketNeeds) {
-			marketNeeds[i] = 0;
+		for (double thisNeed : getMarketNeeds()) {
+			
+			//to fluidify the economy
+			
+			if (thisNeed > 0) {
+				for (AbstractGood good : getAllOfGood(i)) {
+					good.marketPriceAdder(thisNeed);
+				}	
+			}
+			else {
+				for (AbstractGood good : getAllOfGood(i)) {
+					good.marketPriceLowerer(thisNeed);
+				}
+			}
+			
+			
+			
+			getMarketNeeds()[i] = 0;
 			i++;
 		}
 	}
 
-
+//ALL SAME //TODO: ONLY HAVE two!!
 	public double[] getNeeds() {
 		return marketNeeds;
+	}
+	public double getMarketNeed(int goodIndex) {
+		return marketNeeds[goodIndex];
+	}
+	public double[] getMarketNeeds() {
+		return marketNeeds;
+	}
+//_______________________________________
+	
+	
+
+	/**
+	 * change for need, and then
+	 * @param marketNeedChange
+	 * @param index
+	 */
+	public void modMarketNeed(double marketNeedChange, int index) {
+		this.marketNeeds[index] = marketNeedChange;
+	}
+	
+	public void modMarketNeeds(double[] marketNeedChanges) {
+		for(int i = 0; i < marketNeeds.length; i++) {
+			this.marketNeeds[i] += marketNeedChanges[i];
+			//System.out.println(marketNeeds[i]);
+		}
 	}
 	
 }

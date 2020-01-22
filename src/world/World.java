@@ -41,6 +41,26 @@ public class World {
 		}
 		return pops;
 	}
+	
+	/**
+	 * gets all pops of nation with specific job type
+	 * @param job
+	 * @return
+	 */
+	public List<Pop> getJob(int job) {
+		List<Pop> popsOfJob = new LinkedList<>();
+		
+		List<Pop> allPops = getAllPops();
+		
+		for (int i = 0; i < allPops.size(); i++) {
+			Pop pop = allPops.get(i);
+			if(pop.job == job) {
+				popsOfJob.add(pop);
+			}
+		}
+		
+		return popsOfJob;
+	}
 
 	public List<Nation> getNations() {
 		return nations;

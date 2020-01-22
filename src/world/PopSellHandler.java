@@ -1,6 +1,5 @@
 package world;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,16 +11,18 @@ import goods.Steel;
 import goods.Timber;
 import goods.Wheat;
 import market.AbstractMarket;
-import market.NationalMarket;
 
 public class PopSellHandler {
 
 	
 	
-	public static double sell(Pop pop, List<AbstractGood> goods, AbstractMarket market, Nation nation) {
+	public synchronized static double sell(Pop pop, AbstractMarket market, Nation nation) {
+		
+		
+		List<AbstractGood> goods = pop.getGoods();
 		
 		double money = 0;
-		
+		/*
 		for (int i = 0; i < goods.size(); i++) {
 			AbstractGood good = goods.get(i);
 			
@@ -31,21 +32,21 @@ public class PopSellHandler {
 			money += good.sellGood(amount, market);
 			//System.out.println(good.getAmount());
 		
-		}
+		}*/
 		
 		
 		for(AbstractGood good : goods) {
 			
-			if(market.getGoodMaxPrice(good.getConstant(), 1) > good.MIN_PRICE) {
-				double amount = good.getAmount();
-				amount = amount - pop.getNeeds()[good.getConstant()];
-				
-				if (amount < 0) {
-					amount = 0;
-				}
-				
-				money = money += good.sellGood(amount, market);
-				good.setAmount(good.getAmount() - amount);					
+			if(true/*market.getMarketNeed(good.getConstant()) > 0*/) {
+				//if (market.getMarketNeed(good.getConstant()) > good.getAmount()) {
+				money = sellAllButNeeds(good, market, pop);	
+				//}
+				//else {
+				//	money = sellXButNeeds(good, market, pop, market.getMarketNeed(good.getConstant()));
+				//}		
+			}
+			else {
+				//System.out.println(good.toString());
 			}
 		}
 		
@@ -57,6 +58,38 @@ public class PopSellHandler {
 
 		return money;
 		
+	}
+
+
+	private static double sellXButNeeds(AbstractGood good, AbstractMarket market, Pop pop, double x) {
+		double money = 0;
+		double amount = x;
+		amount = amount - pop.getNeeds()[good.getConstant()];
+		
+		if (amount < 0) {
+			amount = 0;
+		}
+		
+		money = money += good.sellGood(amount, market);
+		good.setAmount(good.getAmount() - amount);
+		
+		return money;
+	}
+
+
+	private static double sellAllButNeeds(AbstractGood good, AbstractMarket market, Pop pop) {
+		double money = 0;
+		double amount = good.getAmount();
+		amount = amount - pop.getNeeds()[good.getConstant()];
+		
+		if (amount < 0) {
+			amount = 0;
+		}
+		
+		money = money += good.sellGood(amount, market);
+		good.setAmount(good.getAmount() - amount);
+		
+		return money;
 	}
 
 

@@ -11,9 +11,9 @@ public abstract class AbstractGood {
 	public double baseValue = 5;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
-	public static double MAX_PRICE = 100;
-	public static double MIN_PRICE = 0.1;
-	public static double NON_PRICE = 0.01; //must be smaller than MIN_PRICE
+	public static double MAX_PRICE = 1000000;
+	public static double MIN_PRICE = 0.01;
+	public static double NON_PRICE = 0.001; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
 	protected String goodName;
@@ -21,8 +21,8 @@ public abstract class AbstractGood {
 	public int getConstant() {
 		return constant;
 	}
-	private int daysOnNeg = 0;
-	private int daysOnPos = 0;
+	private double daysOnNeg = 0;
+	private double daysOnPos = 0;
 	
 	
 	
@@ -31,9 +31,14 @@ public abstract class AbstractGood {
 		this.amount = amount;
 		this.originState = originState;
 	}
-	
-	public void marketPriceAdder(int factor) {
-		
+
+	public void marketPriceAdder(double factor) {
+		daysOnPos = 0;
+		daysOnNeg += factor;
+	}
+	public void marketPriceLowerer(double factor) {
+		daysOnNeg = 0;
+		daysOnPos += factor;
 	}
 	
 	/**
@@ -56,7 +61,7 @@ public abstract class AbstractGood {
 	public double getValue(double amount) {
 		//setValueMultiplyer(valueMultiplyer);
 		//return amount*(baseValue*valueMultiplyer);
-		return amount*(baseValue + sumModifier );
+		return amount*(baseValue + sumModifier )*valueMultiplyer;
 	}
 	
 	public double sellGood(double amount, AbstractMarket market) {
@@ -70,14 +75,14 @@ public abstract class AbstractGood {
 		if (amount < 1000) {
 			daysOnPos = 0;
 			daysOnNeg++;
-			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.01)));
+			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.1)));
 			setValueSumModifier(sumModifier+0.01);
 			
 		}
 		else {
 			daysOnNeg = 0;
 			daysOnPos++;
-			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.01*(daysOnPos*0.01)));
+			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.01*(daysOnPos*0.1)));
 			setValueSumModifier(sumModifier-0.01);
 			
 		}
