@@ -215,6 +215,15 @@ public class State extends World {
 	public void setAristocratCashPool(AristocratCashPool aristocratCashPool) {
 		this.aristocratCashPool = aristocratCashPool;
 	}
+
+	public void addPop(Pop pop) {
+
+		//TODO: add something that tests if such a pop exists lrdy. IMPORTANT!!!!!
+		
+		pops.add(pop);
+		
+		
+	}
 	
 
 }

@@ -160,9 +160,12 @@ public class Pop {
 		if(getNeedsFurfilled() > 0.6) {
 			setWantsFurfilled(buy(nation, state, getWants()));			
 		}
-
-
 		
+		
+		
+
+
+		demotionControll();
 		birthControll();
 		
 		
@@ -546,6 +549,33 @@ public class Pop {
 		//}
 	
 	}
+	
+	public void demotionControll() {
+		if (getNeedsFurfilled() < 0.1) {
+			if (Constants.jobToClass(job) != Constants.LOWEST_STRATA) {
+				demote(1, Constants.SERF);				
+			}
+
+		}
+	}
+
+
+	/**
+	 * make people into lower class
+	 */
+	private void demote(int demotablePopulation, int job) {
+		
+		if (population < demotablePopulation) {
+			demotablePopulation = population;
+		}
+		
+		population = population - demotablePopulation;
+		
+		state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
+		
+	}
+
+
 
 
 	private double getwantsFurfilled() {

@@ -11,7 +11,7 @@ public abstract class AbstractGood {
 	public double baseValue = 5;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
-	public static double MAX_PRICE = 1000000;
+	public static double MAX_PRICE = 1000;
 	public static double MIN_PRICE = 0.01;
 	public static double NON_PRICE = 0.001; //must be smaller than MIN_PRICE
 	public State originState;
