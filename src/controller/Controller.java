@@ -74,7 +74,7 @@ public class Controller {
 					e1.printStackTrace();
 				}
 				// all tasks have finished or the time has been reached.
-				System.out.println("Simnum " + simNum);
+				//System.out.println("Simnum " + itteration);
 			}
 			
 			

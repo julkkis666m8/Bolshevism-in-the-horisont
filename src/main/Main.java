@@ -24,7 +24,7 @@ public class Main {
 	
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
-	public static JobParameters germanJob = new JobParameters(0, 0, 50, 10, 5, 5, 1, 2, 1, 2, 1, 1);
+	public static JobParameters germanJob = new JobParameters(0, 0, 50, 10, 5, 5, 1, 2, 1, 2, 10000000, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(100, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
@@ -58,11 +58,11 @@ public class Main {
 		poland.addAcceptedRace(Constants.JEWISH);
 		poland.addHatedRace(Constants.GERMANIC);
 		
-		world.addNation(poland);
+		//world.addNation(poland);
 		
 
 		//testing nation w/ 3 states
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 1; i++) {
 			germany.addState(new State("State "+i, germany));
 		}
 		
@@ -124,7 +124,7 @@ public class Main {
 
 
 			
-			JOptionPane.showMessageDialog(null, germany.getInfo());
+			//JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
 			//JOptionPane.showMessageDialog(null, poland.getInfo());

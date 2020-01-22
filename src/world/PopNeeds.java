@@ -11,6 +11,9 @@ public class PopNeeds {
 	private double steel = 0.00000;
 	private double cotton = 0.00000;
 	
+	
+	private double modifier = 1;
+	
 	private double needsFurfilled = 1;
 	
 	public PopNeeds(int job) {
@@ -36,6 +39,10 @@ public class PopNeeds {
 			//low ppl needs
 			//iron += +0.0001;
 			break;
+		case Constants.LOWEST_STRATA:
+			//lowest ppl needs
+			modifier = 0.1;
+			break;
 		}
 	}
 	
@@ -52,12 +59,12 @@ public class PopNeeds {
 		double[] needs = new double[Constants.AMOUNT_OF_GOODS];
 
 		
-		needs[Constants.WHEAT] = wheat * population;
-		needs[Constants.IRON] = iron * population;
-		needs[Constants.STEEL] = steel * population;
-		needs[Constants.CLOTHING] = clothing * population;
-		needs[Constants.FURNUATURE] = furnuature * population;
-		needs[Constants.COTTON] = cotton * population;
+		needs[Constants.WHEAT] = wheat * population * modifier;
+		needs[Constants.IRON] = iron * population * modifier;
+		needs[Constants.STEEL] = steel * population * modifier;
+		needs[Constants.CLOTHING] = clothing * population * modifier;
+		needs[Constants.FURNUATURE] = furnuature * population * modifier;
+		needs[Constants.COTTON] = cotton * population * modifier;
 		
 		return needs;	
 	}

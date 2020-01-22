@@ -174,6 +174,9 @@ public class Constants {
 		case ARISTOCRAT:
 			title = "aristocrat";
 			break;
+		case OFFICER:
+			title = "officer";
+			break;
 		case SERF:
 			title = "serf";
 			break;

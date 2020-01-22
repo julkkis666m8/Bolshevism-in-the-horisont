@@ -164,7 +164,7 @@ public class Pop {
 		
 		
 
-
+		promotionControll();
 		demotionControll();
 		birthControll();
 		
@@ -530,18 +530,18 @@ public class Pop {
 				growthOMatic -= growth;
 				double toPay = growth * (5000);
 				System.out.println(growth+" BIRTHs of "+Constants.JobToString(job));
-				takeMoney(getSelfList(), toPay);
+				//takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
 				population += growth;
 			}
-			else if (getNeedsFurfilled() < 0.25 && population > 0 && (job == Constants.FARMER || job == Constants.LABORER)) {
+			/*else if (getNeedsFurfilled() < 0.25 && population > 0 && (job == Constants.FARMER || job == Constants.LABORER)) {
 				int growth = -1;
 				double toPay = growth * (5000);
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
 				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
 				population += growth;
-			}
+			}*/
 			else if(getwantsFurfilled() >= 0.75) {
 				//System.out.println(growthOMatic+" growths of "+Constants.JobToString(job));
 				growthOMatic += fertility*population;
@@ -549,13 +549,83 @@ public class Pop {
 		//}
 	
 	}
-	
-	public void demotionControll() {
-		if (getNeedsFurfilled() < 0.1) {
-			if (Constants.jobToClass(job) != Constants.LOWEST_STRATA) {
-				demote(1, Constants.SERF);				
-			}
 
+	public void promotionControll() {
+		
+		int toDemote = 1;
+		
+		if (getNeedsFurfilled() < 0.1 && Constants.jobToClass(job) == Constants.LOWEST_STRATA && Math.random() > 0.99) {
+			
+			if(Math.random() > 0.34) {
+				demote(toDemote, Constants.FARMER);
+			}
+			else if(Math.random() > 0.34) {
+				demote(toDemote, Constants.LABORER);
+			}
+			else { 
+				demote(toDemote, Constants.SOLDIER);
+			}
+			
+		}/*
+		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
+			if(Math.random() > 0.34) {
+				demote(toDemote, Constants.FARMER);
+			}
+			else if(Math.random() > 0.34) {
+				demote(toDemote, Constants.LABORER);
+			}
+			else { 
+				demote(toDemote, Constants.SOLDIER);
+			}
+			
+		}
+		else if (getNeedsFurfilled() < 0.75 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+			if(Math.random() > 0.5) {
+				demote(toDemote, Constants.FARMER);
+			}
+			else {
+				demote(toDemote, Constants.LABORER);
+			}
+			
+		}*/
+	}
+
+	public void demotionControll() {
+		
+		int toDemote = 1;
+		
+		if (getNeedsFurfilled() < 0.1 && Constants.jobToClass(job) == Constants.LOWER_STRATA) {
+			
+			demote(toDemote, Constants.SERF);
+			
+		}
+		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
+			if(Math.random() > 0.34) {
+				demote(toDemote, Constants.FARMER);
+			}
+			else if(Math.random() > 0.5) {
+				demote(toDemote, Constants.LABORER);
+			}
+			else { 
+				demote(toDemote, Constants.SOLDIER);
+			}
+			
+		}
+		else if (getNeedsFurfilled() < 0.75 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+			
+			if(Math.random() > 0.5) {
+				demote(toDemote, Constants.ARTISAN);
+			}
+			else if(Math.random() > 0.2) {
+				demote(toDemote, Constants.OFFICER);
+			}
+			else if(Math.random() > 0.5) {
+				demote(toDemote, Constants.CLERK);
+			}
+			else {
+				demote(toDemote, Constants.CLERGYMAN);
+			}
+			
 		}
 	}
 
@@ -570,6 +640,8 @@ public class Pop {
 		}
 		
 		population = population - demotablePopulation;
+		
+		System.out.println(demotablePopulation+" "+ Constants.JobToString(this.job) + " demote to "+ Constants.JobToString(job));
 		
 		state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
 		

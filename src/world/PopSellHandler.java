@@ -219,6 +219,25 @@ public class PopSellHandler {
 	}
 
 
+	public static List<AbstractGood> serfJob(Pop pop, State state) {
+		
+		List<AbstractGood> goods = new LinkedList<AbstractGood>();
+		
+		int population = pop.getPopulation();
+		
+		
+		//efficency calculator
+		double amount = population * 0.025 * state.getFertility();
+
+		goods.add(new Wheat(amount*2, state));
+		//goods.add(new Cotton(amount, state));
+		
+		
+		
+		return goods;
+	}
+
+
 
 	public static List<AbstractGood> artesanJob(Pop pop, State state) {
 
