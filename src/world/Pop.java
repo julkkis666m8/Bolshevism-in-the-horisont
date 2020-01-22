@@ -460,6 +460,10 @@ public class Pop {
 	public void returnTotalCash(double totalCash) {
 		averageWealth = totalCash/population;
 	}
+	
+	public void giveCash(double totalCash) {
+		averageWealth += totalCash/population; //TODO: CHEK IF THIS ACTUALLY WORKS
+	}
 
 
 	public double getIncomeTaxable() {
@@ -611,7 +615,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.75 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+		else if (getNeedsFurfilled() < 0.5 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
 			
 			if(Math.random() > 0.5) {
 				demote(toDemote, Constants.ARTISAN);
@@ -698,6 +702,30 @@ public class Pop {
 
 	public State getState() {
 		return state;
+	}
+
+
+	//state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
+
+	public boolean comparePop(Pop pop) {
+		if(this.sex == pop.sex && this.race == pop.race && this.religion == pop.religion && this.age == pop.age && this.job == pop.job) {
+			return true;
+		}
+		return false;
+	}
+
+
+	//state.addPop(new Pop(demotablePopulation, ideology, averageWealth, state));
+	
+
+	public void combinePop(Pop pop) {
+		
+		//TODO: handle ideology
+		
+		this.population += pop.population;
+		
+		this.giveCash(pop.getTotalWealth());
+		
 	}
 
 

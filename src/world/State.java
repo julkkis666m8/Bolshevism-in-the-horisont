@@ -220,6 +220,15 @@ public class State extends World {
 
 		//TODO: add something that tests if such a pop exists lrdy. IMPORTANT!!!!!
 		
+		List<Pop> popJobs = this.getJob(pop.job);
+		
+		for (Pop exPop : popJobs) {
+			if (exPop.comparePop(pop)) {
+				exPop.combinePop(pop);
+				return;
+			}
+		}
+		
 		pops.add(pop);
 		
 		

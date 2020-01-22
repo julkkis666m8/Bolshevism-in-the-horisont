@@ -3,6 +3,8 @@ package world;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import constants.Constants;
 import goods.AbstractGood;
 import goods.Cotton;
@@ -40,6 +42,9 @@ public class PopSellHandler {
 			if(true/*market.getMarketNeed(good.getConstant()) > 0*/) {
 				//if (market.getMarketNeed(good.getConstant()) > good.getAmount()) {
 				money = sellAllButNeeds(good, market, pop);	
+				
+				
+				
 				//}
 				//else {
 				//	money = sellXButNeeds(good, market, pop, market.getMarketNeed(good.getConstant()));
@@ -158,6 +163,7 @@ public class PopSellHandler {
 				}
 				catch(NullPointerException e) {
 					System.out.println(e);
+					JOptionPane.showMessageDialog(null, e);
 				}	
 			}
 		}
@@ -239,6 +245,13 @@ public class PopSellHandler {
 
 
 
+	
+	/**
+	 * OLD LEGACY NOT IN USE. SEE ARTESAN JOB CLASS
+	 * @param pop
+	 * @param state
+	 * @return
+	 */
 	public static List<AbstractGood> artesanJob(Pop pop, State state) {
 
 		

@@ -66,22 +66,24 @@ public abstract class AbstractGood {
 	
 	public double sellGood(double amount, AbstractMarket market) {
 		
+		market.modMarketNeed(amount*(-1), this.getConstant());
+		
 		return market.add(getAbstractGoodOfConst(amount, this.originState, this.getConstant()),amount);
 		
 		
 	}
 	
 	public void calculateAviliability() {
-		if (amount < 1000) {
-			daysOnPos = 0;
-			daysOnNeg++;
+		if (daysOnNeg != 0) {
+			//daysOnPos = 0;
+			//daysOnNeg++;
 			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.1)));
 			setValueSumModifier(sumModifier+0.01);
 			
 		}
 		else {
-			daysOnNeg = 0;
-			daysOnPos++;
+			//daysOnNeg = 0;
+			//daysOnPos++;
 			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.01*(daysOnPos*0.1)));
 			setValueSumModifier(sumModifier-0.01);
 			
