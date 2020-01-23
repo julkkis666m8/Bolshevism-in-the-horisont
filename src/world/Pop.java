@@ -473,7 +473,7 @@ public class Pop {
 	}
 	
 	public void giveCash(double totalCash) {
-		averageWealth += totalCash/population; //TODO: CHEK IF THIS ACTUALLY WORKS
+		averageWealth = averageWealth + (totalCash/population); //TODO: CHEK IF THIS ACTUALLY WORKS
 	}
 
 
@@ -628,12 +628,12 @@ public class Pop {
 		
 		int toDemote = 1;
 		
-		if (getNeedsFurfilled() < 0.1 && Constants.jobToClass(job) == Constants.LOWER_STRATA) {
+		if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.LOWER_STRATA) {
 			
 			demote(toDemote, Constants.SERF);
 			
 		}
-		else if (getNeedsFurfilled() < 0.25 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
+		else if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
 			if(Math.random() > 0.34) {
 				demote(toDemote, Constants.FARMER);
 			}
@@ -645,7 +645,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.UPPER_STRATA && Math.random() > 0.9) {
+		else if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.UPPER_STRATA && Math.random() > 0.9) {
 			
 			if(Math.random() > 0.5) {
 				demote(toDemote, Constants.ARTISAN);

@@ -74,18 +74,22 @@ public abstract class AbstractGood {
 	}
 	
 	public void calculateAviliability() {
-		if (daysOnNeg != 0) {
+		if (daysOnPos == 0) {
 			//daysOnPos = 0;
 			//daysOnNeg++;
-			setValueMultiplyer(valueMultiplyer+(valueMultiplyer*0.01*(daysOnNeg*0.1)));
-			setValueSumModifier(sumModifier+0.01);
+			if (getValue(1) < baseValue) {
+				setValueMultiplyer(valueMultiplyer+(/*valueMultiplyer*0.01**/(daysOnNeg*0.0001)));
+			}
+			setValueSumModifier(sumModifier+0.1);
 			
 		}
 		else {
 			//daysOnNeg = 0;
 			//daysOnPos++;
-			setValueMultiplyer(valueMultiplyer-(valueMultiplyer*0.01*(daysOnPos*0.1)));
-			setValueSumModifier(sumModifier-0.01);
+			if (getValue(1) > baseValue) {
+				setValueMultiplyer(valueMultiplyer-(/*valueMultiplyer*0.01**/(daysOnPos*0.0001)));
+			}
+			setValueSumModifier(sumModifier-0.1);
 			
 		}
 	}
