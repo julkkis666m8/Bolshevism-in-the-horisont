@@ -123,7 +123,7 @@ public class Main {
 			//}
 			
 			
-			//JOptionPane.showMessageDialog(null, germany.getInfo());
+			JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			//JOptionPane.showMessageDialog(null, germany.getInfo());
 			//JOptionPane.showMessageDialog(null, poland.getInfo());

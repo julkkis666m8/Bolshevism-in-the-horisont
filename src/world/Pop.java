@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import constants.Constants;
@@ -164,14 +166,23 @@ public class Pop {
 		
 		
 
-		promotionControll();
-		demotionControll();
-		birthControll();
-		
 		
 		//System.out.println(itteration);
 		//pop.removePeople( (( (int)(Math.round((pop.getPopulation())*0.1)) ) + 150) );
 			
+		
+	}
+	
+	public void buyTick(Nation nation) {
+
+		setNeedsFurfilled(buy(nation, state, getNeeds()));
+		if(getNeedsFurfilled() > 0.6) {
+			setWantsFurfilled(buy(nation, state, getWants()));			
+		}
+
+		promotionControll();
+		demotionControll();
+		birthControll();
 		
 	}
 
@@ -556,43 +567,62 @@ public class Pop {
 
 	public void promotionControll() {
 		
-		int toDemote = 1;
+		int toPromote = 1;
 		
-		if (getNeedsFurfilled() < 0.1 && Constants.jobToClass(job) == Constants.LOWEST_STRATA && Math.random() > 0.99) {
+		if (getWantsFurfilled() >= 0.1 && Constants.jobToClass(job) == Constants.LOWEST_STRATA && Math.random() > 0.9) {
 			
 			if(Math.random() > 0.34) {
-				demote(toDemote, Constants.FARMER);
+				promote(toPromote, Constants.FARMER);
 			}
 			else if(Math.random() > 0.34) {
-				demote(toDemote, Constants.LABORER);
+				promote(toPromote, Constants.LABORER);
 			}
 			else { 
-				demote(toDemote, Constants.SOLDIER);
-			}
-			
-		}/*
-		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
-			if(Math.random() > 0.34) {
-				demote(toDemote, Constants.FARMER);
-			}
-			else if(Math.random() > 0.34) {
-				demote(toDemote, Constants.LABORER);
-			}
-			else { 
-				demote(toDemote, Constants.SOLDIER);
+				promote(toPromote, Constants.SOLDIER);
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.75 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+		else if (getNeedsFurfilled() >= 1 && job == Constants.FARMER && Math.random() > 0.9) {
+
 			if(Math.random() > 0.5) {
-				demote(toDemote, Constants.FARMER);
+				promote(toPromote, Constants.ARTISAN);
+			}
+			else if(Math.random() > 0.2) {
+				promote(toPromote, Constants.OFFICER);
+			}
+			else if(Math.random() > 0.5) {
+				promote(toPromote, Constants.CLERK);
 			}
 			else {
-				demote(toDemote, Constants.LABORER);
+				promote(toPromote, Constants.CLERGYMAN);
+			}
+		}
+		else if (getWantsFurfilled() > 0.33 && Constants.jobToClass(job) == Constants.LOWER_STRATA && Math.random() > 0.9) {
+
+			if(Math.random() > 0.5) {
+				promote(toPromote, Constants.ARTISAN);
+			}
+			else if(Math.random() > 0.2) {
+				promote(toPromote, Constants.OFFICER);
+			}
+			else if(Math.random() > 0.5) {
+				promote(toPromote, Constants.CLERK);
+			}
+			else {
+				promote(toPromote, Constants.CLERGYMAN);
+			}
+		}
+		else if (getWantsFurfilled() > 0.75 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA && Math.random() > 0.9 && getAverageWealth() > 100000) {
+			if(Math.random() > 0.5) {
+				promote(toPromote, Constants.CAPITALIST);
+			}
+			else {
+				promote(toPromote, Constants.ARISTOCRAT);
 			}
 			
-		}*/
+		}
 	}
+	
 
 	public void demotionControll() {
 		
@@ -615,7 +645,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.UPPER_STRATA && Math.random() > 0.9) {
 			
 			if(Math.random() > 0.5) {
 				demote(toDemote, Constants.ARTISAN);
@@ -631,6 +661,23 @@ public class Pop {
 			}
 			
 		}
+	}
+	
+	/**
+	 * make people into lower class
+	 */
+	private void promote(int promotablePopulation, int job) {
+		
+		if (population < promotablePopulation) {
+			promotablePopulation = population;
+		}
+		
+		population = population - promotablePopulation;
+		
+		System.out.println(promotablePopulation+" "+ Constants.JobToString(this.job) + " promote to "+ Constants.JobToString(job));
+		//JOptionPane.showMessageDialog(null, "PROMOTION");
+		state.addPop(new Pop(promotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
+		
 	}
 
 

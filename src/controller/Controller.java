@@ -1,4 +1,7 @@
 package controller;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -55,13 +58,13 @@ public class Controller {
 
 						@Override
 						public void run() {
-							try {	
+							//try {	
 								tickState(nation, state);
-								
+							/*	
 							}catch (Exception e) {
 								System.out.println("!!!!!!ERROR IN STATE MULTITRHEADDING!!!!!!\n"+e);
 								JOptionPane.showInternalMessageDialog(null, "!!!!!!ERROR IN STATE MULTITRHEADDING!!!!!!\n"+e);
-							}
+							}*/
 							
 						}
 				    	
@@ -106,7 +109,13 @@ public class Controller {
 			
 			
 			p.getState().localMarket.modMarketNeeds(allNeeds);
+
+			p.setNeedsFurfilled(0);
+			p.setWantsFurfilled(0);
+			//Luxury
 		}
+		
+		
 		
 	}
 	
@@ -133,6 +142,23 @@ public class Controller {
 			}
 			
 		}
+
+		ArrayList<Pop> popsA = new ArrayList<Pop>();
+		
+		popsA.addAll(pops);
+
+		Collections.sort(popsA, new Comparator<Pop>() {
+			public int compare(Pop o1, Pop o2) {
+				return o1.getAverageWealth() > o2.getAverageWealth() ? -1 : o1.getAverageWealth() == o2.getAverageWealth() ? 0 : 1;
+			}
+		});
+
+		for(Pop pop : popsA) {
+			pop.buyTick(nation);
+		}
+
+
+
 		//END METHOD
 	}
 
