@@ -316,7 +316,7 @@ public class Pop {
 		}
 		else if (job == Constants.SERF) {
 
-			goods.addAll(PopSellHandler.farmerJob(this, state));
+			goods.addAll(PopSellHandler.serfJob(this, state));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -328,7 +328,7 @@ public class Pop {
 		}
 		else if (job == Constants.SLAVE) {
 
-			goods.addAll(PopSellHandler.farmerJob(this, state));
+			goods.addAll(PopSellHandler.serfJob(this, state));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -603,7 +603,7 @@ public class Pop {
 			demote(toDemote, Constants.SERF);
 			
 		}
-		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
+		else if (getNeedsFurfilled() < 0.25 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
 			if(Math.random() > 0.34) {
 				demote(toDemote, Constants.FARMER);
 			}
@@ -615,7 +615,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.5 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
+		else if (getNeedsFurfilled() < 0.33 && Constants.jobToClass(job) == Constants.UPPER_STRATA) {
 			
 			if(Math.random() > 0.5) {
 				demote(toDemote, Constants.ARTISAN);

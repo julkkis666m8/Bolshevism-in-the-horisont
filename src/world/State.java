@@ -10,7 +10,7 @@ import nationalEconomyManagers.AristocratCashPool;
 
 
 
-public class State extends World {
+public class State {
 	public LinkedList<Pop> pops;
 	public String name;
 	public LocalMarket localMarket;
@@ -222,6 +222,8 @@ public class State extends World {
 		
 		List<Pop> popJobs = this.getJob(pop.job);
 		
+		System.out.println(Constants.JobToString(pop.job)+" people of that job "+popJobs.size());
+		
 		for (Pop exPop : popJobs) {
 			if (exPop.comparePop(pop)) {
 				exPop.combinePop(pop);
@@ -232,6 +234,26 @@ public class State extends World {
 		pops.add(pop);
 		
 		
+	}
+
+	/**
+	 * gets all pops of nation with specific job type
+	 * @param job
+	 * @return
+	 */
+	public List<Pop> getJob(int job) {
+		List<Pop> popsOfJob = new LinkedList<>();
+		
+		List<Pop> allPops = getPops();
+		
+		for (int i = 0; i < allPops.size(); i++) {
+			Pop pop = allPops.get(i);
+			if(pop.job == job) {
+				popsOfJob.add(pop);
+			}
+		}
+		System.out.println("getJob size: "+allPops.size()+" to "+popsOfJob.size());
+		return popsOfJob;
 	}
 	
 

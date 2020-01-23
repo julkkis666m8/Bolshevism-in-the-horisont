@@ -9,7 +9,7 @@ import main.Main;
 import market.NationalMarket;
 import nationalEconomyManagers.SoldierPay;
 
-public class Nation extends World {
+public class Nation {
 	
 	private String name;
 	private String nameADJ;
@@ -262,7 +262,7 @@ public class Nation extends World {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.getAverageWealth();
+			totalWealth += pop.getAverageWealth()*population;
 			justSpent += pop.getJustSpent()*population;
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();
