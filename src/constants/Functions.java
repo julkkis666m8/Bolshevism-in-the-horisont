@@ -27,6 +27,19 @@ public class Functions {
 		return fin;
 	}
 	
+	/**
+	 * number under 1 turns into its opposite or hwat ever
+	 * @param number
+	 * @return
+	 */
+	public static double complementGetter(double number) {
+		
+		return 1-number;
+		
+	}
+	
+	
+	
 	private static String[] suffix = new String[]{"","k", "m", "b", "t"};
 	private static int MAX_LENGTH = 8;
 

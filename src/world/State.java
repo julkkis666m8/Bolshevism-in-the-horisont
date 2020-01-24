@@ -170,6 +170,20 @@ public class State {
 		
 		return capitalists;
 	}
+	
+	public double jobPercentage(int job) {
+		int ofJob = countPopulation(getJob(job));
+		return ofJob/countPopulation(getPops());
+	}
+	
+	public int countPopulation(List<Pop> pops) {
+		int total = 0;
+		for (Pop pop : pops) {
+			total += pop.population;
+		}
+		return total;
+	}
+	
 
 	public void AddEducation(int population, double effect) {
 		// TODO Auto-generated method stub

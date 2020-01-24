@@ -212,9 +212,10 @@ public class PopSellHandler {
 		
 		int population = pop.getPopulation();
 		
+		double aristocratModifier = 1 + state.jobPercentage(Constants.ARISTOCRAT);
 		
 		//efficency calculator
-		double amount = population * 0.025 * state.getFertility();
+		double amount = population * 0.025 * aristocratModifier * state.getFertility();
 
 		goods.add(new Wheat(amount, state));
 		goods.add(new Cotton(amount, state));

@@ -148,7 +148,12 @@ public class Pop {
 			
 		
 	}
-	
+
+	public int populationRandom(double modifier) {
+		
+		return (int) (Math.random() * (population * modifier * POPULATION_FLUIDITY_CONSTANT) + POPULATION_FLUIDITY_CONSTANT);
+		
+	}
 	public int populationRandom() {
 		
 		return (int) (Math.random() * (population * POPULATION_FLUIDITY_CONSTANT) + POPULATION_FLUIDITY_CONSTANT);
@@ -165,7 +170,7 @@ public class Pop {
 		
 		
 		promotionControll(populationRandom());
-		demotionControll(populationRandom());
+		demotionControll(populationRandom(1-getNeedsFurfilled())); //TODO: make number go reverse.
 		birthControll(populationRandom());
 		
 	}
@@ -620,12 +625,12 @@ public class Pop {
 		
 		//int toDemote = 1;
 		
-		if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.LOWER_STRATA) {
+		if (Constants.jobToClass(job) == Constants.LOWER_STRATA) {
 			
 			demote(toDemote, Constants.SERF);
 			
 		}
-		else if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
+		else if ( Constants.jobToClass(job) == Constants.MIDDLE_STRATA) {
 			if(Math.random() > 0.34) {
 				demote(toDemote, Constants.FARMER);
 			}
@@ -637,7 +642,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.UPPER_STRATA && Math.random() > 0.9) {
+		else if (Constants.jobToClass(job) == Constants.UPPER_STRATA && Math.random() > 0.9) {
 			
 			if(Math.random() > 0.5) {
 				demote(toDemote, Constants.ARTISAN);
