@@ -17,6 +17,7 @@ public class Pop {
 
 
 
+	private static final double POPULATION_FLUIDITY_CONSTANT = 0.01;
 	public int population;
 	public int religion;
 	public int sex;
@@ -43,17 +44,10 @@ public class Pop {
 		return Constants.raceToString(race)+" "+Constants.ReligionToString(religion)+
 				" "+Constants.JobToString(job)+" from "+state.toString();
 	}
-	
-	
-	
-	
 	public Pop(int population, int sex, int race, int religion, float age, int job, Ideology ideology,
 			double averageWealth, State state) {
-
 		this.state = state;
-
 		goods = new LinkedList<AbstractGood>();
-
 		this.population = population;
 		this.sex = sex;
 		this.race = race;
@@ -61,38 +55,25 @@ public class Pop {
 		this.age = age;
 		this.job = job;
 		this.averageWealth = averageWealth;
-		
-
 		popNeeds = new PopNeeds(job);
 		popWants = new PopWants(job);
-		
 		if(job == Constants.CAPITALIST) {
 			taxEvasion = 0.5;
 		}
 		else {
 			taxEvasion = 0.01;
 		}
-		
 	}
-
-	
 	public Pop(int population, int religion, int race, int job, double averageWealth, State state) {
-
 		this.state = state;
-		
 		goods = new LinkedList<AbstractGood>();
-		
 		this.population = population;
 		this.religion = religion;
 		this.race = race;
 		this.job = job;
 		this.averageWealth = averageWealth;
-		
-		
-		
 		popNeeds = new PopNeeds(job);
 		popWants = new PopWants(job);
-
 		if(job == Constants.CAPITALIST) {
 			taxEvasion = 0.5;
 		}
@@ -100,9 +81,7 @@ public class Pop {
 			taxEvasion = 0.01;
 		}
 	}
-	
 
-	
 	/**
 	 * gives information about a pop
 	 * @return
@@ -120,32 +99,29 @@ public class Pop {
 		return string;
 	}
 	private String getAverageWealthString() {
-		// TODO Auto-generated method stub
 		return ""+averageWealth;
 	}
 	private String getGenderString() {
-		// TODO Auto-generated method stub
 		return Constants.sexToString(sex);
 	}
 	private String getRaceString() {
-		// TODO Auto-generated method stub
 		return Constants.raceToString(race);
 	}
 	private String getJobString() {
-		// TODO Auto-generated method stub
 		return Constants.JobToString(job);
 	}
 	private String getReligionString() {
-		// TODO Auto-generated method stub
 		return Constants.ReligionToString(religion);
 	}
 	private String getPopulationString() {
-		// TODO Auto-generated method stub
 		return "population: "+population;
 	}
 	public int getPopulation() {
 		return population;
 	}
+	
+	
+	
 	public void tick(Nation nation) {
 
 
@@ -173,6 +149,12 @@ public class Pop {
 		
 	}
 	
+	public int populationRandom() {
+		
+		return (int) (Math.random() * (population * POPULATION_FLUIDITY_CONSTANT) + POPULATION_FLUIDITY_CONSTANT);
+		
+	}
+	
 	public void buyTick(Nation nation) {
 
 		setNeedsFurfilled(buy(nation, state, getNeeds()));
@@ -180,9 +162,11 @@ public class Pop {
 			setWantsFurfilled(buy(nation, state, getWants()));			
 		}
 
-		promotionControll();
-		demotionControll();
-		birthControll();
+		
+		
+		promotionControll(populationRandom());
+		demotionControll(populationRandom());
+		birthControll(populationRandom());
 		
 	}
 
@@ -535,8 +519,8 @@ public class Pop {
 		popWants.setWantsFurfilled(wantsFurfilled);
 	}
 
-
-	public void birthControll() {
+	//TODO: make work with inparameter
+	public void birthControll(int popModifier) {
 
 		//if (getStrata() == Constants.LOWER_STRATA) {
 			if (getNeedsFurfilled() >= 1 && growthOMatic > 1) {
@@ -565,9 +549,13 @@ public class Pop {
 	
 	}
 
-	public void promotionControll() {
+	public void promotionControll(int toPromote) {
 		
-		int toPromote = 1;
+		if(toPromote == 0) {
+			return;
+		}
+		
+		//int toPromote = 1;
 		
 		if (getWantsFurfilled() >= 0.1 && Constants.jobToClass(job) == Constants.LOWEST_STRATA && Math.random() > 0.9) {
 			
@@ -582,7 +570,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() >= 1 && job == Constants.FARMER && Math.random() > 0.9) {
+		else if (getNeedsFurfilled() >= 1 && job == Constants.FARMER && state.localMarket.getMarketNeed(Constants.WHEAT) <= 0) {
 
 			if(Math.random() > 0.5) {
 				promote(toPromote, Constants.ARTISAN);
@@ -597,7 +585,7 @@ public class Pop {
 				promote(toPromote, Constants.CLERGYMAN);
 			}
 		}
-		else if (getWantsFurfilled() > 0.33 && Constants.jobToClass(job) == Constants.LOWER_STRATA && Math.random() > 0.9) {
+		else if (getWantsFurfilled() > 0.33 && Constants.jobToClass(job) == Constants.LOWER_STRATA && job != Constants.FARMER && Math.random() > 0.9) {
 
 			if(Math.random() > 0.5) {
 				promote(toPromote, Constants.ARTISAN);
@@ -624,9 +612,13 @@ public class Pop {
 	}
 	
 
-	public void demotionControll() {
+	public void demotionControll(int toDemote) {
 		
-		int toDemote = 1;
+		if(toDemote == 0) {
+			return;
+		}
+		
+		//int toDemote = 1;
 		
 		if (getNeedsFurfilled() < 0.9 && Constants.jobToClass(job) == Constants.LOWER_STRATA) {
 			

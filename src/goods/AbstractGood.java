@@ -12,8 +12,8 @@ public abstract class AbstractGood {
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public static double MAX_PRICE = 1000;
-	public static double MIN_PRICE = 0.01;
-	public static double NON_PRICE = 0.001; //must be smaller than MIN_PRICE
+	public static double MIN_PRICE = 1;
+	public static double NON_PRICE = 0.99; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
 	protected String goodName;
@@ -232,7 +232,7 @@ public abstract class AbstractGood {
 	}
 
 	public void tick() {
-		rot(0.9999);
+		rot();
 		
 	}
 	
