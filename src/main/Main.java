@@ -63,15 +63,37 @@ public class Main {
 
 		//testing nation w/ 3 states
 		for (int i = 0; i < 1; i++) {
-			germany.addState(new State("State "+i, germany));
+			//germany.addState(new State("State "+i, germany));
 		}
+
+		State state1 = new State("State "+1, germany);
+		State state2 = new State("State "+2, germany);
+		State state3 = new State("State "+3, germany);
+		germany.addState(state1);
+		germany.addState(state2);
+		germany.addState(state3);
+		
+		state1.addNeigbour(state2);
+		state2.addNeigbour(state3);
 		
 		
+		State statep1 = new State("State "+1, poland);
+		State statep2 = new State("State "+2, poland);
+		State statep3 = new State("State "+3, poland);
+		poland.addState(statep1);
+		poland.addState(statep2);
+		poland.addState(statep3);
+		
+		statep1.addNeigbour(statep2);
+		statep2.addNeigbour(statep3);
+		
+		
+		statep1.addNeigbour(state1);
 		
 		
 		//testing nation w/ 3 states
 		for (int i = 0; i < 3; i++) {
-			poland.addState(new State("State "+i, poland));
+			//poland.addState(new State("State "+i, poland));
 		}
 
 

@@ -135,7 +135,7 @@ public class Constants {
 	public final static int SOLDIER = 2;
 	public final static int ARTISAN = 3;
 	public final static int CRAFTSMAN = 4;
-	public final static int CLERK = 5;
+	public final static int MERCHANT = 5;
 	public final static int CAPITALIST = 6;
 	public final static int CLERGYMAN = 7;
 	public final static int ARISTOCRAT = 8;
@@ -162,8 +162,8 @@ public class Constants {
 		case CRAFTSMAN:
 			title = "craftsman";
 			break;
-		case CLERK:
-			title = "clerk";
+		case MERCHANT:
+			title = "merchant";
 			break;
 		case CAPITALIST:
 			title = "capitalist";
@@ -207,7 +207,7 @@ public class Constants {
 		case ARTISAN:
 			strata = MIDDLE_STRATA;
 			break;
-		case CLERK:
+		case MERCHANT:
 			strata = MIDDLE_STRATA;
 			break;
 		case CLERGYMAN:

@@ -27,6 +27,7 @@ public class Nation {
 	private SoldierPay soldierPay;
 	public double babyPrice = 500;
 	public int births = 0; //for statistics
+	public double tarrif = 0.10;
 	
 	//TODO: add lists for discriminated races/etc and perfered races/etc
 	

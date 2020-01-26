@@ -11,6 +11,7 @@ import constants.Constants;
 import constants.Functions;
 import factories.ArtesanJobs;
 import goods.AbstractGood;
+import market.MerchantHandler;
 import market.Taxes;
 
 public class Pop {
@@ -276,8 +277,8 @@ public class Pop {
 			state.AddEducation(population, effect);
 			state.convert(population, effect);
 		}
-		else if (job == Constants.CLERK) {
-			income = state.getClerkPay(state.getClerkWage()*population);
+		else if (job == Constants.MERCHANT) {
+			income = MerchantHandler.wrangle(state, population, nation);
 		}
 		else if (job == Constants.CRAFTSMAN) {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
@@ -584,7 +585,7 @@ public class Pop {
 				promote(toPromote, Constants.OFFICER);
 			}
 			else if(Math.random() > 0.5) {
-				promote(toPromote, Constants.CLERK);
+				promote(toPromote, Constants.MERCHANT);
 			}
 			else {
 				promote(toPromote, Constants.CLERGYMAN);
@@ -599,7 +600,7 @@ public class Pop {
 				promote(toPromote, Constants.OFFICER);
 			}
 			else if(Math.random() > 0.5) {
-				promote(toPromote, Constants.CLERK);
+				promote(toPromote, Constants.MERCHANT);
 			}
 			else {
 				promote(toPromote, Constants.CLERGYMAN);
@@ -651,7 +652,7 @@ public class Pop {
 				demote(toDemote, Constants.OFFICER);
 			}
 			else if(Math.random() > 0.5) {
-				demote(toDemote, Constants.CLERK);
+				demote(toDemote, Constants.MERCHANT);
 			}
 			else {
 				demote(toDemote, Constants.CLERGYMAN);

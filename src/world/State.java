@@ -19,6 +19,7 @@ public class State {
 	private double craftsmanWage;
 	private double fertility;
 	private AristocratCashPool aristocratCashPool;
+	public List<State> neigbours = new LinkedList<>();
 
 	@Override
 	public String toString() {
@@ -66,6 +67,22 @@ public class State {
 		
 		pops.addAll(PopParameters.createPops(main.Main.germany, pop, main.Main.germanRace, main.Main.germanJob, this));
 		pops.addAll(PopParameters.createPops(main.Main.germany, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
+		
+	}
+	
+	public void addNeigbour(State state){
+		state.neigbours.add(this);
+		this.neigbours.add(state);
+	}
+	
+	public void addNeigbours(List<State> states){
+
+		for (State state : states) {
+			state.neigbours.add(this);
+			state.neigbours.addAll(states);
+			state.neigbours.remove(state);
+		}
+		this.neigbours.addAll(states);
 		
 	}
 	
@@ -128,7 +145,7 @@ public class State {
 		else if (job == Constants.CLERGYMAN) {
 			return 0;
 		}
-		else if (job == Constants.CLERK) {
+		else if (job == Constants.MERCHANT) {
 			return 5;
 		}
 		else if (job == Constants.CRAFTSMAN) {
@@ -268,6 +285,10 @@ public class State {
 		}
 		System.out.println("getJob size: "+allPops.size()+" to "+popsOfJob.size());
 		return popsOfJob;
+	}
+
+	public List<State> getNeigbours() {
+		return neigbours;
 	}
 	
 
