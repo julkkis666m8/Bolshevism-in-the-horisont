@@ -61,7 +61,7 @@ public abstract class AbstractGood {
 	public double getValue(double amount) {
 		//setValueMultiplyer(valueMultiplyer);
 		//return amount*(baseValue*valueMultiplyer);
-		return amount*(baseValue + sumModifier )*valueMultiplyer;
+		return amount*(baseValue + sumModifier )/**valueMultiplyer*/;
 	}
 	
 	public double sellGood(double amount, AbstractMarket market) {

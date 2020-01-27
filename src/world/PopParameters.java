@@ -2,6 +2,8 @@ package world;
 
 import java.util.LinkedList;
 
+import constants.Constants;
+
 public class PopParameters {
 	
 	public static LinkedList<Pop> createPops(Nation nation, int totalStatePop, RaceParameters rp, JobParameters jp, State state) {
@@ -11,18 +13,18 @@ public class PopParameters {
 
 		//System.out.println(totalStatePop+"");
 		
-		pops.addAll(raceDefiner((int)(jp.getSerfPercentage() * totalStatePop), rp, 9, state));
-		pops.addAll(raceDefiner((int)(jp.getSlavePercentage() * totalStatePop), rp, 10, state));
-		pops.addAll(raceDefiner((int)(jp.getFarmerPercentage() * totalStatePop), rp, 0, state));
-		pops.addAll(raceDefiner((int)(jp.getLaborerPercentage() * totalStatePop), rp, 1, state));
-		pops.addAll(raceDefiner((int)(jp.getSoldierPercentage() * totalStatePop), rp, 2, state));
-		pops.addAll(raceDefiner((int)(jp.getArtisanPercentage() * totalStatePop), rp, 3, state));
-		pops.addAll(raceDefiner((int)(jp.getCraftsmanPercentage() * totalStatePop), rp, 4, state));
-		pops.addAll(raceDefiner((int)(jp.getClerkPercentage() * totalStatePop), rp, 5, state));
-		pops.addAll(raceDefiner((int)(jp.getCapitalistPercentage() * totalStatePop), rp, 6, state));
-		pops.addAll(raceDefiner((int)(jp.getClergymanPercentage() * totalStatePop), rp, 7, state));
-		pops.addAll(raceDefiner((int)(jp.getAristocratPercentage() * totalStatePop), rp, 8, state));
-		pops.addAll(raceDefiner((int)(jp.getOfficerPercentage() * totalStatePop), rp, 9, state));
+		pops.addAll(raceDefiner((int)(jp.getSerfPercentage() * totalStatePop), rp, Constants.SERF, state));
+		pops.addAll(raceDefiner((int)(jp.getSlavePercentage() * totalStatePop), rp, Constants.SLAVE, state));
+		pops.addAll(raceDefiner((int)(jp.getFarmerPercentage() * totalStatePop), rp, Constants.FARMER, state));
+		pops.addAll(raceDefiner((int)(jp.getLaborerPercentage() * totalStatePop), rp, Constants.LABORER, state));
+		pops.addAll(raceDefiner((int)(jp.getSoldierPercentage() * totalStatePop), rp, Constants.SOLDIER, state));
+		pops.addAll(raceDefiner((int)(jp.getArtisanPercentage() * totalStatePop), rp, Constants.ARTISAN, state));
+		pops.addAll(raceDefiner((int)(jp.getCraftsmanPercentage() * totalStatePop), rp, Constants.CRAFTSMAN, state));
+		pops.addAll(raceDefiner((int)(jp.getClerkPercentage() * totalStatePop), rp, Constants.MERCHANT, state));
+		pops.addAll(raceDefiner((int)(jp.getCapitalistPercentage() * totalStatePop), rp, Constants.CAPITALIST, state));
+		pops.addAll(raceDefiner((int)(jp.getClergymanPercentage() * totalStatePop), rp, Constants.CLERGYMAN, state));
+		pops.addAll(raceDefiner((int)(jp.getAristocratPercentage() * totalStatePop), rp, Constants.ARISTOCRAT, state));
+		pops.addAll(raceDefiner((int)(jp.getOfficerPercentage() * totalStatePop), rp, Constants.OFFICER, state));
 		
 		
 		//TODO: create wives

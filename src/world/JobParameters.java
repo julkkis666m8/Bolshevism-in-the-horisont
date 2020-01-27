@@ -33,8 +33,8 @@ public class JobParameters {
 	public JobParameters(int serf, int slave, int farmer, int laborer, int soldier, int artisan,
 			int craftsman, int clerk, int capitalist, int clergyman, int aristocrat, int officer) {
 		
-		double total = serf + slave + farmer + laborer + soldier + artisan + craftsman + clerk
-				+ capitalist + clergyman + aristocrat + officer;
+		double total = serf + slave + farmer + laborer + soldier + artisan
+				+ craftsman + clerk	+ capitalist + clergyman + aristocrat + officer;
 
 		
 		this.serf = serf/total;
@@ -49,8 +49,6 @@ public class JobParameters {
 		this.clergyman = clergyman/total;
 		this.aristocrat = aristocrat/total;
 		this.officer = officer/total;
-		
-		
 	}
 
 

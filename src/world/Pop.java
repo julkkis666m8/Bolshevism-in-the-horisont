@@ -278,7 +278,7 @@ public class Pop {
 			state.convert(population, effect);
 		}
 		else if (job == Constants.MERCHANT) {
-			income = MerchantHandler.wrangle(state, population, nation);
+			income = MerchantHandler.wrangle(state, this, nation);
 		}
 		else if (job == Constants.CRAFTSMAN) {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);

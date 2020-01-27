@@ -28,8 +28,8 @@ public class Main {
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(0, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
-	public static JobParameters polishJob = new JobParameters(0, 0, 70, 10, 5, 5, 0, 1, 0, 2, 1, 1);
-	private static Nation poland;
+	public static JobParameters polishJob = new JobParameters(200, 0, 0, 5, 2, 1, 0, 1, 1, 2, 1, 1);
+	public static Nation poland;
 	
 	//public State nullState = new State(null, null);
 	
@@ -58,7 +58,7 @@ public class Main {
 		poland.addAcceptedRace(Constants.JEWISH);
 		poland.addHatedRace(Constants.GERMANIC);
 		
-		//world.addNation(poland);
+		world.addNation(poland);
 		
 
 		//testing nation w/ 3 states
@@ -66,35 +66,35 @@ public class Main {
 			//germany.addState(new State("State "+i, germany));
 		}
 
-		State state1 = new State("State "+1, germany);
-		State state2 = new State("State "+2, germany);
-		State state3 = new State("State "+3, germany);
+		State state1 = new State("State "+1, germany, germanRace, germanJob, (int)(Math.random() * 10000 + 1000));
+		//State state2 = new State("State "+2, germany);
+		//State state3 = new State("State "+3, germany);
 		germany.addState(state1);
-		germany.addState(state2);
-		germany.addState(state3);
+		//germany.addState(state2);
+		//germany.addState(state3);
 		
-		state1.addNeigbour(state2);
-		state2.addNeigbour(state3);
+		//state1.addNeigbour(state2);
+		//state2.addNeigbour(state3);
 		
 		
-		State statep1 = new State("State "+1, poland);
-		State statep2 = new State("State "+2, poland);
-		State statep3 = new State("State "+3, poland);
+		State statep1 = new State("State "+1, poland, polishRace, polishJob, 1000000000/*(int)(Math.random() * 10000 + 1000)*/);
+		//State statep2 = new State("State "+2, poland);
+		//State statep3 = new State("State "+3, poland);
 		poland.addState(statep1);
-		poland.addState(statep2);
-		poland.addState(statep3);
+		//poland.addState(statep2);
+		//poland.addState(statep3);
 		
-		statep1.addNeigbour(statep2);
-		statep2.addNeigbour(statep3);
+		//statep1.addNeigbour(statep2);
+		//statep2.addNeigbour(statep3);
 		
 		
 		statep1.addNeigbour(state1);
 		
 		
 		//testing nation w/ 3 states
-		for (int i = 0; i < 3; i++) {
+		//for (int i = 0; i < 3; i++) {
 			//poland.addState(new State("State "+i, poland));
-		}
+		//}
 
 
 
@@ -138,6 +138,11 @@ public class Main {
 				System.out.println(s.pops.size());
 				break;
 			}
+			for(State s : poland.getStates()) {
+				System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());
+				System.out.println(s.pops.size());
+				break;
+			}
 			
 			
 			//for(State s : poland.getStates()) {
@@ -145,10 +150,9 @@ public class Main {
 			//}
 			
 			
-			//JOptionPane.showMessageDialog(null, germany.getInfo());
+			JOptionPane.showMessageDialog(null, germany.getInfo());
 
-			//JOptionPane.showMessageDialog(null, germany.getInfo());
-			//JOptionPane.showMessageDialog(null, poland.getInfo());
+			JOptionPane.showMessageDialog(null, poland.getInfo());
 					
 			
 			controller.tick(tickAmount);

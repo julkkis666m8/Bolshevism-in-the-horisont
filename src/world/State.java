@@ -40,7 +40,7 @@ public class State {
 		return string;
 	}
 
-	public State(String name, Nation nation) {
+	public State(String name, Nation nation, RaceParameters mainRace, JobParameters mainJob, int population) {
 		
 		this.nation = nation;
 		
@@ -63,10 +63,10 @@ public class State {
 		//pops.add(new Pop(100, Constants.CATHOLIC, Constants.GERMANIC, Constants.CAPITALIST, wealthCalculator(Constants.CAPITALIST)));
 		
 
-		int pop = (int)(Math.random() * 10000 + 1000);
+		//int pop = (int)(Math.random() * 10000 + 1000);
 		
-		pops.addAll(PopParameters.createPops(main.Main.germany, pop, main.Main.germanRace, main.Main.germanJob, this));
-		pops.addAll(PopParameters.createPops(main.Main.germany, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
+		pops.addAll(PopParameters.createPops(nation, population, mainRace, mainJob, this));
+		pops.addAll(PopParameters.createPops(nation, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
 		
 	}
 	

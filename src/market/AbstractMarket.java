@@ -41,7 +41,12 @@ public class AbstractMarket {
 	
 	
 	
-
+	/**
+	 * adds good to state and combines if possible. returns profit.
+	 * @param newGood
+	 * @param amount
+	 * @return
+	 */
 	public double add(AbstractGood newGood, double amount) {
 		int i = 0;
 		for(AbstractGood g : stockPile) {
@@ -63,6 +68,16 @@ public class AbstractMarket {
 		return money;
 		
 	}
+	
+	public double addAll(List<AbstractGood> newGoods) {
+		double money = 0;
+		for (AbstractGood newGood : newGoods) {
+			money += this.add(newGood, newGood.getAmount());			
+		}
+		return money;
+	}
+	
+	
 	
 	public void updateGoods(){
 		
