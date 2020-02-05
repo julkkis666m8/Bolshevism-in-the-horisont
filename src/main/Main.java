@@ -1,6 +1,4 @@
 package main;
-import java.sql.Time;
-
 import javax.swing.JOptionPane;
 
 import constants.Constants;
