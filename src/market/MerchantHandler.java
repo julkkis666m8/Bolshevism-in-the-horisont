@@ -35,7 +35,7 @@ public class MerchantHandler {
 		}
 				
 		
-		
+		System.out.println("merchant warangels for " + income);
 
 		return income;
 	}
@@ -71,11 +71,16 @@ public class MerchantHandler {
 
 		double[] neededArray = new double[Constants.AMOUNT_OF_GOODS];
 		neededArray[goodConst] = needed;
+		double neededITEM_TEMP = needed;
 		
 		for(State deal : deals) {
-			
+			System.out.println("deal "+deal.localMarket.getAllOfGood(goodConst).toString());
 			neededArray = PopSellHandler.buy(pop, neededArray, pop.totalCash(), deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
+			
+			System.out.println("BUY? "+(neededArray[goodConst] - neededITEM_TEMP)+ " " + neededITEM_TEMP);
+			
 			if (neededArray[goodConst] <= 0) {
+				System.out.println("BREAK");
 				break;
 			}
 		}

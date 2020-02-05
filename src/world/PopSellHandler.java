@@ -59,7 +59,7 @@ public class PopSellHandler {
 		
 		
 		
-		nation.coffers -= money; //TODO: TEMPORARY TEST WHATEVER
+		//nation.coffers -= money; //TODO: TEMPORARY TEST WHATEVER
 
 		return money;
 		

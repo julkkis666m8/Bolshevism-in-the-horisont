@@ -1,9 +1,9 @@
-/view/
-/world/
-/main/
-/factories/
-/constants/
 /controller/
+/factories/
 /goods/
+/main/
 /market/
 /nationalEconomyManagers/
+/view/
+/world/
+/constants/

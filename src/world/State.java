@@ -145,8 +145,8 @@ public class State {
 		else if (job == Constants.CLERGYMAN) {
 			return 0;
 		}
-		else if (job == Constants.MERCHANT) {
-			return 5;
+		else if (job == Constants.MERCHANT) { //TEMPORARY BILLION
+			return 50000000;
 		}
 		else if (job == Constants.CRAFTSMAN) {
 			return 0;
