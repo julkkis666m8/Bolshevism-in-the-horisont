@@ -52,7 +52,9 @@ public class MerchantHandler {
 			double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, needed);
 			double profit = importPrice - localPrice;
 			if (profit <= 0) {
-				deals.add(neigbour);
+				if(neigbour.localMarket.goodTotalAmount(goodConst) > 0) {
+					deals.add(neigbour);	
+				}
 			}
 		}
 		
@@ -75,7 +77,7 @@ public class MerchantHandler {
 		
 		for(State deal : deals) {
 			System.out.println("deal "+deal.localMarket.getAllOfGood(goodConst).toString());
-			neededArray = PopSellHandler.buy(pop, neededArray, pop.totalCash(), deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
+			neededArray = PopSellHandler.buy(pop, neededArray, 100/*pop.takeTotalCash()*/, deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
 			
 			System.out.println("BUY? "+(neededArray[goodConst] - neededITEM_TEMP)+ " " + neededITEM_TEMP);
 			
