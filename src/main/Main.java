@@ -22,7 +22,7 @@ public class Main {
 	
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
-	public static JobParameters germanJob = new JobParameters(0, 0, 30, 10, 5, 5, 1, 2, 2, 2, 3, 1);
+	public static JobParameters germanJob = new JobParameters(0, 0, 30, 10, 5, 15, 1, 2, 2, 2, 3, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(0, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
@@ -65,20 +65,22 @@ public class Main {
 		}
 
 		State state1 = new State("State "+1, germany, germanRace, germanJob, (int)(Math.random() * 10000 + 1000));
+		State state2 = new State("State POL "+1, germany, polishRace, polishJob, 1000);
 		//State state2 = new State("State "+2, germany);
 		//State state3 = new State("State "+3, germany);
 		germany.addState(state1);
+		germany.addState(state2);
 		//germany.addState(state2);
 		//germany.addState(state3);
 		
-		//state1.addNeigbour(state2);
+		state1.addNeigbour(state2);
 		//state2.addNeigbour(state3);
 		
 		
-		State statep1 = new State("State "+1, poland, polishRace, polishJob, 1000000000/*(int)(Math.random() * 10000 + 1000)*/);
+		//State statep1 = new State("State "+1, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
 		//State statep2 = new State("State "+2, poland);
 		//State statep3 = new State("State "+3, poland);
-		poland.addState(statep1);
+		//poland.addState(statep1);
 		//poland.addState(statep2);
 		//poland.addState(statep3);
 		
@@ -86,7 +88,7 @@ public class Main {
 		//statep2.addNeigbour(statep3);
 		
 		
-		statep1.addNeigbour(state1);
+		//statep1.addNeigbour(state1);
 		
 		
 		//testing nation w/ 3 states
@@ -134,12 +136,12 @@ public class Main {
 			for(State s : germany.getStates()) {
 				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());
 				System.out.println(s.pops.size());
-				break;
+				//break;
 			}
 			for(State s : poland.getStates()) {
 				System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());
 				System.out.println(s.pops.size());
-				break;
+				//break;
 			}
 			
 			
@@ -150,6 +152,14 @@ public class Main {
 			
 			JOptionPane.showMessageDialog(null, germany.getInfo());
 
+			/*
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+			
 			//JOptionPane.showMessageDialog(null, poland.getInfo());
 					
 			

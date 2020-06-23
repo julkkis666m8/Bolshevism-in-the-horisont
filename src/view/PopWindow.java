@@ -63,11 +63,6 @@ public class PopWindow extends Application {
 
 	
 	
-	
-	
-	
-	
-	
 
 	private static double popInfo(List<Pop> pops) {
 		
@@ -183,7 +178,7 @@ public class PopWindow extends Application {
 		
 		for (int job = 0; job < 12; job++) {
 			Constants.JobToString(job);
-			popInfo(Nation.getPopsJob(main.Main.poland.getAllPops(), job));
+			popInfo(Nation.getPopsJob(main.Main.germany.getAllPops(), job));
 		}
 		
 		
@@ -226,12 +221,12 @@ public class PopWindow extends Application {
 	private static void getSelectedPops() {
 
 		//temp
-		popList = main.Main.poland.getAllPops();
+		popList = main.Main.germany.getAllPops();
 	}
 
 	private static LinkedList<Pop> getSelectedPops2() {
 
-		return main.Main.poland.getAllPops();
+		return main.Main.germany.getAllPops();
 	}
 
 	
@@ -244,7 +239,7 @@ public class PopWindow extends Application {
 		List<PieChart.Data> list = new ArrayList<PieChart.Data>();
 
 		for (int job = 0; job < 12; job++) {
-			list.add(new PieChart.Data(Constants.JobToString(job), popInfo(main.Main.poland.getPopsJob(pops, job))));
+			list.add(new PieChart.Data(Constants.JobToString(job), popInfo(main.Main.germany.getPopsJob(pops, job))));
 		}
 		return list;
 		

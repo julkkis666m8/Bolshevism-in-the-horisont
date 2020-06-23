@@ -139,31 +139,52 @@ public class State {
 	 * @return
 	 */
 	public static double wealthCalculator(int job) { 
+		
+		int socialClass = Constants.jobToClass(job);
+		
+		if (job == Constants.UPPER_STRATA) {
+			return 100;
+		}
+		else if (job == Constants.MIDDLE_STRATA) {
+			return 10;
+		}
+		else if (job == Constants.LOWER_STRATA) {
+			return 1;
+		}
+		else if (job == Constants.LOWEST_STRATA) {
+			return 0.001;
+		}
+		else {
+			return 0;
+		}
+		
+		
+		/*
 		if (job == Constants.CAPITALIST) {
 			return 100;
 		}
 		else if (job == Constants.CLERGYMAN) {
-			return 0;
+			return 100;
 		}
 		else if (job == Constants.MERCHANT) { //TEMPORARY BILLION
-			return 50000000;
+			return 5000;
 		}
 		else if (job == Constants.CRAFTSMAN) {
-			return 0;
+			return 1;
 		}
 		else if (job == Constants.ARTISAN) {
-			return 60;
+			return 600;
 		}
 		else if (job == Constants.SOLDIER) {
 			return 1;
 		}
 		else if (job == Constants.LABORER) {
-			return 0;
+			return 1;
 		}
 		else if (job == Constants.FARMER) {
-			return 0;
+			return 1;
 		}
-		return 0;
+		return 0;*/
 	}
 
 	public double getClerkWage() {
@@ -217,6 +238,7 @@ public class State {
 	}
 
 	public double getCraftsmanPay(double payThis) {
+		System.out.println("CRAFTSMEN WANT MONEY: "+payThis);
 		return Pop.takeMoney(findCapitalists(), payThis);
 	}
 

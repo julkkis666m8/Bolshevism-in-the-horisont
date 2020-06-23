@@ -11,9 +11,9 @@ public abstract class AbstractGood {
 	public double baseValue = 5;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
-	public static double MAX_PRICE = 1000;
-	public static double MIN_PRICE = 1;
-	public static double NON_PRICE = 0.99; //must be smaller than MIN_PRICE
+	public double MAX_PRICE = 1000;
+	public double MIN_PRICE = 1;
+	public double NON_PRICE = 0.99; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
 	protected String goodName;
@@ -23,6 +23,8 @@ public abstract class AbstractGood {
 	}
 	private double daysOnNeg = 0;
 	private double daysOnPos = 0;
+	private double maxDaysOnNeg = 10;
+	private double maxDaysOnPos = 10;
 	
 	
 	
@@ -32,13 +34,13 @@ public abstract class AbstractGood {
 		this.originState = originState;
 	}
 
-	public void marketPriceAdder(double factor) {
+	public void marketPriceAdder(double factor) { //factor is legacy/oldtest
 		daysOnPos = 0;
-		daysOnNeg += factor;
+		daysOnNeg++;
 	}
-	public void marketPriceLowerer(double factor) {
+	public void marketPriceLowerer(double factor) {//factor is legacy/oldtest
 		daysOnNeg = 0;
-		daysOnPos += factor;
+		daysOnPos++;
 	}
 	
 	/**
@@ -55,7 +57,7 @@ public abstract class AbstractGood {
 	@Override
 	public String toString() {
 		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "
-				+Functions.formatNum(amount)+" units, multiplyer: "+Functions.formatNum(valueMultiplyer)+" Summer: "+Functions.formatNum(sumModifier);
+				+Functions.formatNum(amount)+" units, multiplyer: "+daysOnPos+"/"+daysOnNeg+" Summer: "+Functions.formatNum(sumModifier);
 	}
 
 	public double getValue(double amount) {
@@ -78,19 +80,20 @@ public abstract class AbstractGood {
 			//daysOnPos = 0;
 			//daysOnNeg++;
 			if (getValue(1) < baseValue) {
-				setValueMultiplyer(valueMultiplyer+(/*valueMultiplyer*0.01**/(daysOnNeg*0.0001)));
+				//setValueMultiplyer(valueMultiplyer+(/*valueMultiplyer*0.01**/(daysOnNeg*0.0001)));
 			}
-			setValueSumModifier(sumModifier+0.1);
+			setValueSumModifier(sumModifier+(0.1/*daysOnNeg*/));
 			
 		}
 		else {
 			//daysOnNeg = 0;
 			//daysOnPos++;
 			if (getValue(1) > baseValue) {
-				setValueMultiplyer(valueMultiplyer-(/*valueMultiplyer*0.01**/(daysOnPos*0.0001)));
+				//setValueMultiplyer(valueMultiplyer-(/*valueMultiplyer*0.01**/(daysOnPos*0.0001)));
 			}
-			setValueSumModifier(sumModifier-0.1);
-			
+			if(amount > 1) {
+				setValueSumModifier(sumModifier-(0.1/*daysOnPos*/));
+			}
 		}
 	}
 	
@@ -108,12 +111,12 @@ public abstract class AbstractGood {
 	
 	private void setValueSumModifier(double newModifier) {
 		//System.out.println(getName()+": "+newMultiplyer);
-		if((baseValue+sumModifier) > MAX_PRICE) {
+		if((baseValue+sumModifier) >= MAX_PRICE) {
 			sumModifier = (MAX_PRICE - baseValue);
 			return;
 		}
-		if((baseValue+newModifier) < MIN_PRICE) {
-			sumModifier = (NON_PRICE - baseValue);
+		if((baseValue+newModifier) <= MIN_PRICE) {
+			sumModifier = (MIN_PRICE - baseValue);
 			return;
 		}
 		
@@ -232,7 +235,7 @@ public abstract class AbstractGood {
 	}
 
 	public void tick() {
-		rot();
+		//rot();
 		
 	}
 	

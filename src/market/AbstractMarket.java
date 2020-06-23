@@ -4,15 +4,22 @@ import constants.Constants;
 import constants.Functions;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import goods.AbstractGood;
+import world.Pop;
 import world.State;
 
 public class AbstractMarket {
 
 	protected List<AbstractGood> stockPile;
 	private double[] marketNeeds = new double[Constants.AMOUNT_OF_GOODS];
+	private List<AbstractMarket> subMarkets = new LinkedList<>();
 	
 	public AbstractMarket() {
 		stockPile = new ArrayList<>();
@@ -162,6 +169,33 @@ public class AbstractMarket {
 			}
 		}
 		
+			//if no more goods in market then look at sub markets
+		
+		if(stillNeeded > 0) {
+			List<AbstractGood> goods2Sort = this.getSubGoodType(goodConst);
+			Collections.sort(goods2Sort, new Comparator<AbstractGood>() {
+				public int compare(AbstractGood o1, AbstractGood o2) {
+					return o1.getValue(1) < o2.getValue(1) ? -1 : o1.getValue(1) == o2.getValue(1) ? 0 : 1;
+				}
+			});
+			
+			for(AbstractGood good : goods2Sort) {
+				if(good.isGoodToBuy(goodConst)) {
+					
+					stillNeeded -= good.getAmount();
+					
+					goods.add(good);
+					
+					if(stillNeeded <= 0) {
+						return goods;
+					}
+				}
+			}
+			
+		}
+		
+		
+		
 		marketNeed(goodConst, stillNeeded);
 		return goods;
 	}
@@ -192,19 +226,30 @@ public class AbstractMarket {
 			//to fluidify the economy
 			
 			if (thisNeed > 0) {
+				//JOptionPane.showMessageDialog(null, thisNeed+" IS THIS ZERO?");
 				for (AbstractGood good : getAllOfGood(i)) {
-					good.marketPriceAdder(thisNeed);
+					good.marketPriceAdder(thisNeed);//factor is legacy/oldtest
 				}	
 			}
 			else {
 				for (AbstractGood good : getAllOfGood(i)) {
-					good.marketPriceLowerer(thisNeed);
+					good.marketPriceLowerer(thisNeed);//factor is legacy/oldtest
 				}
 			}
+			///////////////////////
+			//actual reset of need:
+			/////////////////////
 			
+			double needNudger = 0;
 			
-			
-			getMarketNeeds()[i] = 0;
+			for (AbstractGood good : getAllOfGood(i)) {
+				
+				needNudger -= good.getAmount();
+				
+				//good.marketPriceLowerer(thisNeed);//factor is legacy/oldtest
+			}
+					
+			getMarketNeeds()[i] = needNudger*0.01; //to set default need to a fraction of total stockpile to prevent prices staying stable while stockpiles are rising.
 			i++;
 		}
 	}
@@ -238,5 +283,36 @@ public class AbstractMarket {
 			//System.out.println(marketNeeds[i]);
 		}
 	}
+
+
+	public List<AbstractMarket> getSubMarkets() {
+		return subMarkets;
+	}
+	
+	/**
+	 * get all goods of type from submarkets
+	 * @param goodConst
+	 * @return
+	 */
+	public List<AbstractGood> getSubGoodType(int goodConst){
+		
+		List<AbstractGood> goods = new LinkedList<>();
+		
+		for (AbstractMarket market : subMarkets) {
+			market.getAllOfGood(goodConst);
+		}
+		
+		return goods;
+	}
+
+
+	public void addSubMarkets(List<AbstractMarket> subMarkets) {
+		this.subMarkets = subMarkets;
+	}
+	
+	public void removeSubMarkets(List<AbstractMarket> subMarkets) {
+		this.subMarkets = subMarkets;
+	}
+	
 	
 }

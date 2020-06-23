@@ -13,6 +13,9 @@ import world.State;
 public class Constants {
 	
 	
+
+	public static final double STUPIDITY_EFFECT_CONSTANT = 10; //how much does stupidity effect stupid choises?
+	
 	
 	//TODO: UPDATE WHEN GOODS ADDED
 	public static final int AMOUNT_OF_GOODS = 7;
@@ -306,6 +309,7 @@ public class Constants {
 	public final static int ARABIAN = 8;
 	public final static int BLACK = 9;
 	public final static int NATIVE_AMERICAN = 10;
+
 
 
 

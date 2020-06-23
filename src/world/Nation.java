@@ -2,6 +2,7 @@ package world;
 import java.util.LinkedList;
 import java.util.List;
 
+import common.AbstractTechnology;
 import constants.Constants;
 import constants.Functions;
 import goods.AbstractGood;
@@ -17,6 +18,7 @@ public class Nation {
 	private List<Integer> coreRaces;
 	private List<Integer> acceptedRaces;
 	private List<Integer> hatedRaces;
+	private List<AbstractTechnology> technologies;
 	public double taxEfficency;
 	public double coffers;
 	public double taxPercentage;
@@ -44,7 +46,7 @@ public class Nation {
 		
 		//temp
 		cleregymanPay = 0.9;
-		soldierPay = new SoldierPay(10000, this);
+		soldierPay = new SoldierPay(100000, this);
 		
 		setNationalMarket(new NationalMarket(this, main.Main.world.getGlobalMarket()));
 		
@@ -221,9 +223,9 @@ public class Nation {
 		double totpop = getTotalMoney();
 		string += "\nTotal weth:  "+Functions.formatNum((coffers+totpop))+"£";
 		
-//		for (int i = 0; i < states.size(); i++) {
-//			string += states.get(i).getInfo();
-//		}
+		for (int i = 0; i < states.size(); i++) {
+			string += states.get(i).getInfo();
+		}
 		
 
 		string += getPopInfo();

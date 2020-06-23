@@ -2,6 +2,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,6 +11,16 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import constants.Constants;
+import factories.AbstractJob;
+import factories.AbstractJobChoser;
+import factories.AbstractJobDoer;
+import factories.ArtesanClothing;
+import factories.ArtesanFurnature;
+import factories.ArtesanSteel;
+import factories.FarmCotton;
+import factories.FarmWheat;
+import factories.LabourIron;
+import factories.LabourTimber;
 import main.Main;
 import market.Taxes;
 import world.Nation;
@@ -20,9 +31,23 @@ import world.World;
 public class Controller {
 
 	public World world;
+	public List<AbstractJob> farmJobs = new ArrayList<>();
+	public List<AbstractJob> labourJobs = new ArrayList<>();
+	public List<AbstractJob> artesanJobs = new ArrayList<>();
+	public AbstractJobChoser jobChoser = new AbstractJobChoser();
+	public AbstractJobDoer jobDoer = new AbstractJobDoer();
 	
 	public Controller(World world) {
 		this.world = world;
+		
+		farmJobs.add(new FarmCotton());
+		farmJobs.add(new FarmWheat());
+		labourJobs.add(new LabourIron());
+		labourJobs.add(new LabourTimber());
+		artesanJobs.add(new ArtesanSteel());
+		artesanJobs.add(new ArtesanFurnature());
+		artesanJobs.add(new ArtesanClothing());
+		
 	}
 	
 	/**
@@ -119,6 +144,16 @@ public class Controller {
 		
 	}
 	
+	/**
+	 * use to make goods spread
+	 * @param state
+	 */
+	private void tickMarkets(State state) {
+		List<State> neigbours = state.getNeigbours();
+		
+		
+	}
+	
 
 	private void tickState(Nation nation, State state) {
 		
@@ -167,8 +202,8 @@ public class Controller {
 	 */
 	private void updateWorldsGoodPrices() {
 		for (State s : main.Main.world.getAllStates()){
-			s.localMarket.updateGoods();
 			s.localMarket.resetMarketNeedForTheTurn();
+			s.localMarket.updateGoods();
 		}
 	}
 	

@@ -135,6 +135,7 @@ public class PopSellHandler {
 			
 				List<AbstractGood> goods = market.getGood(goodConst, buyTheseNeeds[goodConst]);
 				
+				
 				try {
 					for(AbstractGood good : goods) {
 						if (money > 0 && good.getAmount() > 0) {

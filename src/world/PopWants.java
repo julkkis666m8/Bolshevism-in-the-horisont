@@ -7,9 +7,9 @@ public class PopWants {
 	private double wheat = 0.01;
 	private double clothing = 0.005;
 	private double furnuature = 0.001;
-	private double iron = 0.0001;
+	private double iron = 0.000;
 	private double steel = 0.0001;
-	private double cotton = 0.0001;
+	private double cotton = 0.000;
 	
 	
 	private double modifier = 1;
@@ -48,7 +48,7 @@ public class PopWants {
 			break;
 		case Constants.LOWEST_STRATA:
 			//lowest ppl needs
-			modifier = 0.1;
+			//modifier = 0.1;
 			break;
 		}
 	}

@@ -9,7 +9,9 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import constants.Constants;
 import constants.Functions;
+import factories.AbstractJobChoser;
 import factories.ArtesanJobs;
+import factories.LabourIron;
 import goods.AbstractGood;
 import market.MerchantHandler;
 import market.Taxes;
@@ -284,14 +286,16 @@ public class Pop {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
 		}
 		else if (job == Constants.ARTISAN) {
-			goodAdder(ArtesanJobs.artesanJob(this, state));
+			//goodAdder(ArtesanJobs.artesanJob(this, state));
+			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.artesanJobs, 0.1));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 		}
 		else if (job == Constants.SOLDIER) {
 			income = nation.getSoldierPay().paySoldier(population);
 		}
 		else if (job == Constants.LABORER) {
-			goods.addAll(PopSellHandler.labourerJob(this, state));
+			//goods.addAll(PopSellHandler.labourerJob(this, state));
+			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.labourJobs, 0.1));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -302,7 +306,8 @@ public class Pop {
 			
 		}
 		else if (job == Constants.FARMER) {
-			goods.addAll(PopSellHandler.farmerJob(this, state));
+			//goods.addAll(PopSellHandler.farmerJob(this, state));
+			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -317,7 +322,8 @@ public class Pop {
 		}
 		else if (job == Constants.SERF) {
 
-			goods.addAll(PopSellHandler.serfJob(this, state));
+			//goods.addAll(PopSellHandler.serfJob(this, state));
+			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -329,7 +335,8 @@ public class Pop {
 		}
 		else if (job == Constants.SLAVE) {
 
-			goods.addAll(PopSellHandler.serfJob(this, state));
+			//goods.addAll(PopSellHandler.serfJob(this, state));
+			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
 			income = PopSellHandler.sell(this, state.localMarket, nation);
 			
 			
@@ -492,8 +499,13 @@ public class Pop {
 		//buy from local market
 		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), state.localMarket);
 		
+
+		//buy from national market
+		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), nation.getNationalMarket());
+		
 		
 		//TODO: add global market
+		//buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), );
 		
 
 		
@@ -771,6 +783,11 @@ public class Pop {
 		
 		this.giveCash(pop.getTotalWealth());
 		
+	}
+	
+	//to add stuff to people's pockets
+	public void addGoods(List<AbstractGood> goodList) {
+		goods.addAll(goodList);
 	}
 
 
