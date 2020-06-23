@@ -125,6 +125,26 @@ public class AbstractMarket {
 		}
 
 	}
+	
+	/**
+	 * find total amount of good constant in a market
+	 * @return
+	 */
+	public double goodTotalAmount(int goodConst) {
+		double totalAmount = 0;
+		
+		for(AbstractGood good : stockPile) {
+			
+			if (good.getConstant() == goodConst) {
+				totalAmount += good.getAmount();
+			}
+			
+		}
+		
+		return totalAmount;
+	}
+	
+	
 	/**
 	 * maximum price for a good on a market
 	 * @param goodConst

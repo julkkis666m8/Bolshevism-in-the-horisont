@@ -33,9 +33,15 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
+		
+		long last_time = System.nanoTime(); //for calculating performance and such :^)
+
+
+		
+		
 		world = new World();
 		controller = new Controller(world);
-		tickAmount = 1;
+		tickAmount = 100;
 		
 		
 		
@@ -105,7 +111,7 @@ public class Main {
 	      }.start();
 	      
 	      try {
-			Thread.sleep(1000);
+			Thread.sleep(50);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -131,7 +137,16 @@ public class Main {
 				e1.printStackTrace();
 			}
 		while (true) {
+			
+			//FIRST PRINT FROM THIS IS TIME TO SETUP
+			//FOR CALCULATING TIME BETWEEN TICKS
+		    long time = System.nanoTime();
+		    int delta_time = (int) ((time - last_time) / 1000000);
+		    //last_time = time; //we want to skip gui
+		    //System.out.println(delta_time); //i want to see "fps" last on prints
+			//FOR CALCULATING TIME BETWEEN TICKS
 
+		    System.out.println("\n-----------------previous happenings above-----------");
 
 			for(State s : germany.getStates()) {
 				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());
@@ -143,6 +158,11 @@ public class Main {
 				System.out.println(s.pops.size());
 				//break;
 			}
+			
+			System.out.println("Delta time: "+delta_time+"ms"); //to show "fps"
+
+
+		    System.out.println("-----------------new happenings below-----------\n");
 			
 			
 			//for(State s : poland.getStates()) {
@@ -162,7 +182,7 @@ public class Main {
 			
 			//JOptionPane.showMessageDialog(null, poland.getInfo());
 					
-			
+			last_time = System.nanoTime();
 			controller.tick(tickAmount);
 		}
 	}
