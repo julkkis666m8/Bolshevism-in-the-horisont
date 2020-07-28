@@ -23,6 +23,7 @@ import factories.LabourIron;
 import factories.LabourTimber;
 import main.Main;
 import market.Taxes;
+import nationalEconomyManagers.PopJobHandler;
 import world.Nation;
 import world.Pop;
 import world.State;
@@ -30,6 +31,8 @@ import world.World;
 
 public class Controller {
 
+	
+	public PopJobHandler popJobHandler;
 	public World world;
 	public List<AbstractJob> farmJobs = new ArrayList<>();
 	public List<AbstractJob> labourJobs = new ArrayList<>();
@@ -38,6 +41,9 @@ public class Controller {
 	public AbstractJobDoer jobDoer = new AbstractJobDoer();
 	
 	public Controller(World world) {
+		
+		popJobHandler = new PopJobHandler();
+		
 		this.world = world;
 		
 		farmJobs.add(new FarmCotton());
@@ -226,7 +232,7 @@ public class Controller {
 
 		Collections.sort(popsA, new Comparator<Pop>() {
 			public int compare(Pop o1, Pop o2) {
-				return o1.getAverageWealth() > o2.getAverageWealth() ? -1 : o1.getAverageWealth() == o2.getAverageWealth() ? 0 : 1;
+				return o1.getStanding(nation) > o2.getStanding(nation) ? -1 : o1.getStanding(nation) == o2.getStanding(nation) ? 0 : 1;
 			}
 		});
 

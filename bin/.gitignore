@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-/factories/
+/view/
+/main/
+/nationalEconomyManagers/
+/controller/
 /world/
-/constants/
-/controller/
-/goods/
-/market/
-/main/
-/common/
-=======
-/main/
-/controller/
->>>>>>> branch 'master' of https://github.com/julkk-a-project/Bolshevism-in-the-horisont

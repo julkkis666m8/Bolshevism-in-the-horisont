@@ -15,9 +15,9 @@ public class Nation {
 	private String name;
 	private String nameADJ;
 	private List<State> states;
-	private List<Integer> coreRaces;
-	private List<Integer> acceptedRaces;
-	private List<Integer> hatedRaces;
+	public List<Integer> coreRaces;
+	public List<Integer> acceptedRaces;
+	public List<Integer> hatedRaces;
 	private List<AbstractTechnology> technologies;
 	public double taxEfficency;
 	public double coffers;

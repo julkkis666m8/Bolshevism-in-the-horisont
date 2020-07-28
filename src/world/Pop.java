@@ -9,6 +9,7 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import constants.Constants;
 import constants.Functions;
+import controller.Controller;
 import factories.AbstractJobChoser;
 import factories.ArtesanJobs;
 import factories.LabourIron;
@@ -266,119 +267,10 @@ public class Pop {
 	 * @param state
 	 */
 	public void jobCounter(Nation nation, State state) {
-		
-		double income = 0;
-		
-		if (job == Constants.CAPITALIST) {
-			income = 10*population;
-		}
-		else if (job == Constants.CLERGYMAN) {
-			double neededInc = nation.getCleregymanPay()*population;
-			income = nation.getNationCash(nation.getCleregymanPay()*population);
-			double effect = income/neededInc;
-			state.AddEducation(population, effect);
-			state.convert(population, effect);
-		}
-		else if (job == Constants.MERCHANT) {
-			income = MerchantHandler.wrangle(state, this, nation);
-		}
-		else if (job == Constants.CRAFTSMAN) {
-			income = state.getCraftsmanPay(state.getCraftsmankWage()*population);
-		}
-		else if (job == Constants.ARTISAN) {
-			//goodAdder(ArtesanJobs.artesanJob(this, state));
-			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.artesanJobs, 0.1));
-			income = PopSellHandler.sell(this, state.localMarket, nation);
-		}
-		else if (job == Constants.SOLDIER) {
-			income = nation.getSoldierPay().paySoldier(population);
-		}
-		else if (job == Constants.LABORER) {
-			//goods.addAll(PopSellHandler.labourerJob(this, state));
-			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.labourJobs, 0.1));
-			income = PopSellHandler.sell(this, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.1;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
-		}
-		else if (job == Constants.FARMER) {
-			//goods.addAll(PopSellHandler.farmerJob(this, state));
-			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
-			income = PopSellHandler.sell(this, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.1;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
-		}
-		else if (job == Constants.ARISTOCRAT) {
-			income = state.getAristocratCashPool().payAristocrat(population);
-		}
-		else if (job == Constants.SERF) {
-
-			//goods.addAll(PopSellHandler.serfJob(this, state));
-			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
-			income = PopSellHandler.sell(this, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.75;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
-		}
-		else if (job == Constants.SLAVE) {
-
-			//goods.addAll(PopSellHandler.serfJob(this, state));
-			main.Main.controller.jobDoer.doJob(this, state, main.Main.controller.jobChoser.choseLessEfficentJob(this, state, main.Main.controller.farmJobs, 0.1));
-			income = PopSellHandler.sell(this, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.99;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
-		}
-		
-		
-		
-		
-		this.setIncomeTaxable(income);
-		averageWealth = income/population;
+		main.Main.controller.popJobHandler.jobCounter(nation, state, this); //to save space in Pop so easier to read
 	}
 	
 
-	private void goodAdder(List<AbstractGood> newGoods) {
-
-		
-		List<AbstractGood> newGoodsAddList = new ArrayList<>();
-		
-		for (AbstractGood newGood : newGoods) {
-			boolean has = false;
-			for (AbstractGood good : goods) {
-				if (newGood.compare(good)) {
-					good.addAmount(newGood.getAmount());
-					has = true;
-					break;
-				}
-			}
-			
-			if (!has) {
-				//System.out.println("has "+(goods.size()+1));
-				newGoodsAddList.add(newGood);				
-			}
-		}
-		
-		goods.addAll(newGoodsAddList);
-		
-	}
 
 
 	public static int countTotalPopulation(List<Pop> pops) {
@@ -764,7 +656,21 @@ public class Pop {
 
 	//state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
 
+	/**
+	 * Legacy, use "compare(Pop pop)".
+	 * @param pop
+	 * @return
+	 */
 	public boolean comparePop(Pop pop) {
+		return compare(pop);
+	}
+	
+	/**
+	 * compare if pop is combinable
+	 * @param pop
+	 * @return
+	 */
+	public boolean compare(Pop pop) {
 		if(this.sex == pop.sex && this.race == pop.race && this.religion == pop.religion && this.age == pop.age && this.job == pop.job) {
 			return true;
 		}
@@ -775,7 +681,11 @@ public class Pop {
 	//state.addPop(new Pop(demotablePopulation, ideology, averageWealth, state));
 	
 
-	public void combinePop(Pop pop) {
+	/**
+	 * combine pops who are compatable to save on operations.
+	 * @param pop
+	 */
+	public void combine(Pop pop) {
 		
 		//TODO: handle ideology
 		
@@ -784,14 +694,67 @@ public class Pop {
 		this.giveCash(pop.getTotalWealth());
 		
 	}
+	/**
+	 * legacy, use "combine(Pop pop)".
+	 * @param pop
+	 */
+	public void combinePop(Pop pop) {
+		combine(pop);
+	}
 	
+
+	//LEGACY?
+	/*
 	//to add stuff to people's pockets
 	public void addGoods(List<AbstractGood> goodList) {
 		goods.addAll(goodList);
+	}*/
+
+	/**
+	 * adds goods to pop taking into account similar goods lrdy in pops pocket
+	 * @param newGoods
+	 */
+	public void addGoods(List<AbstractGood> newGoods) {
+
+		
+		List<AbstractGood> newGoodsAddList = new ArrayList<>();
+		
+		for (AbstractGood newGood : newGoods) {
+			boolean has = false;
+			for (AbstractGood good : goods) {
+				if (newGood.compare(good)) {
+					good.addAmount(newGood.getAmount());
+					has = true;
+					break;
+				}
+			}
+			
+			if (!has) {
+				//System.out.println("has "+(goods.size()+1));
+				newGoodsAddList.add(newGood);				
+			}
+		}
+		
+		goods.addAll(newGoodsAddList);
+		
 	}
 
-
-
+	public double getStanding(Nation nation) {
+		double standing = Constants.jobToClass(job);
+		
+		if(nation.hatedRaces.contains(this.race)) {
+			standing++;
+			standing = standing * 2;
+		}
+		
+		standing = standing - 100;
+		standing = standing * -1;
+		
+		return standing;
+		
+		//replaces this from controller:
+		//return o1.getAverageWealth() > o2.getAverageWealth() ? -1 : o1.getAverageWealth() == o2.getAverageWealth() ? 0 : 1;
+	}
 
 
 
