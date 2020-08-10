@@ -141,6 +141,12 @@ public class Controller {
 		
 	}
 	
+	private void tickApop(Pop pop) {
+				//long temp = System.nanoTime();
+				pop.tick(pop.getState().nation);
+				//System.out.println((((long) System.nanoTime() - temp)/1000000) +"ms");
+	}
+	
 	private void singlethreadTickPops(Nation nation, State state, List<Pop> pops) {
 
 		for(int i = 0; i < pops.size(); i++) {
@@ -154,7 +160,7 @@ public class Controller {
 			}
 			else {
 				//long temp = System.nanoTime();
-				pop.tick(nation);
+				pop.tick(nation);					//NO BECAUSE THIS IS WRONG
 				//System.out.println((((long) System.nanoTime() - temp)/1000000) +"ms");
 			}
 			

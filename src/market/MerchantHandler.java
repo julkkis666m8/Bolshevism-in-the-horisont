@@ -30,6 +30,7 @@ public class MerchantHandler {
 			
 			double needed = needs[goodConst];
 			if (needed > 0) {
+				System.out.println(needed);
 
 				income =+ costBenefitAnalysis(OGstate, neigbours, nation, goodConst, needed, pop);
 			}
@@ -85,7 +86,7 @@ public class MerchantHandler {
 			
 			if (neededArray[goodConst] <= 0) {
 				System.out.println("BREAK");
-				//break;
+				break;
 			}
 		}
 		

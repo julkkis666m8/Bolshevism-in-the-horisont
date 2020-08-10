@@ -41,7 +41,7 @@ public class Main {
 		
 		world = new World();
 		controller = new Controller(world);
-		tickAmount = 100;
+		tickAmount = 1;
 		
 		
 		
@@ -71,7 +71,7 @@ public class Main {
 		}
 
 		State state1 = new State("State "+1, germany, germanRace, germanJob, (int)(Math.random() * 10000 + 1000));
-		State state2 = new State("State POL "+1, germany, polishRace, polishJob, 1000);
+		State state2 = new State("State POL "+1, germany, polishRace, polishJob, 100);
 		//State state2 = new State("State "+2, germany);
 		//State state3 = new State("State "+3, germany);
 		germany.addState(state1);
