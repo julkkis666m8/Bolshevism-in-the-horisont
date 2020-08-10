@@ -174,9 +174,13 @@ public class PopSellHandler {
 	}
 	
 
-	
-	
-	
+	//TODO: FINNISH
+	public double trade(AbstractGood good, AbstractMarket target) {
+		double price = 0;
+		
+		
+		return price;
+	}
 	
 	
 	

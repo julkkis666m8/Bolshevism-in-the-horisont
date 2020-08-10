@@ -16,8 +16,8 @@ public class MerchantHandler {
 
 	public static double wrangle(State OGstate, Pop pop, Nation nation) {
 		
-		return 1; //Did this to make warangeling work for now. gonna implement it in the goods themselves.
-		/*
+		//return 1; //Did this to make warangeling work for now. gonna implement it in the goods themselves.
+		
 		List<State> neigbours = OGstate.getNeigbours();
 		
 		double income = 0;
@@ -39,7 +39,7 @@ public class MerchantHandler {
 		
 		System.out.println("merchant warangels for " + income);
 
-		return income;*/
+		return income;
 	}
 
 	private static double costBenefitAnalysis(State OGstate, List<State> neigbours, Nation nation, int goodConst, double needed, Pop pop) {
@@ -53,7 +53,7 @@ public class MerchantHandler {
 			double importPrice = neigbour.localMarket.getGoodMinPrice(goodConst, needed);
 			double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, needed);
 			double profit = importPrice - localPrice;
-			if (profit <= 0) {
+			if (profit >= 0) {
 				if(neigbour.localMarket.goodTotalAmount(goodConst) > 0) {
 					deals.add(neigbour);	
 				}
