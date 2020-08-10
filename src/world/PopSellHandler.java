@@ -41,7 +41,7 @@ public class PopSellHandler {
 			
 			if(true/*market.getMarketNeed(good.getConstant()) > 0*/) {
 				//if (market.getMarketNeed(good.getConstant()) > good.getAmount()) {
-				money = sellAllButNeeds(good, market, pop);	
+				money =+ sellAllButNeeds(good, market, pop);	
 				
 				
 				
