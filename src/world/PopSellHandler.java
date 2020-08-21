@@ -175,11 +175,27 @@ public class PopSellHandler {
 	
 
 	//TODO: FINNISH
-	public double trade(AbstractGood good, AbstractMarket target) {
-		double price = 0;
+	public static double trade(AbstractGood good, AbstractMarket target) {
 		
 		
-		return price;
+		double minPrice = target.getGoodMinPrice(good.getConstant(), 1);
+		
+		double myPrice = good.getValue(1);
+		
+		double income = (minPrice - myPrice) * Constants.TRADE_MARGIN_MERCHANT_CONSTANT;
+		
+		double finalPrice = myPrice + income;
+		JOptionPane.showMessageDialog(null, "FINAL PRICE: "+minPrice+" "+myPrice);
+		good.setValue(finalPrice);
+		
+		target.add(good, good.getAmount());
+		//TODO: NEEDED STUFF
+		
+		target.modMarketNeed(good.getAmount(), good.getConstant());
+		
+		income = income * good.getAmount();
+		JOptionPane.showMessageDialog(null, "income PRICE: "+income);
+		return income;
 	}
 	
 	

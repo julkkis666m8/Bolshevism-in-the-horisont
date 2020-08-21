@@ -42,7 +42,11 @@ public class AbstractMarket {
 	
 	public void tick() {
 		for(AbstractGood good : stockPile) {
+			
+			//if(good.originState)
+			
 			good.tick();
+			
 		}
 	}
 	

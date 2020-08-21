@@ -25,19 +25,25 @@ public class MerchantHandler {
 		
 		double[] needs = OGstate.localMarket.getNeeds();
 		
-		
+		boolean nothing = false;
+		int times = 0;
 		for(int goodConst = 0; goodConst < needs.length; goodConst++) {
 			
 			double needed = needs[goodConst];
 			if (needed > 0) {
 				System.out.println(needed);
-
+				nothing = true;
+				times++;
 				income =+ costBenefitAnalysis(OGstate, neigbours, nation, goodConst, needed, pop);
 			}
 			
 		}
 				
-		
+		if(!nothing) {
+			System.out.println("nothing to warangel");
+		}else {
+			System.out.println(times+" times");
+		}
 		System.out.println("merchant warangels for " + income);
 
 		return income;
@@ -54,7 +60,7 @@ public class MerchantHandler {
 			double importPrice = neigbour.localMarket.getGoodMinPrice(goodConst, needed);
 			double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, needed);
 			double profit = importPrice - localPrice;
-			if (profit >= 0) {
+			if (profit <= 0) {
 				if(neigbour.localMarket.goodTotalAmount(goodConst) > 0) {
 					deals.add(neigbour);	
 				}
@@ -87,14 +93,21 @@ public class MerchantHandler {
 			System.out.println(neededArray[goodConst]);
 			System.out.println("BUY? "+(neededArray[goodConst] - neededITEM_TEMP)+ " " + neededITEM_TEMP);
 			
+			List<AbstractGood>goods = deal.localMarket.getGood(goodConst, needed);
+			
+			for (AbstractGood good : goods) {	
+				income += PopSellHandler.trade(good, OGstate.localMarket);
+			}
+			
+			
 			if (neededArray[goodConst] <= 0) {
 				System.out.println("BREAK");
-				//break;
+				//break;  
 			}
 		}
 		
-		System.out.println("GOODS"+pop.getGoods().toString());
-		income += PopSellHandler.sell(pop, OGstate.localMarket, nation);
+		//System.out.println("GOODS"+pop.getGoods().toString());
+		//income += PopSellHandler.sell(pop, OGstate.localMarket, nation);
 		
 		
 		

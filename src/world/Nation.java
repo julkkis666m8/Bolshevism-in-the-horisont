@@ -223,9 +223,9 @@ public class Nation {
 		double totpop = getTotalMoney();
 		string += "\nTotal weth:  "+Functions.formatNum((coffers+totpop))+"£";
 		
-		for (int i = 0; i < states.size(); i++) {
-			string += states.get(i).getInfo();
-		}
+		//for (int i = 0; i < states.size(); i++) {
+		//	string += states.get(i).getInfo();
+		//}
 		
 
 		string += getPopInfo();
@@ -260,6 +260,7 @@ public class Nation {
 		int itterations = 0;
 		double needsFurfilled = 0;
 		double wantsFurfilled = 0;
+		double luxuryFurfilled = 0;
 		
 		for (int i = 0; i < pops.size(); i++) {
 			itterations++;
@@ -270,10 +271,12 @@ public class Nation {
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();
 			wantsFurfilled += pop.getWantsFurfilled();
+			luxuryFurfilled += pop.getLuxuryFurfilled();
 		}
 
 		needsFurfilled = (needsFurfilled / itterations)*100;//%
 		wantsFurfilled = (wantsFurfilled / itterations)*100;//%
+		luxuryFurfilled = (luxuryFurfilled / itterations)*100;//%
 		
 		
 
@@ -289,11 +292,14 @@ public class Nation {
 		if(incomeTaxable != 0) {
 			string += "incomeTaxable: "+Functions.formatNum(incomeTaxable)+"£ | ";	
 		}
-		if(itterations != 0) {
+		if(itterations != 0 & needsFurfilled != 0) {
 			string += "needsFurfilled: "+Functions.formatNum(needsFurfilled)+"% | ";	
-		}
-		if(itterations != 0) {
-			string += "wantsFurfilled: "+Functions.formatNum(wantsFurfilled)+"% | ";	
+			if(itterations != 0 & wantsFurfilled != 0) {
+				string += "wantsFurfilled: "+Functions.formatNum(wantsFurfilled)+"% | ";
+				if(itterations != 0 & luxuryFurfilled != 0) {
+					string += "luxuryFurfilled: "+Functions.formatNum(luxuryFurfilled)+"% | ";	
+				}	
+			}
 		}
 		
 		

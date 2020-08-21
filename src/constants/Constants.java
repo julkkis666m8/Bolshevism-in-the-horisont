@@ -311,6 +311,9 @@ public class Constants {
 	public final static int NATIVE_AMERICAN = 10;
 
 
+	public static final double TRADE_MARGIN_MERCHANT_CONSTANT = 0.9; //1 - this = what he's left with.
+
+
 
 
 

@@ -34,6 +34,7 @@ public class Pop {
 	List<AbstractGood> goods;
 	private PopNeeds popNeeds;
 	private PopWants popWants;
+	private PopLuxury popLuxury;
 	
 	private double justSpent = 0;
 	private double incomeTaxable = 0;
@@ -61,6 +62,7 @@ public class Pop {
 		this.averageWealth = averageWealth;
 		popNeeds = new PopNeeds(job);
 		popWants = new PopWants(job);
+		popLuxury = new PopLuxury(job);
 		if(job == Constants.CAPITALIST) {
 			taxEvasion = 0.5;
 		}
@@ -78,6 +80,7 @@ public class Pop {
 		this.averageWealth = averageWealth;
 		popNeeds = new PopNeeds(job);
 		popWants = new PopWants(job);
+		popLuxury = new PopLuxury(job);
 		if(job == Constants.CAPITALIST) {
 			taxEvasion = 0.5;
 		}
@@ -140,7 +143,15 @@ public class Pop {
 
 		setNeedsFurfilled(buy(nation, state, getNeeds()));
 		if(getNeedsFurfilled() > 0.6) {
-			setWantsFurfilled(buy(nation, state, getWants()));			
+			setWantsFurfilled(buy(nation, state, getWants()));	
+			if(getWantsFurfilled() > 0.6) {
+				setLuxuryFurfilled(buy(nation, state, getLuxury()));			
+			}else {
+				setLuxuryFurfilled(0);
+			}
+		}else {
+			setWantsFurfilled(0);
+			setLuxuryFurfilled(0);
 		}
 		
 		
@@ -421,6 +432,13 @@ public class Pop {
 		return popWants.getWantsFurfilled();
 	}
 
+	public double getLuxuryFurfilled() {
+		return popLuxury.getLuxuryFurfilled();
+	}
+	
+	private void setLuxuryFurfilled(double luxuryFurfilled) {
+		popLuxury.setLuxuryFurfilled(luxuryFurfilled);
+	}
 	public void setNeedsFurfilled(double needsFurfilled) {
 		popNeeds.setNeedsFurfilled(needsFurfilled);
 	}
@@ -630,6 +648,10 @@ public class Pop {
 		return popWants.getWants(population, job);
 	}
 
+	
+	public double[] getLuxury() {
+		return popLuxury.getLuxury(population, job);
+	}
 
 
 

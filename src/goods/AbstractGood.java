@@ -238,6 +238,26 @@ public abstract class AbstractGood {
 		//rot();
 		
 	}
+
+	
+	/**
+	 * TODO: works?
+	 * @param newPrice
+	 */
+	public void setValue(double newPrice) {
+		
+		double curValue = this.getValue(1);
+		
+		double takeThis = curValue - newPrice;
+		
+		setValueSumModifier(sumModifier - (takeThis));
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 	
