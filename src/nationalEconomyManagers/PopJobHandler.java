@@ -102,6 +102,12 @@ public class PopJobHandler {
 			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
 			
 		}
+		
+		
+
+		pop.setIncomeTaxable(income);
+		pop.averageWealth = income/pop.population;
+		
 	}
 
 }

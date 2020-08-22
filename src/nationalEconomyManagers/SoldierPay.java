@@ -5,6 +5,7 @@ import java.util.List;
 import constants.Constants;
 import world.Nation;
 import world.Pop;
+import world.State;
 
 
 /**
@@ -24,8 +25,8 @@ public class SoldierPay {
 	
 
 	public SoldierPay(double totalBudget, Nation nation) {
-		this.totalBudgetOrigin = totalBudget;
 		this.nation = nation;
+		this.totalBudgetOrigin = totalBudget;
 	}
 	
 	

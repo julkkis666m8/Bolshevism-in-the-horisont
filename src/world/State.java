@@ -66,10 +66,17 @@ public class State {
 		//int pop = (int)(Math.random() * 10000 + 1000);
 		
 		pops.addAll(PopParameters.createPops(nation, population, mainRace, mainJob, this));
-		pops.addAll(PopParameters.createPops(nation, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
+		//pops.addAll(PopParameters.createPops(nation, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
 		
 	}
 	
+	/**
+	 * NULL STATE? USE PARAMETERS: NAME, NATION, RACE, JOB, POPnum TO MAKE A REAL STATE
+	 */
+	public State() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void addNeigbour(State state){
 		state.neigbours.add(this);
 		this.neigbours.add(state);

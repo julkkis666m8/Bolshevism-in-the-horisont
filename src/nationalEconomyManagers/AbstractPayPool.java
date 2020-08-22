@@ -17,12 +17,12 @@ public abstract class AbstractPayPool {
 	
 
 	
-	private double totalBudgetOrigin = 0;
-	private double budget = 0;
+	protected double totalBudgetOrigin = 0;
+	protected double budget = 0;
 	
-	private int aristocratPop = 0;
-	private Nation nation;
-	private State state;
+	protected int targetPop = 0;
+	protected Nation nation;
+	protected State state;
 	
 
 	
@@ -32,6 +32,10 @@ public abstract class AbstractPayPool {
 		this.state = state;
 	}
 	
+	private Nation getNation() {
+		this.nation = state.nation;
+		return nation;
+	}
 	
 	
 	
@@ -39,7 +43,7 @@ public abstract class AbstractPayPool {
 		//pay is handeled per pop
 		
 		totalBudgetOrigin = budget;
-		updateAristocratPop();	
+		updateTargetPop();	
 	}
 	
 	public void giveMoneyToAristocrats(double money) {
@@ -47,17 +51,14 @@ public abstract class AbstractPayPool {
 	}
 	
 
-	private void updateAristocratPop() {
-
-		
-		List<Pop> aristocratPops = state.getJob(Constants.ARISTOCRAT);
-		aristocratPop = 0;
-		
-		for (Pop persons : aristocratPops) {
-			aristocratPop += persons.population;
-		}
-	}
-
+	abstract void updateTargetPop();
+	/*
+	List<Pop> targetPops = state.getJob(Constants.ARISTOCRAT);
+	targetPop = 0;
+	
+	for (Pop persons : targetPops) {
+		targetPop += persons.population;
+	}*/
 
 	public double getTotalBudget() {
 		return totalBudgetOrigin;
@@ -68,11 +69,11 @@ public abstract class AbstractPayPool {
 	}
 
 
-	public double payAristocrat(int population) {
+	public double payTarget(int population) {
 		
 		double pay = 0;
 		
-		pay = giveMoneyToAristocrat(population);
+		pay = giveMoneyToTarget(population);
 		
 		return pay;
 	}
@@ -81,11 +82,11 @@ public abstract class AbstractPayPool {
 
 
 	//TODO: make multithreadable by splitting budgets per state
-	private synchronized double giveMoneyToAristocrat(int population) {
+	private synchronized double giveMoneyToTarget(int population) {
 
 		double pay = 0;
 		
-		double toBePayed = payPerAristocrat(population);
+		double toBePayed = payPerPop(population);
 
 		if(budget > toBePayed) {
 			this.budget = budget - toBePayed;
@@ -101,9 +102,9 @@ public abstract class AbstractPayPool {
 	}
 
 
-	private double payPerAristocrat(int population) {
+	private double payPerPop(int population) {
 		
-		double pay = (totalBudgetOrigin / aristocratPop) * population;
+		double pay = (totalBudgetOrigin / targetPop) * population;
 		
 		return pay;
 		

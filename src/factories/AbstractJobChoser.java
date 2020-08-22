@@ -52,7 +52,7 @@ public class AbstractJobChoser {
 	
 
 	public AbstractJob choseEfficentJob(Pop pop, State state, List<AbstractJob>  jobList){
-		double[] costBenefitList = {0,0,0}; //steel, chiars, clothes.
+		double[] costBenefitList = new double[jobList.size()]; //{0,0,0}; //steel, chiars, clothes.
 		
 		//List<Double> costBenefitList = new ArrayList<Double>(jobList.size());
 		
@@ -85,7 +85,7 @@ public class AbstractJobChoser {
 	 */
 	public AbstractJob choseLessEfficentJob(Pop pop, State state, List<AbstractJob>  jobList, double stupidity) {
 		//System.out.println(jobList.toString());
-		double[] costBenefitList = {0,0,0}; //steel, chiars, clothes.
+		double[] costBenefitList = new double[jobList.size()]; //{0,0,0}; //steel, chiars, clothes.
 		
 		for(int i = 0; i < jobList.size(); i++) {
 			costBenefitList[i] = costBenefit( jobList.get(i).inAmounts, jobList.get(i).inGoodsConst, jobList.get(i).outAmounts, jobList.get(i).outGoodsConst, state);			
