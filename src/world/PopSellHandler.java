@@ -185,7 +185,7 @@ public class PopSellHandler {
 		double income = (minPrice - myPrice) * Constants.TRADE_MARGIN_MERCHANT_CONSTANT;
 		
 		double finalPrice = myPrice + income;
-		JOptionPane.showMessageDialog(null, "FINAL PRICE: "+minPrice+" "+myPrice);
+		//JOptionPane.showMessageDialog(null, "FINAL PRICE: "+minPrice+" "+myPrice);
 		good.setValue(finalPrice);
 		
 		target.add(good, good.getAmount());
@@ -194,7 +194,7 @@ public class PopSellHandler {
 		target.modMarketNeed(good.getAmount(), good.getConstant());
 		
 		income = income * good.getAmount();
-		JOptionPane.showMessageDialog(null, "income PRICE: "+income);
+		//JOptionPane.showMessageDialog(null, "income PRICE: "+income);
 		return income;
 	}
 	

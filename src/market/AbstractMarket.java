@@ -12,6 +12,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import goods.AbstractGood;
+import goods.Clothing;
+import goods.Cotton;
+import goods.Furnuature;
+import goods.Iron;
+import goods.Steel;
+import goods.Timber;
+import goods.Wheat;
 import world.Pop;
 import world.State;
 
@@ -23,6 +30,17 @@ public class AbstractMarket {
 	
 	public AbstractMarket() {
 		stockPile = new ArrayList<>();
+		initializeStockpile();
+	}
+	
+	private void initializeStockpile() {
+		stockPile.add(new Wheat(0, null));
+		stockPile.add(new Cotton(0, null));
+		stockPile.add(new Iron(0, null));
+		stockPile.add(new Timber(0, null));
+		stockPile.add(new Steel(0, null));
+		stockPile.add(new Clothing(0, null));
+		stockPile.add(new Furnuature(0, null));
 	}
 	
 
@@ -63,6 +81,7 @@ public class AbstractMarket {
 		for(AbstractGood g : stockPile) {
 			i++;
 			//System.out.println("lol "+i);
+			
 			if (newGood.compare(g)) {
 				//System.out.println("yes");
 				g.addAmount(newGood.getAmount());

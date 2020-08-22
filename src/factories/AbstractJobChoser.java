@@ -107,8 +107,8 @@ public class AbstractJobChoser {
 				index = i;
 			}
 		}
-		System.out.println(index);
-		System.out.println(pop.population+" PEOPLE MAKE: "+jobList.get(index).toString());
+		//System.out.println(index);
+		//System.out.println(pop.population+" PEOPLE MAKE: "+jobList.get(index).toString());
 		
 		return jobList.get(index);
 	}

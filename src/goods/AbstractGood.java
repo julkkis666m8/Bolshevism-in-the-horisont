@@ -16,7 +16,7 @@ public abstract class AbstractGood {
 	public double NON_PRICE = 0.99; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
-	protected String goodName;
+	public String goodName;
 	protected int constant = -1;
 	public int getConstant() {
 		return constant;
@@ -156,9 +156,13 @@ public abstract class AbstractGood {
 	 */
 	public boolean compare(AbstractGood g) {
 
+		/*
+		if(this.originState.equals(obj)) {
+			return true;
+		}*/
 
 
-		if (this.goodName.equals(g.goodName) && this.originState.equals(g.originState)) {
+		if (this.goodName.equals(g.goodName)/* && this.originState.equals(g.originState)*/) {
 			return true;
 		}
 		
