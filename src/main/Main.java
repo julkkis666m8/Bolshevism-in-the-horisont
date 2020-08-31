@@ -7,6 +7,7 @@ import javafx.application.Application;
 import view.PopWindow;
 import world.JobParameters;
 import world.Nation;
+import world.PopParameters;
 import world.RaceParameters;
 import world.State;
 import world.World;
@@ -70,18 +71,21 @@ public class Main {
 
 
 		State state1 = new State("State "+1, germany, germanRace, germanJob, 2000);
+		
+		state1.addPop(PopParameters.createPops(germany, 500, polishRace, polishJob, state1));
+		
 		//State state2 = new State("State POL "+1, germany, polishRace, polishJob, 100);
-		//State state2 = new State("State "+2, germany, germanRace, germanJob, 3250);
-		//State state3 = new State("State "+3, germany, germanRace, germanJob, 5000);
+		State state2 = new State("State "+2, germany, germanRace, germanJob, 3250);
+		State state3 = new State("State "+3, germany, germanRace, germanJob, 5000);
 		germany.addState(state1);
-		//germany.addState(state2);
-		//germany.addState(state3);
+		germany.addState(state2);
+		germany.addState(state3);
 		
-		//state1.addNeigbour(state2);
-		//state2.addNeigbour(state3);
+		state1.addNeigbour(state2);
+		state2.addNeigbour(state3);
 		
 		
-		State statep1 = new State("State "+1, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
+		State statep1 = new State("State "+1, poland, polishRace, polishJob, 10000/*(int)(Math.random() * 10000 + 1000)*/);
 		//State statep2 = new State("State "+2, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
 		//State statep3 = new State("State "+3, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
 		poland.addState(statep1);

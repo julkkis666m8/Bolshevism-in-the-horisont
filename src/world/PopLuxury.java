@@ -4,7 +4,7 @@ import constants.Constants;
 
 public class PopLuxury {
 
-	private double wheat = 0.01;
+	private double wheat = 0.0;
 	private double clothing = 0.1000;
 	private double furnuature = 0.120000;
 	private double iron = 0.00000;

@@ -70,6 +70,10 @@ public class State {
 		
 	}
 	
+	public void addPop(List<Pop> pops) {
+		pops.addAll(pops);
+	}
+	
 	/**
 	 * NULL STATE? USE PARAMETERS: NAME, NATION, RACE, JOB, POPnum TO MAKE A REAL STATE
 	 */

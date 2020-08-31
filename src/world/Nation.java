@@ -266,7 +266,7 @@ public class Nation {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.getAverageWealth()*population;
+			totalWealth += pop.getTotalWealth();
 			justSpent += pop.getJustSpent()*population;
 			incomeTaxable += pop.getIncomeTaxable();
 			needsFurfilled += pop.getNeedsFurfilled();
