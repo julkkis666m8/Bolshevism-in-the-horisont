@@ -31,14 +31,36 @@ public class BattleController {
 
     }
 
+    /**
+     * place front and backrow of units correctly on the frontline
+     *
+     * backrow units are placed seperately on the X-axis, but other than that,
+     * all units are placed acording to their desired range.
+     *
+     * distance between armies is based on size of each army.
+     *
+     * @param regiments
+     */
     private void setStartDistance(List<Regiment> regiments) {
         int distSide = 0;
         int distNeg = 1;
-        for (Regiment regiment : regiments){
-            regiment.setDistFront(regiments.size());
-            regiment.setDistSide(distNeg*distSide);
-            distNeg = distNeg*(-1);
-            distSide++;
+        for (Regiment regiment : regiments){ //Backrow units
+            if(regiment.getBackrow()){
+                regiment.setDistFront(regiments.size()+(regiment.getDesiredRange()/2));
+                regiment.setDistSide(distNeg*distSide);
+                distNeg = distNeg*(-1);
+                distSide++;
+            }
+        }
+        distSide = 0;
+        distNeg = 1;
+        for (Regiment regiment : regiments){ //Frontrow units
+            if(!regiment.getBackrow()){
+                regiment.setDistFront(regiments.size()+(regiment.getDesiredRange()/2));
+                regiment.setDistSide(distNeg*distSide);
+                distNeg = distNeg*(-1);
+                distSide++;
+            }
         }
     }
 
@@ -55,16 +77,21 @@ public class BattleController {
         for(Regiment shooter : shooters){
 
             int hisRange = shooter.getRange();
+            shooter.distTEST = 100;
             for (Regiment shootee : shootees){
                 if (Regiment.distance(shooter, shootee) < hisRange){
                     targets.add(shootee);
                 }
+                if(shooter.distTEST > Regiment.distance(shooter, shootee)){
+                    shooter.distTEST=Regiment.distance(shooter, shootee);
+                }
             }
+            shooter.numTarg = targets.size();
             if(targets.size()>0){
                 Collections.shuffle(targets); //randomize order and get first to get random target
                 targets.get(0).damage(shooter.attack());
                 if (targets.get(0).getManpower() <= 0 || targets.get(0).getOrganization() <= 0){
-                    System.out.println(targets.get(0).toString()+" was destroyed");
+                    System.out.println(targets.get(0).toString()+" was destroyed by "+shooter.toString());
                     shootees.remove(targets.get(0));
                 }
                 targets.clear();

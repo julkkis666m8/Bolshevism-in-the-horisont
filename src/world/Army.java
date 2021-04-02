@@ -12,11 +12,29 @@ public class Army {
     public void addRegiment(Regiment regiment){
         regimentList.add(regiment);
     }
+
+    public double getTotalManpower(){
+        double total = 0;
+        for (Regiment regiment : getRegiments()){
+            total +=regiment.getManpower();
+        }
+        return total;
+    }
+    public double getTotalOrganization(){
+        double total = 0;
+        for (Regiment regiment : getRegiments()){
+            total += regiment.getOrganization();
+        }
+        return total;
+    }
+
     @Override
     public String toString(){
         String string = "";
+        string += "Org: "+getTotalOrganization()+"\n";
+        string += "Man: "+getTotalManpower()+"\n";
         for(Regiment regiment : regimentList){
-            string += "|"+regiment.getDistFront()+","+regiment.getOrganization();
+            string += "|"+regiment.numTarg+","+(regiment.distTEST-regiment.getRange());
         }
         return string;
     }
