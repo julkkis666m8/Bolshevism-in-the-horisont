@@ -9,7 +9,7 @@ public class AbstractJob {
 	public int[] inGoodsConst;
 	public double[] outAmounts;
 	public int[] outGoodsConst;
-	
+	public boolean unemployed = false;
 
 
 	//TODO: to better performance; make this into a per-tick thing!

@@ -20,6 +20,7 @@ public class State {
 	private double fertility;
 	private AristocratCashPool aristocratCashPool;
 	public List<State> neigbours = new LinkedList<>();
+	public List<Army> armies = new LinkedList<>();
 
 	@Override
 	public String toString() {
@@ -78,7 +79,20 @@ public class State {
 	 * NULL STATE? USE PARAMETERS: NAME, NATION, RACE, JOB, POPnum TO MAKE A REAL STATE
 	 */
 	public State() {
-		// TODO Auto-generated constructor stub
+		this.nation = new Nation("fake", "fakist");
+
+	}
+
+	public boolean isForigen(State other){
+		try{
+			if(this.nation.equals(other.nation)){
+				return false;
+			}
+			return true;
+		}catch(NullPointerException e){
+			return true;
+		}
+
 	}
 
 	public void addNeigbour(State state){

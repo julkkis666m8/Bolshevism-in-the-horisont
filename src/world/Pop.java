@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+//import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import constants.Constants;
 import constants.Functions;
@@ -100,7 +100,7 @@ public class Pop {
 		string += getReligionString()+", ";
 		string += getRaceString()+", ";
 		string += getJobString()+", ";
-		string += getAverageWealthString()+"£, ";
+		string += getAverageWealthString()+"ï¿½, ";
 
 
 		return string;

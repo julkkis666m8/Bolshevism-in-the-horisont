@@ -6,6 +6,7 @@ import common.AbstractTechnology;
 import constants.Constants;
 import constants.Functions;
 import goods.AbstractGood;
+import javafx.scene.control.Label;
 import main.Main;
 import market.NationalMarket;
 import nationalEconomyManagers.SoldierPay;
@@ -22,6 +23,7 @@ public class Nation {
 	public double taxEfficency;
 	public double coffers;
 	public double taxPercentage;
+	public double oldCoffers; //used to chek income
 	
 	private NationalMarket nationalMarket;
 	private double cleregymanPay;
@@ -65,6 +67,10 @@ public class Nation {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public void update(){
+		oldCoffers = coffers;
 	}
 	
 	
@@ -218,10 +224,10 @@ public class Nation {
 		string += "\nHated Pop:    "+getHatedPop();
 		string += "\nOther Pop:    "+getOtherPop();
 		string += "\ngrowth Pop:   "+getBirths();
-		string += "\npop wealth: "+Functions.formatNum(getTotalMoney())+"£";
-		string += "\nstate weal:  "+Functions.formatNum(coffers)+"£";
+		string += "\npop wealth: "+Functions.formatNum(getTotalMoney())+"$";
+		string += "\nstate weal:  "+Functions.formatNum(coffers)+"$";
 		double totpop = getTotalMoney();
-		string += "\nTotal weth:  "+Functions.formatNum((coffers+totpop))+"£";
+		string += "\nTotal weth:  "+Functions.formatNum((coffers+totpop))+"$";
 		
 		//for (int i = 0; i < states.size(); i++) {
 		//	string += states.get(i).getInfo();
@@ -266,13 +272,18 @@ public class Nation {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.getTotalWealth();
-			justSpent += pop.getJustSpent()*population;
-			incomeTaxable += pop.getIncomeTaxable();
+			totalWealth += pop.getTotalWealth()/pop.getPopulation();
+			justSpent += pop.getJustSpent()/pop.getPopulation();
+			incomeTaxable += pop.getIncomeTaxable()/pop.getPopulation();
 			needsFurfilled += pop.getNeedsFurfilled();
 			wantsFurfilled += pop.getWantsFurfilled();
 			luxuryFurfilled += pop.getLuxuryFurfilled();
 		}
+
+		totalWealth = totalWealth/itterations;
+		justSpent = justSpent/itterations;
+		incomeTaxable = incomeTaxable/itterations;
+
 
 		needsFurfilled = (needsFurfilled / itterations)*100;//%
 		wantsFurfilled = (wantsFurfilled / itterations)*100;//%
@@ -280,19 +291,21 @@ public class Nation {
 		
 		
 
-		if(population != 0) {
+		if(population > 0) {
 			string += "population: "+population+" | ";	
+		}else{
+			return string;
 		}
 		if(totalWealth != 0) {
-			string += "totalWealth: "+Functions.formatNum(totalWealth)+"£ | ";	
+			string += "totalWealth: "+Functions.formatNum(totalWealth)+"$ | ";
 		}
 		if(justSpent != 0) {
-			string += "justSpent: "+Functions.formatNum(justSpent)+"£ | ";	
+			string += "justSpent: "+Functions.formatNum(justSpent)+"$ | ";
 		}
 		if(incomeTaxable != 0) {
-			string += "incomeTaxable: "+Functions.formatNum(incomeTaxable)+"£ | ";	
+			string += "incomeTaxable: "+Functions.formatNum(incomeTaxable)+"$ | ";
 		}
-		if(itterations != 0 & needsFurfilled != 0) {
+		if(itterations != 0/* & needsFurfilled != 0*/) {
 			string += "needsFurfilled: "+Functions.formatNum(needsFurfilled)+"% | ";	
 			if(itterations != 0 & wantsFurfilled != 0) {
 				string += "wantsFurfilled: "+Functions.formatNum(wantsFurfilled)+"% | ";
@@ -301,12 +314,7 @@ public class Nation {
 				}	
 			}
 		}
-		
-		
-		
-		
-		
-		
+
 		
 		return string;
 	}
@@ -405,9 +413,34 @@ public class Nation {
 
 
 	public void tick() {
+		this.update();
 		soldierPay.tick();
 		
 	}
 
-	
+
+	public String getName() {
+		return name;
+	}
+	public String getNameADJ() {
+		return nameADJ;
+	}
+
+	public void setTaxPercentage(double val) {
+		taxPercentage = val;
+	}
+
+	public double getIncome() {
+		return coffers - oldCoffers;
+	}
+
+	public void setTarrifPercentage(double val) {
+		this.tarrif = val;
+	}
+
+	public double payTarrif(double thisTrade) {
+		addToCoffers(thisTrade*tarrif);
+
+		return thisTrade*(1-tarrif);
+	}
 }

@@ -2,6 +2,7 @@ package goods;
 
 import constants.Constants;
 import constants.Functions;
+import main.Main;
 import market.AbstractMarket;
 import world.State;
 
@@ -31,7 +32,14 @@ public abstract class AbstractGood {
 	
 	public AbstractGood(double amount, State originState) {
 		this.amount = amount;
-		this.originState = originState;
+		try{
+			if(originState != null){
+				this.originState = originState;
+			}
+		}catch(NullPointerException e){
+			this.originState = new State(); //fake state when origal good is traded
+		}
+
 	}
 
 	public void marketPriceAdder(double factor) { //factor is legacy/oldtest

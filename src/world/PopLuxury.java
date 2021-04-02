@@ -4,7 +4,7 @@ import constants.Constants;
 
 public class PopLuxury {
 
-	private double wheat = 0.0;
+	private double wheat = 1.0;
 	private double clothing = 0.1000;
 	private double furnuature = 0.120000;
 	private double iron = 0.00000;
@@ -26,13 +26,13 @@ public class PopLuxury {
 		switch(Constants.jobToClass(job)) {
 		case Constants.UPPER_STRATA:
 			//rich people needs
-			//wheat = wheat * 1.49;
+			wheat = wheat * 1.49;
 			//steel += 0.01;
 			//iron += 0.49;
 			break;
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
-			//wheat += 0.549;
+			wheat += 0.549;
 			//steel += 0.001;
 			break;
 		case Constants.LOWER_STRATA:

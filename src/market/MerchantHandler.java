@@ -84,25 +84,29 @@ public class MerchantHandler {
 		neededArray[goodConst] = needed;
 		double neededITEM_TEMP = needed;
 		
-		System.out.println("fag"+needed);
+		//System.out.println("fag"+needed);
 		
 		for(State deal : deals) {
 			System.out.println("deal "+deal.localMarket.getAllOfGood(goodConst).toString());
 			System.out.println("neededArray"+neededArray[goodConst]);
-			neededArray = PopSellHandler.buy(pop, neededArray, 100/*pop.takeTotalCash()*/, deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
+			neededArray = PopSellHandler.buy(pop, neededArray, pop.takeTotalCash(), deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
 			System.out.println(neededArray[goodConst]);
 			System.out.println("BUY? "+(neededArray[goodConst] - neededITEM_TEMP)+ " " + neededITEM_TEMP);
 			
 			List<AbstractGood>goods = deal.localMarket.getGood(goodConst, needed);
 			
-			for (AbstractGood good : goods) {	
-				income += PopSellHandler.trade(good, OGstate.localMarket);
+			for (AbstractGood good : goods) {
+				double thisTrade = PopSellHandler.trade(good, OGstate.localMarket);
+				if(OGstate.isForigen(good.originState)){
+					thisTrade = nation.payTarrif(thisTrade);
+				}
+				income += thisTrade;
 			}
 			
 			
 			if (neededArray[goodConst] <= 0) {
 				System.out.println("BREAK");
-				//break;  
+				break;
 			}
 		}
 		

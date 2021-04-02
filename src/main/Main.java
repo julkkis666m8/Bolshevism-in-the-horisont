@@ -4,6 +4,11 @@ import javax.swing.JOptionPane;
 import constants.Constants;
 import controller.Controller;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import view.NationGuiController;
 import view.PopWindow;
 import world.JobParameters;
 import world.Nation;
@@ -12,18 +17,22 @@ import world.RaceParameters;
 import world.State;
 import world.World;
 
-public class Main {
+import java.io.IOException;
+import java.util.Objects;
+
+public class Main{
 
 	public static Controller controller;
 	public static World world;
 	public static int tickAmount;
 	public static Nation germany;
 	public static PopWindow popWindow;
+	public static NationGuiController nationGuiController;
 	
 	
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
-	public static JobParameters germanJob = new JobParameters(0, 0, 0/*30*/, 10, 5, 15, 1, 2, 2, 2, 3, 1);
+	public static JobParameters germanJob = new JobParameters(0, 0, 30, 10, 5, 15, 1, 2, 2, 2, 3, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(0, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
@@ -33,7 +42,7 @@ public class Main {
 	//public State nullState = new State(null, null);
 	
 	
-	public static void main(String[] args) {
+	public static void main() {
 		
 		long last_time = System.nanoTime(); //for calculating performance and such :^)
 
@@ -98,15 +107,17 @@ public class Main {
 		
 		
 		statep1.addNeigbour(state1);
-		
 
 
 
-	      new Thread("PopWindow"){
-	        public void run(){
-	    		Application.launch(view.PopWindow.class, args);
-	        }
-	      }.start();
+
+		new Thread("PopWindow"){
+			public void run(){
+				Application.launch(view.PopWindow.class);
+			}
+		}.start();
+
+
 	      
 	      try {
 			Thread.sleep(50);
@@ -114,16 +125,17 @@ public class Main {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	      
+
 	      new Thread("PopWindowUpdater"){
 				public void run(){
 					try {
 						while(true) {
-							view.PopWindow.tickUpdate();	
+							view.PopWindow.tickUpdate();
 						}
 										
 					}catch (Exception e) {
-						System.out.println("GuiNotLoaded");
+						System.out.println("PopWindowGuiNotLoaded");
+						//e.printStackTrace();
 					}
 				}
 			}.start();
@@ -166,8 +178,12 @@ public class Main {
 			//for(State s : poland.getStates()) {
 			//	System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());				
 			//}
-			
-			
+
+			try{
+				nationGuiController.tickUpdate();
+			}catch (NullPointerException e){
+
+			}
 			JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			/*
@@ -178,11 +194,15 @@ public class Main {
 				e.printStackTrace();
 			}*/
 			
-			//JOptionPane.showMessageDialog(null, poland.getInfo());
+			JOptionPane.showMessageDialog(null, poland.getInfo());
 					
 			last_time = System.nanoTime();
 			controller.tick(tickAmount);
 		}
 	}
 
+
+	public void setNationGui(NationGuiController nationGuiController) {
+		this.nationGuiController = nationGuiController;
+	}
 }
