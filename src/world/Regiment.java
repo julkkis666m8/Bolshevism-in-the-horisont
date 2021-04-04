@@ -1,7 +1,8 @@
 package world;
 
 public class Regiment {
-    private final String name;;
+    private String name;;
+    private final char shortName;
     private Nation nation;
     private double organization = 1;
     private double manpower = 1000;
@@ -25,6 +26,7 @@ public class Regiment {
 
     public Regiment(String name, int range, int speed, double disciplinen, double tactics, boolean backrow) {
         this.name = name;
+        this.shortName = name.charAt(0);
         this.range = range;
         desiredRange = range;
         this.speed = speed;
@@ -32,6 +34,17 @@ public class Regiment {
         this.tactics = tactics;
         this.backrow = backrow;
 
+    }
+
+    public char getShortName() {
+        return shortName;
+    }
+    public void setName(String newName){
+        this.name = newName;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static int distance(Regiment shooter, Regiment shootee) {

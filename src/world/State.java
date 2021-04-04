@@ -79,7 +79,7 @@ public class State {
 	 * NULL STATE? USE PARAMETERS: NAME, NATION, RACE, JOB, POPnum TO MAKE A REAL STATE
 	 */
 	public State() {
-		this.nation = new Nation("fake", "fakist");
+		this.nation = new Nation("fake", "fakist",new World());
 
 	}
 

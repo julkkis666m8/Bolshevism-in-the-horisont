@@ -13,6 +13,12 @@ public class BattleController {
     private List<Regiment> attackers;
     private List<Regiment> defenders;
 
+    public List<Regiment> getAttackers(){
+        return attackers;
+    }
+    public List<Regiment> getDefenders(){
+        return defenders;
+    }
 
     public void startBattle(Army armyAtt, Army armyDef, State state) {
 

@@ -42,7 +42,7 @@ public class Nation {
 	 * @param name
 	 * @param nameADJ
 	 */
-	public Nation(String name, String nameADJ) {
+	public Nation(String name, String nameADJ, World world) {
 		
 		
 		
@@ -50,7 +50,7 @@ public class Nation {
 		cleregymanPay = 0.9;
 		soldierPay = new SoldierPay(100000, this);
 		
-		setNationalMarket(new NationalMarket(this, main.Main.world.getGlobalMarket()));
+		setNationalMarket(new NationalMarket(this, world.getGlobalMarket()));
 		
 		
 		coffers = 1000000000;

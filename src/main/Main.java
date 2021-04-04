@@ -57,7 +57,7 @@ public class Main{
 		
 		//NATIONS--------------------
 		
-		germany = new Nation("Germany", "German");
+		germany = new Nation("Germany", "German",world);
 
 		germany.addCoreRace(Constants.GERMANIC);
 		germany.addAcceptedRace(Constants.NORDIC);
@@ -66,7 +66,7 @@ public class Main{
 		world.addNation(germany);
 		
 
-		poland = new Nation("Poland", "Polish");
+		poland = new Nation("Poland", "Polish",world);
 
 		poland.addCoreRace(Constants.SLAV);
 		poland.addAcceptedRace(Constants.JEWISH);
