@@ -259,7 +259,7 @@ public class Nation {
 		
 
 		int population = 0;
-		double totalWealth = 0;
+		double pocketMoneyPerPerson = 0;
 		
 		double justSpent = 0;
 		double incomeTaxable = 0; 
@@ -272,7 +272,7 @@ public class Nation {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			totalWealth += pop.getTotalWealth()/pop.getPopulation();
+			pocketMoneyPerPerson += pop.getAverageWealth();
 			justSpent += pop.getJustSpent()/pop.getPopulation();
 			incomeTaxable += pop.getIncomeTaxable()/pop.getPopulation();
 			needsFurfilled += pop.getNeedsFurfilled();
@@ -280,7 +280,7 @@ public class Nation {
 			luxuryFurfilled += pop.getLuxuryFurfilled();
 		}
 
-		totalWealth = totalWealth/itterations;
+		pocketMoneyPerPerson = pocketMoneyPerPerson/itterations;
 		justSpent = justSpent/itterations;
 		incomeTaxable = incomeTaxable/itterations;
 
@@ -296,8 +296,8 @@ public class Nation {
 		}else{
 			return string;
 		}
-		if(totalWealth != 0) {
-			string += "totalWealth: "+Functions.formatNum(totalWealth)+"$ | ";
+		if(pocketMoneyPerPerson != 0) {
+			string += "Money/person: "+Functions.formatNum(pocketMoneyPerPerson)+"$ | ";
 		}
 		if(justSpent != 0) {
 			string += "justSpent: "+Functions.formatNum(justSpent)+"$ | ";

@@ -1,13 +1,6 @@
 package constants;
 
-import goods.AbstractGood;
-import goods.Clothing;
-import goods.Cotton;
-import goods.Furnuature;
-import goods.Iron;
-import goods.Steel;
-import goods.Timber;
-import goods.Wheat;
+import goods.*;
 import world.State;
 
 public class Constants {
@@ -18,7 +11,7 @@ public class Constants {
 	
 	
 	//TODO: UPDATE WHEN GOODS ADDED
-	public static final int AMOUNT_OF_GOODS = 7;
+	public static final int AMOUNT_OF_GOODS = 10; //should be one larger than the last index
 	
 	public static final int WHEAT = 0;
 	public static final int COTTON = 1;
@@ -27,8 +20,11 @@ public class Constants {
 	public static final int FURNUATURE = 4;
 	public static final int IRON = 5;
 	public static final int STEEL = 6;
-	
-	
+	public static final int PAPER = 7;
+    public static final int ANIMAL = 8;
+	public static final int COAL = 9;
+
+
 	//TODO: UPDATE ME AND MY FRIEND DOWN SOUTH TOO
 	public static String GoodToString(int goodIndex) {
 
@@ -53,9 +49,18 @@ public class Constants {
 		case IRON:
 			title = "iron";
 			break;
-		case STEEL:
-			title = "steel";
-			break;
+			case STEEL:
+				title = "steel";
+				break;
+			case PAPER:
+				title = "paper";
+				break;
+			case ANIMAL:
+				title = "animal";
+				break;
+			case COAL:
+				title = "coal";
+				break;
 		default:
 			title = "unobtanium";
 			break;
@@ -88,9 +93,18 @@ public class Constants {
 		case IRON:
 			good = new Iron(amount, originState);
 			break;
-		case STEEL:
-			good = new Steel(amount, originState);
-			break;
+			case STEEL:
+				good = new Steel(amount, originState);
+				break;
+			case PAPER:
+				good = new Paper(amount, originState);
+				break;
+			case ANIMAL:
+				good = new Animal(amount, originState);
+				break;
+			case COAL:
+				good = new Coal(amount, originState);
+				break;
 		default:
 			System.out.println("ERROR, CONSTANTS OF GOODS ARE NOT GOOD!!!");
 			good = new Wheat(amount, originState); //should never happen

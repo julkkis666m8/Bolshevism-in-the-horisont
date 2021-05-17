@@ -8,6 +8,7 @@ import java.util.List;
 import constants.Constants;
 import constants.Functions;
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,7 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.Group;
 
 
-public class PopWindow extends Application {
+public class PopWindow {
 
 	private static List<Pop> popList;
 	static PieChart jobChart;

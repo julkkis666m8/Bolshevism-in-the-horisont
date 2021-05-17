@@ -11,14 +11,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import goods.AbstractGood;
-import goods.Clothing;
-import goods.Cotton;
-import goods.Furnuature;
-import goods.Iron;
-import goods.Steel;
-import goods.Timber;
-import goods.Wheat;
+import goods.*;
 import world.Pop;
 import world.State;
 
@@ -41,6 +34,9 @@ public class AbstractMarket {
 		stockPile.add(new Steel(0, null));
 		stockPile.add(new Clothing(0, null));
 		stockPile.add(new Furnuature(0, null));
+		stockPile.add(new Paper(0, null));
+		stockPile.add(new Animal(0, null));
+		stockPile.add(new Coal(0, null));
 	}
 	
 

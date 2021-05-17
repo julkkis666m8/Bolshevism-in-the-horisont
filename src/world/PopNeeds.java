@@ -10,6 +10,8 @@ public class PopNeeds {
 	private double iron = 0.00000;
 	private double steel = 0.00000;
 	private double cotton = 0.00000;
+	private double paper = 0.00000;
+	private double animal = 0.000;
 	
 	
 	private double modifier = 1;
@@ -65,7 +67,9 @@ public class PopNeeds {
 		needs[Constants.CLOTHING] = clothing * population * modifier;
 		needs[Constants.FURNUATURE] = furnuature * population * modifier;
 		needs[Constants.COTTON] = cotton * population * modifier;
-		
+		needs[Constants.PAPER] = paper * population * modifier;
+		needs[Constants.ANIMAL] = animal * population * modifier;
+
 		return needs;	
 	}
 

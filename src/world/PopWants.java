@@ -10,6 +10,10 @@ public class PopWants {
 	private double iron = 0.000;
 	private double steel = 0.0001;
 	private double cotton = 0.000;
+	private double paper = 0.0001;
+	private double animal = 0.001;
+	private double coal = 0.01;
+	private double timber = 0.01;
 	
 	
 	private double modifier = 1;
@@ -31,6 +35,7 @@ public class PopWants {
 			steel += 0.01;
 			furnuature += 0.001;
 			clothing += 0.001;
+			paper = paper * 15;
 			//iron += 0.49;
 			modifier = 2.5;
 			break;
@@ -40,6 +45,7 @@ public class PopWants {
 			steel += 0.001;
 			furnuature += 0.0001;
 			clothing += 0.001;
+			paper = paper * 15;
 			modifier = 1.3;
 			break;
 		case Constants.LOWER_STRATA:
@@ -71,6 +77,10 @@ public class PopWants {
 		needs[Constants.CLOTHING] = clothing * population * modifier;
 		needs[Constants.FURNUATURE] = furnuature * population * modifier;
 		needs[Constants.COTTON] = cotton * population * modifier;
+		needs[Constants.PAPER] = paper * population * modifier;
+		needs[Constants.ANIMAL] = animal * population * modifier;
+		needs[Constants.COAL] = coal * population * modifier;
+		needs[Constants.TIMBER] = timber * population * modifier;
 		
 		return needs;	
 	}

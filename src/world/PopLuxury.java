@@ -10,7 +10,8 @@ public class PopLuxury {
 	private double iron = 0.00000;
 	private double steel = 0.100000;
 	private double cotton = 0.010000;
-	
+	private double paper = 0.009;
+	private double animal = 0.1;
 	
 	private double modifier = 1;
 	
@@ -26,14 +27,19 @@ public class PopLuxury {
 		switch(Constants.jobToClass(job)) {
 		case Constants.UPPER_STRATA:
 			//rich people needs
+			modifier = modifier+2;
 			wheat = wheat * 1.49;
-			//steel += 0.01;
+			animal = animal * 1.49;
+			paper = paper * 15;
+			steel += 0.01;
 			//iron += 0.49;
 			break;
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
+			modifier = modifier+1;
 			wheat += 0.549;
-			//steel += 0.001;
+			paper = paper * 15;
+			steel += 0.001;
 			break;
 		case Constants.LOWER_STRATA:
 			//low ppl needs
@@ -65,6 +71,8 @@ public class PopLuxury {
 		needs[Constants.CLOTHING] = clothing * population * modifier;
 		needs[Constants.FURNUATURE] = furnuature * population * modifier;
 		needs[Constants.COTTON] = cotton * population * modifier;
+		needs[Constants.PAPER] = paper * population * modifier;
+		needs[Constants.ANIMAL] = animal * population * modifier;
 		
 		return needs;	
 	}

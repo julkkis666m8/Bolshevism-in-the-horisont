@@ -41,6 +41,7 @@ public class NationGuiController {
     private XYChart.Series<Integer, Double> moneySeries = new XYChart.Series();
     private XYChart.Series<Integer, Double> incomeSeries = new XYChart.Series();
     private double income;
+    private boolean toTick;
 
 
     public void initialize(){
@@ -51,6 +52,9 @@ public class NationGuiController {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+
+
+
 
         this.main = GuiMain.main;
         main.setNationGui(this);
@@ -65,7 +69,7 @@ public class NationGuiController {
         tickUpdate();
     }
 
-    public synchronized void update(){
+    private void update(){
         this.income = mainNation.getIncome();
         incomeLabel.setText(Functions.formatNum(income));
 
@@ -75,13 +79,18 @@ public class NationGuiController {
 
 
     }
-    public synchronized void tickUpdate() {
+    private void tickUpdate() {
 
         Task dynamicTimeTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 while (true) {
-                    //update();
+                    if(toTick){
+                        setTickUpdate(false);
+                        update();
+                    }
+
+
 
                     try {
                         Thread.sleep(1000);
@@ -109,4 +118,7 @@ public class NationGuiController {
         update();
     }
 
+    public synchronized void setTickUpdate(boolean bool) {
+        this.toTick = bool;
+    }
 }

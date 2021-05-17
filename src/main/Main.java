@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import constants.Constants;
 import controller.Controller;
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,7 +37,7 @@ public class Main{
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
 	public static JobParameters jewishJob = new JobParameters(0, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
-	public static JobParameters polishJob = new JobParameters(200, 0, 0, 5, 2, 1, 0, 1, 1, 2, 1, 1);
+	public static JobParameters polishJob = new JobParameters(20, 0, 20, 5, 2, 1, 0, 1, 1, 2, 1, 1);
 	public static Nation poland;
 	
 	//public State nullState = new State(null, null);
@@ -84,39 +85,42 @@ public class Main{
 		state1.addPop(PopParameters.createPops(germany, 500, polishRace, polishJob, state1));
 		
 		//State state2 = new State("State POL "+1, germany, polishRace, polishJob, 100);
-		State state2 = new State("State "+2, germany, germanRace, germanJob, 3250);
-		State state3 = new State("State "+3, germany, germanRace, germanJob, 5000);
+		//State state2 = new State("State "+2, germany, germanRace, germanJob, 3250);
+		//State state3 = new State("State "+3, germany, germanRace, germanJob, 5000);
 		germany.addState(state1);
-		germany.addState(state2);
-		germany.addState(state3);
+		//germany.addState(state2);
+		//germany.addState(state3);
 		
-		state1.addNeigbour(state2);
-		state2.addNeigbour(state3);
+		//state1.addNeigbour(state2);
+		//state2.addNeigbour(state3);
 		
 		
 		State statep1 = new State("State "+1, poland, polishRace, polishJob, 10000/*(int)(Math.random() * 10000 + 1000)*/);
-		//State statep2 = new State("State "+2, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
-		//State statep3 = new State("State "+3, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
+		State statep2 = new State("State "+2, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
+		State statep3 = new State("State "+3, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
 		poland.addState(statep1);
-		//poland.addState(statep2);
-		//poland.addState(statep3);
-		
-		
-		//statep1.addNeigbour(statep2);
-		//statep2.addNeigbour(statep3);
+		poland.addState(statep2);
+		poland.addState(statep3);
+
+
+
+		statep1.addNeigbour(statep2);
+		statep2.addNeigbour(statep3);
 		
 		
 		statep1.addNeigbour(state1);
 
 
 
-
+		/*
 		new Thread("PopWindow"){
 			public void run(){
-				Application.launch(view.PopWindow.class);
+				//Preloader.launch(view.PopWindow.class);
+				popWindow = new PopWindow();
+				popWindow.start(new Stage());
 			}
 		}.start();
-
+		*/
 
 	      
 	      try {
@@ -126,6 +130,7 @@ public class Main{
 			e1.printStackTrace();
 		}
 
+	      /*
 	      new Thread("PopWindowUpdater"){
 				public void run(){
 					try {
@@ -138,7 +143,7 @@ public class Main{
 						//e.printStackTrace();
 					}
 				}
-			}.start();
+			}.start();*/
 
 		      try {
 				Thread.sleep(1);
@@ -163,11 +168,13 @@ public class Main{
 				System.out.println(s.pops.size());
 				//break;
 			}
+			System.out.println("POLISH MARKET: "+statep1.localMarket.getStockpileString());
+			/*
 			for(State s : poland.getStates()) {
 				System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());
 				System.out.println(s.pops.size());
 				//break;
-			}
+			}*/
 			
 			System.out.println("Delta time: "+delta_time+"ms"); //to show "fps"
 
@@ -180,7 +187,7 @@ public class Main{
 			//}
 
 			try{
-				nationGuiController.tickUpdate();
+				nationGuiController.setTickUpdate(true);
 			}catch (NullPointerException e){
 
 			}
@@ -194,7 +201,7 @@ public class Main{
 				e.printStackTrace();
 			}*/
 			
-			JOptionPane.showMessageDialog(null, poland.getInfo());
+			//JOptionPane.showMessageDialog(null, poland.getInfo());
 					
 			last_time = System.nanoTime();
 			controller.tick(tickAmount);

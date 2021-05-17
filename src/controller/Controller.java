@@ -11,16 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 import constants.Constants;
-import factories.AbstractJob;
-import factories.AbstractJobChoser;
-import factories.AbstractJobDoer;
-import factories.ArtesanClothing;
-import factories.ArtesanFurnature;
-import factories.ArtesanSteel;
-import factories.FarmCotton;
-import factories.FarmWheat;
-import factories.LabourIron;
-import factories.LabourTimber;
+import factories.*;
 import main.Main;
 import market.Taxes;
 import nationalEconomyManagers.PopJobHandler;
@@ -48,11 +39,13 @@ public class Controller {
 		
 		farmJobs.add(new FarmCotton());
 		farmJobs.add(new FarmWheat());
+		farmJobs.add(new FarmAnimal());
 		labourJobs.add(new LabourIron());
 		labourJobs.add(new LabourTimber());
 		artesanJobs.add(new ArtesanSteel());
 		artesanJobs.add(new ArtesanFurnature());
 		artesanJobs.add(new ArtesanClothing());
+		artesanJobs.add(new ArtesanPaper());
 		
 	}
 	
