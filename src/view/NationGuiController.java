@@ -83,14 +83,12 @@ public class NationGuiController {
 
         Task dynamicTimeTask = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 while (true) {
                     if(toTick){
                         setTickUpdate(false);
                         update();
                     }
-
-
 
                     try {
                         Thread.sleep(1000);

@@ -249,7 +249,7 @@ public class Controller {
 	 */
 	private void updateWorldsGoodPrices() {
 		for (State s : main.Main.world.getAllStates()){
-			s.localMarket.resetMarketNeedForTheTurn();
+			s.localMarket.resetDemandAndCalculatePricesForTheTurn();
 			s.localMarket.updateGoods();
 		}
 	}

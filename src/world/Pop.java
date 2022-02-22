@@ -3,18 +3,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 //import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import constants.Constants;
-import constants.Functions;
-import controller.Controller;
-import factories.AbstractJobChoser;
-import factories.ArtesanJobs;
-import factories.LabourIron;
 import goods.AbstractGood;
-import market.MerchantHandler;
 import market.Taxes;
 
 public class Pop {
@@ -498,7 +490,7 @@ public class Pop {
 			}
 			
 		}
-		else if (getNeedsFurfilled() >= 1 && job == Constants.FARMER && state.localMarket.getMarketNeed(Constants.WHEAT) <= 0) {
+		else if (getNeedsFurfilled() >= 1 && job == Constants.FARMER && state.localMarket.getMarketDemand(Constants.WHEAT) <= 0) { //TODO: change this to supoply/demand
 
 			if(Math.random() > 0.5) {
 				promote(toPromote, Constants.ARTISAN);

@@ -1,10 +1,8 @@
 package factories;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import constants.Constants;
-import goods.AbstractGood;
 import world.Pop;
 import world.State;
 
@@ -147,12 +145,12 @@ public class AbstractJobChoser {
 		return jobList.get(index);
 	}
 
-	private double needComparisonIndex(AbstractJob abstractJob, State state) {
+	private double needComparisonIndex(AbstractJob abstractJob, State state) { //TODO: change calculation to use supply/demand instead
 		double need = 0;
 		int goodConst = 0;
 		for(double output : abstractJob.outAmounts){
 			goodConst++;
-			double needed = state.localMarket.getMarketNeed(goodConst);
+			double needed = state.localMarket.getMarketDemand(goodConst);
 			need += needed*output;
 		}
 

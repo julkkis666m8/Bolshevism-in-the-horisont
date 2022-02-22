@@ -2,14 +2,16 @@ package goods;
 
 import constants.Constants;
 import constants.Functions;
-import main.Main;
 import market.AbstractMarket;
 import world.State;
+
+import static java.util.Objects.nonNull;
 
 public abstract class AbstractGood {
 
 	private static final double ROTTING_COEFICENT = 0.35;
 	public double baseValue = 5;
+	public double lastValue = 5;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public double MAX_PRICE = 1000;
@@ -19,6 +21,9 @@ public abstract class AbstractGood {
 	private double amount;
 	public String goodName;
 	protected int constant = -1;
+	private double supply = 1;
+	private double demand = 1;
+
 	public int getConstant() {
 		return constant;
 	}
@@ -32,6 +37,7 @@ public abstract class AbstractGood {
 	
 	public AbstractGood(double amount, State originState) {
 		this.amount = amount;
+		//this.originState = nonNull(originState) ? originState : new State(); //fake state when origal good is traded
 		try{
 			if(originState != null){
 				this.originState = originState;
@@ -39,7 +45,6 @@ public abstract class AbstractGood {
 		}catch(NullPointerException e){
 			this.originState = new State(); //fake state when origal good is traded
 		}
-
 	}
 
 	public void marketPriceAdder(double factor) { //factor is legacy/oldtest
@@ -65,13 +70,13 @@ public abstract class AbstractGood {
 	@Override
 	public String toString() {
 		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "
-				+Functions.formatNum(amount)+" units, multiplyer: "+daysOnPos+"/"+daysOnNeg+" Summer: "+Functions.formatNum(sumModifier);
+				+Functions.formatNum(amount)+" units";
 	}
 
 	public double getValue(double amount) {
 		//setValueMultiplyer(valueMultiplyer);
 		//return amount*(baseValue*valueMultiplyer);
-		return amount*(baseValue + sumModifier )/**valueMultiplyer*/;
+		return amount* (baseValue * (demand/supply));//(baseValue + sumModifier )/**valueMultiplyer*/;
 	}
 	
 	public double sellGood(double amount, AbstractMarket market) {
@@ -193,6 +198,7 @@ public abstract class AbstractGood {
 
 	public void addAmount(double amount) {
 		//setValueMultiplyer(valueMultiplyer+(amount/this.amount));
+		//this.supply += amount;
 		this.amount += amount;
 	}
 
@@ -265,13 +271,17 @@ public abstract class AbstractGood {
 		setValueSumModifier(sumModifier - (takeThis));
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+	public void setSupplyAndDemand(double demand, double supply) {
+
+		//lastValue = getValue(1); //TODO: continue here
+
+		this.demand = demand > 1 ? demand : 1;
+		this.supply = supply > 1 ? supply : 1;
+	}
+
+	//public void setSupply(double supply) {
+	//	this.supply = supply;
+	//}
 }

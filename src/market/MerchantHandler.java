@@ -23,7 +23,7 @@ public class MerchantHandler {
 		double income = 0;
 
 		
-		double[] needs = OGstate.localMarket.getNeeds();
+		double[] needs = OGstate.localMarket.getDemands();
 		
 		boolean nothing = false;
 		int times = 0;

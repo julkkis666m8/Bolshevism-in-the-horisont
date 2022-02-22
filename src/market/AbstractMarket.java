@@ -9,16 +9,13 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import goods.*;
-import world.Pop;
-import world.State;
 
 public class AbstractMarket {
 
 	protected List<AbstractGood> stockPile;
-	private double[] marketNeeds = new double[Constants.AMOUNT_OF_GOODS];
+	private double[] marketDemands = new double[Constants.AMOUNT_OF_GOODS];
+	private double[] marketSupplys = new double[Constants.AMOUNT_OF_GOODS];
 	private List<AbstractMarket> subMarkets = new LinkedList<>();
 	
 	public AbstractMarket() {
@@ -44,9 +41,9 @@ public class AbstractMarket {
 		
 		String marketNeedsString = "";
 		int i = 0;
-		for(double d : getMarketNeeds()) {
-			
-			marketNeedsString +="\n"+Constants.GoodToString(i)+": "+d;
+		for(double d : getDemands()) {
+
+			marketNeedsString +="\n"+Constants.GoodToString(i)+": "+d+"/"+getSupplys()[i]+" (Demand/Supply)";
 			i++;
 		}
 		
@@ -74,6 +71,8 @@ public class AbstractMarket {
 	 */
 	public double add(AbstractGood newGood, double amount) {
 		int i = 0;
+
+		marketSupply(newGood.getConstant(), amount);
 		for(AbstractGood g : stockPile) {
 			i++;
 			//System.out.println("lol "+i);
@@ -189,11 +188,11 @@ public class AbstractMarket {
 	}
 
 
-	public List<AbstractGood> getGood(int goodConst, double d) {
+	public List<AbstractGood> getGood(int goodConst, double amount) {
 		
 		List<AbstractGood> goods = new ArrayList<>();
 		
-		double stillNeeded = d;
+		double stillNeeded = amount;
 		
 		for(AbstractGood good : stockPile) {
 			if(good.isGoodToBuy(goodConst)) {
@@ -235,7 +234,7 @@ public class AbstractMarket {
 		
 		
 		
-		marketNeed(goodConst, stillNeeded);
+		marketDemand(goodConst, amount);
 		return goods;
 	}
 	
@@ -253,32 +252,28 @@ public class AbstractMarket {
 	}
 
 
-	private void marketNeed(int goodConst, double stillNeeded) {
-		getMarketNeeds()[goodConst] += stillNeeded;
+	private void marketDemand(int goodConst, double demand) {
+		getDemands()[goodConst] += demand;
 		//System.out.println(goodConst +" "+ marketNeeds[goodConst]);
 	}
-	
-	public void resetMarketNeedForTheTurn() {
+	private void marketSupply(int goodConst, double supply) {
+		getSupplys()[goodConst] += supply;
+		//System.out.println(goodConst +" "+ marketNeeds[goodConst]);
+	}
+
+	public void resetDemandAndCalculatePricesForTheTurn() {
 		int i = 0;
-		for (double thisNeed : getMarketNeeds()) {
+		for (double thisNeed : getDemands()) {
 			
 			//to fluidify the economy
-			
-			if (thisNeed > 0) {
-				//JOptionPane.showMessageDialog(null, thisNeed+" IS THIS ZERO?");
-				for (AbstractGood good : getAllOfGood(i)) {
-					good.marketPriceAdder(thisNeed);//factor is legacy/oldtest
-				}	
-			}
-			else {
-				for (AbstractGood good : getAllOfGood(i)) {
-					good.marketPriceLowerer(thisNeed);//factor is legacy/oldtest
-				}
+			//JOptionPane.showMessageDialog(null, thisNeed+" IS THIS ZERO?");
+			for (AbstractGood good : getAllOfGood(i)) {
+				good.setSupplyAndDemand(thisNeed, getSupplys()[i]);//factor is legacy/oldtest
 			}
 			///////////////////////
 			//actual reset of need:
 			/////////////////////
-			
+			/*
 			double needNudger = 0;
 			
 			for (AbstractGood good : getAllOfGood(i)) {
@@ -286,24 +281,25 @@ public class AbstractMarket {
 				needNudger -= good.getAmount();
 				
 				//good.marketPriceLowerer(thisNeed);//factor is legacy/oldtest
-			}
+			}*/
 					
-			getMarketNeeds()[i] = needNudger*0.01; //to set default need to a fraction of total stockpile to prevent prices staying stable while stockpiles are rising.
+			getDemands()[i] = 0;//needNudger*0.01; //to set default need to a fraction of total stockpile to prevent prices staying stable while stockpiles are rising.
 			i++;
 		}
 	}
 
-//ALL SAME //TODO: ONLY HAVE two!!
-	public double[] getNeeds() {
-		return marketNeeds;
+	public double getMarketDemand(int goodIndex) {
+		return marketDemands[goodIndex];
 	}
-	public double getMarketNeed(int goodIndex) {
-		return marketNeeds[goodIndex];
+	public double getMarketSupplys(int goodIndex) {
+		return marketSupplys[goodIndex];
 	}
-	public double[] getMarketNeeds() {
-		return marketNeeds;
+	public double[] getDemands() {
+		return marketDemands;
 	}
-//_______________________________________
+	public double[] getSupplys() {
+		return marketSupplys;
+	}
 	
 	
 
@@ -313,12 +309,12 @@ public class AbstractMarket {
 	 * @param index
 	 */
 	public void modMarketNeed(double marketNeedChange, int index) {
-		this.marketNeeds[index] = marketNeedChange;
+		this.marketDemands[index] = marketNeedChange;
 	}
 	
 	public void modMarketNeeds(double[] marketNeedChanges) {
-		for(int i = 0; i < marketNeeds.length; i++) {
-			this.marketNeeds[i] += marketNeedChanges[i];
+		for(int i = 0; i < marketDemands.length; i++) {
+			this.marketDemands[i] += marketNeedChanges[i];
 			//System.out.println(marketNeeds[i]);
 		}
 	}
