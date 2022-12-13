@@ -47,7 +47,10 @@ public class PopJobHandler {
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 		}
 		else if (pop.job == Constants.SOLDIER) {
-			income = nation.getSoldierPay().paySoldier(pop.population);
+			income = nation.getSoldierPay().paySoldier(pop.population, false);
+		}
+		else if (pop.job == Constants.OFFICER) {
+			income = nation.getSoldierPay().paySoldier(pop.population, true);
 		}
 		else if (pop.job == Constants.LABORER) {
 			//goods.addAll(PopSellHandler.labourerJob(this, state));

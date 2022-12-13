@@ -3,8 +3,6 @@ package nationalEconomyManagers;
 import java.util.List;
 
 import constants.Constants;
-import lombok.Getter;
-import lombok.Setter;
 import world.Nation;
 import world.Pop;
 
@@ -15,21 +13,24 @@ import world.Pop;
  *
  */
 public class SoldierPay {
-	
-	
-	@Getter
-	@Setter
+
+
+	private static final int OFFICER_WAGE_MULTIPLIER = 2;
 	private double perTickBudget = 0;
 
 	private double budget = 0;
 	
 	private int soldierPop;
+	private int officerPop;
+	private int totalMilitaryPop;
+
 	private Nation nation;
 	
 
 	public SoldierPay(double totalBudget, Nation nation) {
 		this.nation = nation;
 		this.perTickBudget = totalBudget;
+		budget = 0;//totalBudget;
 	}
 
 	public double getPerTickBudget() {
@@ -51,8 +52,18 @@ public class SoldierPay {
 	private void updateSoldierPop() {
 
 		List<Pop> soldierPops = nation.getJob(Constants.SOLDIER);
-		
-		
+		List<Pop> officerPops = nation.getJob(Constants.OFFICER);
+
+		soldierPop = 0;
+		for (Pop pop : soldierPops) {
+			soldierPop = soldierPop + pop.population;
+		}
+		officerPop = 0;
+		for (Pop pop : officerPops) {
+			officerPop = officerPop + pop.population;
+		}
+
+		totalMilitaryPop = soldierPop + (officerPop * OFFICER_WAGE_MULTIPLIER);
 		
 	}
 
@@ -71,24 +82,16 @@ public class SoldierPay {
 	}
 
 
-	public double paySoldier(int population) {
+	public double paySoldier(int population, boolean isOfficer) {
 		
 		double pay = 0;
-		
-		pay = giveMoneyToSoldier(population);
-		
-		return pay;
-	}
-	
-	
 
 
-	//TODO: make multithreadable by splitting budgets per state
-	private synchronized double giveMoneyToSoldier(int population) {
-
-		double pay = 0;
-		
 		double toBePayed = payPerSoldier(population);
+
+		if(isOfficer) {
+			toBePayed = toBePayed * OFFICER_WAGE_MULTIPLIER;
+		}
 
 		if(budget > toBePayed) {
 			this.budget = budget - toBePayed;
@@ -99,18 +102,12 @@ public class SoldierPay {
 			budget = 0;
 		}
 		
-		
 		return pay;
 	}
 
-
 	private double payPerSoldier(int population) {
-		
-		double pay = (perTickBudget / soldierPop) * population;
-		
+		double pay = (perTickBudget / totalMilitaryPop) * population;
 		return pay;
-		
-		
 	}
 	
 	
