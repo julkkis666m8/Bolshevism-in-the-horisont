@@ -29,6 +29,7 @@ public class Main{
 	public static Nation germany;
 	public static PopWindow popWindow;
 	public static NationGuiController nationGuiController;
+	//public static PopWindow popGuiController;
 	
 	
 	//temp
@@ -39,7 +40,7 @@ public class Main{
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
 	public static JobParameters polishJob = new JobParameters(20, 0, 20, 5, 2, 1, 0, 1, 1, 2, 1, 1);
 	public static Nation poland;
-	
+
 	//public State nullState = new State(null, null);
 	
 	
@@ -188,6 +189,7 @@ public class Main{
 
 			try{
 				nationGuiController.setTickUpdate(true);
+				//popWindow.tickUpdate();
 			}catch (NullPointerException e){
 
 			}
@@ -212,4 +214,8 @@ public class Main{
 	public void setNationGui(NationGuiController nationGuiController) {
 		this.nationGuiController = nationGuiController;
 	}
+/*
+	public void setPopGui(PopGuiController popGuiController) {
+		this.popGuiController = popGuiController;
+	}*/
 }

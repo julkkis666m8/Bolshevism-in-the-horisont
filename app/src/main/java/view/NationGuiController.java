@@ -30,9 +30,13 @@ public class NationGuiController {
     @FXML
     private Slider tarrifSlider;
     @FXML
+    private TextField soldierPayTextField;
+    @FXML
+    private TextField moneyInCoffer;
+    @FXML
     private Button setButton;
     @FXML
-    private Label incomeLabel;
+    private Text incomeLabel;
     @FXML
     private LineChart moneyChart;
     @FXML
@@ -55,7 +59,6 @@ public class NationGuiController {
 
 
 
-
         this.main = GuiMain.main;
         main.setNationGui(this);
         this.world = main.world;
@@ -70,6 +73,9 @@ public class NationGuiController {
     }
 
     private void update(){
+
+        moneyInCoffer.setText(String.valueOf(mainNation.coffers));
+
         this.income = mainNation.getIncome();
         incomeLabel.setText(Functions.formatNum(income));
 
@@ -111,9 +117,13 @@ public class NationGuiController {
     private void setButtonPress(){
         double val = this.taxesSlider.getValue()/100;
         mainNation.setTaxPercentage(val);
+
         val = this.tarrifSlider.getValue()/100;
         mainNation.setTarrifPercentage(val);
-        update();
+
+        val = Double.parseDouble(this.soldierPayTextField.getCharacters().toString());
+        mainNation.getSoldierPay().setPerTickBudget(val);
+        //update();
     }
 
     public synchronized void setTickUpdate(boolean bool) {

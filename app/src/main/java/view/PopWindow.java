@@ -1,7 +1,8 @@
 package view;
 
-
+import constants.Constants;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,8 +11,14 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import main.Main;
 import world.Nation;
 import world.Pop;
 import javafx.scene.chart.*;
@@ -161,13 +168,6 @@ public class PopWindow extends Application {
 		return chart;
 	}
 
-
-
-
-
-	//START COPYPASTA
-
-
 	public String getPopInfo() {
 		String string = "";
 		
@@ -181,11 +181,6 @@ public class PopWindow extends Application {
 		
 		return string;
 	}
-//END COPYPASTA
-
-
-
-
 
 	private static void updatePop() {
 
@@ -199,7 +194,6 @@ public class PopWindow extends Application {
 			double value = jobs.get(i).getPieValue();
 
 			addData(name, value);
-			
 		}
 		/*
 		try {
@@ -211,7 +205,6 @@ public class PopWindow extends Application {
 		}*/
 
 	}
-
 
 	private static void getSelectedPops() {
 
@@ -271,18 +264,7 @@ public class PopWindow extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		updatePop();
-
-
-		
-		//System.out.println("GRAPHICS UPDATED");
-		
-		//stuff
-		
 	}
-
-
-
-
 }

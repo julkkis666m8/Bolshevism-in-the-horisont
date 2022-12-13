@@ -3,9 +3,10 @@ package nationalEconomyManagers;
 import java.util.List;
 
 import constants.Constants;
+import lombok.Getter;
+import lombok.Setter;
 import world.Nation;
 import world.Pop;
-import world.State;
 
 
 /**
@@ -16,8 +17,10 @@ import world.State;
 public class SoldierPay {
 	
 	
-	
-	private double totalBudgetOrigin = 0;
+	@Getter
+	@Setter
+	private double perTickBudget = 0;
+
 	private double budget = 0;
 	
 	private int soldierPop;
@@ -26,20 +29,24 @@ public class SoldierPay {
 
 	public SoldierPay(double totalBudget, Nation nation) {
 		this.nation = nation;
-		this.totalBudgetOrigin = totalBudget;
+		this.perTickBudget = totalBudget;
 	}
-	
-	
+
+	public double getPerTickBudget() {
+		return perTickBudget;
+	}
+
+	public void setPerTickBudget(double perTickBudget) {
+		this.perTickBudget = perTickBudget;
+	}
+
 	public void tick() {
 		//pay is handeled per pop
 		
 		getSoldierPay();
 		
 		updateSoldierPop();
-		
-		
 	}
-	
 
 	private void updateSoldierPop() {
 
@@ -49,20 +56,18 @@ public class SoldierPay {
 		
 	}
 
-
 	private void getSoldierPay() {
 		
-		budget += nation.getNationCash(totalBudgetOrigin);
+		budget += nation.getNationCash(perTickBudget);
 		
 	}
 
-
 	public double getTotalBudget() {
-		return totalBudgetOrigin;
+		return perTickBudget;
 	}
 
 	public void setTotalBudget(double totalBudget) {
-		this.totalBudgetOrigin = totalBudget;
+		this.perTickBudget = totalBudget;
 	}
 
 
@@ -101,7 +106,7 @@ public class SoldierPay {
 
 	private double payPerSoldier(int population) {
 		
-		double pay = (totalBudgetOrigin / soldierPop) * population;
+		double pay = (perTickBudget / soldierPop) * population;
 		
 		return pay;
 		
