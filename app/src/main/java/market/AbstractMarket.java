@@ -109,10 +109,22 @@ public class AbstractMarket {
 		
 		for(AbstractGood g : stockPile) {
 			
-			g.calculateAviliability();
+			g.advancedCalculatePrice(this);
 			
 		}
-		
+
+		for(int i = 0; i < Constants.AMOUNT_OF_GOODS; i++) {
+
+			double needNudger = 0;
+
+			for (AbstractGood good : getAllOfGood(i)) {
+				needNudger += good.getAmount();
+			}
+
+
+			marketDemands[i] = 1;
+			marketSupplys[i] = 1+(needNudger * 0.01);
+		}
 		
 	}
 
@@ -267,23 +279,24 @@ public class AbstractMarket {
 			
 			//to fluidify the economy
 			//JOptionPane.showMessageDialog(null, thisNeed+" IS THIS ZERO?");
-			for (AbstractGood good : getAllOfGood(i)) {
+			/*for (AbstractGood good : getAllOfGood(i)) {
 				good.setSupplyAndDemand(thisNeed, getSupplys()[i]);//factor is legacy/oldtest
-			}
+			}*/
 			///////////////////////
 			//actual reset of need:
 			/////////////////////
-			/*
+
 			double needNudger = 0;
 			
 			for (AbstractGood good : getAllOfGood(i)) {
 				
-				needNudger -= good.getAmount();
+				//needNudger += good.getAmount();
 				
 				//good.marketPriceLowerer(thisNeed);//factor is legacy/oldtest
-			}*/
+			}
 					
-			getDemands()[i] = 0;//needNudger*0.01; //to set default need to a fraction of total stockpile to prevent prices staying stable while stockpiles are rising.
+			//getDemands()[i] = 1;//needNudger*0.01; //to set default need to a fraction of total stockpile to prevent prices staying stable while stockpiles are rising.
+			//getSupplys()[i] = 1+needNudger*0.01;
 			i++;
 		}
 	}

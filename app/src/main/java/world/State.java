@@ -47,7 +47,7 @@ public class State {
 		
 		//TODO: temp
 		clerkWage = 50;
-		craftsmanWage = 15;
+		craftsmanWage = 1;
 		
 		
 		fertility = 1;//(Math.random() * 10 + 1);

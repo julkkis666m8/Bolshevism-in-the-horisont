@@ -43,7 +43,7 @@ public class PopJobHandler {
 		}
 		else if (pop.job == Constants.ARTISAN) {
 			//goodAdder(ArtesanJobs.artesanJob(this, state));
-			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseNeededJob(pop, state, main.Main.controller.artesanJobs));
+			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.artesanJobs));
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 		}
 		else if (pop.job == Constants.SOLDIER) {
@@ -54,7 +54,8 @@ public class PopJobHandler {
 		}
 		else if (pop.job == Constants.LABORER) {
 			//goods.addAll(PopSellHandler.labourerJob(this, state));
-			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseLessEfficentJob(pop, state, main.Main.controller.labourJobs, 0.5 ));
+			//main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseLessEfficentJob(pop, state, main.Main.controller.labourJobs, 0.5 ));
+			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.labourJobs));
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 			
 			
@@ -66,7 +67,8 @@ public class PopJobHandler {
 		}
 		else if (pop.job == Constants.FARMER) {
 			//goods.addAll(PopSellHandler.farmerJob(this, state));
-			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseLessEfficentJob(pop, state, main.Main.controller.farmJobs, 0.1));
+			//main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseLessEfficentJob(pop, state, main.Main.controller.farmJobs, 0.1));
+			main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.farmJobs));
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 			
 			

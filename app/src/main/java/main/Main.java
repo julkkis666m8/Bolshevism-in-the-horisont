@@ -169,7 +169,7 @@ public class Main{
 				System.out.println(s.pops.size());
 				//break;
 			}
-			System.out.println("POLISH MARKET: "+statep1.localMarket.getStockpileString());
+			//System.out.println("POLISH MARKET: "+statep1.localMarket.getStockpileString());
 			/*
 			for(State s : poland.getStates()) {
 				System.out.println("POLISH MARKET: "+s.localMarket.getStockpileString());

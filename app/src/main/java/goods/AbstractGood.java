@@ -5,13 +5,13 @@ import constants.Functions;
 import market.AbstractMarket;
 import world.State;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public abstract class AbstractGood {
 
 	private static final double ROTTING_COEFICENT = 0.35;
-	public double baseValue = 5;
-	public double lastValue = 5;
+	public double baseValue;
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public double MAX_PRICE = 1000;
@@ -21,8 +21,7 @@ public abstract class AbstractGood {
 	private double amount;
 	public String goodName;
 	protected int constant = -1;
-	private double supply = 1;
-	private double demand = 1;
+	private Double currentPrice;
 
 	public int getConstant() {
 		return constant;
@@ -45,6 +44,76 @@ public abstract class AbstractGood {
 		}catch(NullPointerException e){
 			this.originState = new State(); //fake state when origal good is traded
 		}
+	}
+
+	public void advancedCalculatePrice(AbstractMarket market) {
+
+		double lastPrice = getCurrentPrice();
+
+		double supply = market.getMarketSupplys(constant) - market.getMarketDemand(constant); //market.getMarketDemand(constant);//market.getMarketSupplys(constant);// / market.getMarketDemand(constant);
+		double priceChange = 0;
+		if (supply > 0) {
+			// If supply is greater than 0, the price will decrease by a percentage
+			// equal to the supply divided by the production rate
+			priceChange = -supply /  market.getMarketSupplys(constant) * lastPrice;
+		} else if (supply < 0) {
+			// If supply is less than 0, the price will increase by a percentage
+			// equal to the absolute value of the supply divided by the consumption rate
+			priceChange = Math.abs(supply / market.getMarketDemand(constant) * lastPrice);
+		}
+		// Return the new price
+
+		double nextPrice = lastPrice + priceChange; //* some modifier
+/*
+		if((nextPrice) > MAX_PRICE) {
+			currentPrice = MAX_PRICE;
+			return;
+		}
+		if((nextPrice) < MIN_PRICE) {
+			currentPrice = MIN_PRICE;
+			return;
+		}*/
+		setCurrentPrice(nextPrice);
+	}
+
+	public void calculatePrice(AbstractMarket market) {
+
+		double lastPrice = getCurrentPrice();
+
+		double supply = market.getMarketSupplys(constant) - market.getMarketDemand(constant);
+		System.out.print(constant+": "+market.getMarketSupplys(constant));
+		double priceChange = 0;
+		if (supply > 0) {
+			// If supply is greater than 0, the price will decrease
+			priceChange = -0.01 * lastPrice;
+		} else if (supply < 0) {
+			// If supply is less than 0, the price will increase
+			priceChange = 0.01 * lastPrice;
+		}
+		// Return the new price
+
+		double nextPrice = lastPrice + priceChange; //* some modifier
+/*
+		if((nextPrice) > MAX_PRICE) {
+			currentPrice = MAX_PRICE;
+			return;
+		}
+		if((nextPrice) < MIN_PRICE) {
+			currentPrice = MIN_PRICE;
+			return;
+		}*/
+		currentPrice = nextPrice;
+	}
+
+	public double getCurrentPrice() {
+		if (isNull(currentPrice)){
+			currentPrice = baseValue;
+		}
+		return currentPrice;
+	}
+
+	public void setCurrentPrice(double currentPrice) {
+		this.currentPrice = currentPrice;
 	}
 
 	public void marketPriceAdder(double factor) { //factor is legacy/oldtest
@@ -76,12 +145,12 @@ public abstract class AbstractGood {
 	public double getValue(double amount) {
 		//setValueMultiplyer(valueMultiplyer);
 		//return amount*(baseValue*valueMultiplyer);
-		return amount* (baseValue * (demand/supply));//(baseValue + sumModifier )/**valueMultiplyer*/;
+		return amount * getCurrentPrice();//(baseValue * (demand/supply));//(baseValue + sumModifier )/**valueMultiplyer*/;
 	}
-	
+
 	public double sellGood(double amount, AbstractMarket market) {
 		
-		market.modMarketNeed(amount*(-1), this.getConstant());
+		//market.modMarketNeed(amount*(-1), this.getConstant());
 		
 		return market.add(getAbstractGoodOfConst(amount, this.originState, this.getConstant()),amount);
 		
@@ -253,8 +322,8 @@ public abstract class AbstractGood {
 	}
 
 	public void tick() {
-		//rot();
-		
+		rot();
+
 	}
 
 	
@@ -271,17 +340,4 @@ public abstract class AbstractGood {
 		setValueSumModifier(sumModifier - (takeThis));
 		
 	}
-
-
-	public void setSupplyAndDemand(double demand, double supply) {
-
-		//lastValue = getValue(1); //TODO: continue here
-
-		this.demand = demand > 1 ? demand : 1;
-		this.supply = supply > 1 ? supply : 1;
-	}
-
-	//public void setSupply(double supply) {
-	//	this.supply = supply;
-	//}
 }
