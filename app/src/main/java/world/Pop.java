@@ -32,7 +32,7 @@ public class Pop {
 	private double incomeTaxable = 0;
 	
 	private State state;
-	private double fertility = 0.0001;
+	private double fertility = 0.001;
 	private double growthOMatic = 0;
 
 	
@@ -133,6 +133,7 @@ public class Pop {
 		jobCounter(nation, state);//has sell for RGO
 		Taxes.taxMe(this, nation); //income tax
 
+		/* People buy thier goods in the begining of the turn in state calculation
 		setNeedsFurfilled(buy(nation, state, getNeeds()));
 		if(getNeedsFurfilled() > 0.6) {
 			setWantsFurfilled(buy(nation, state, getWants()));	
@@ -144,7 +145,7 @@ public class Pop {
 		}else {
 			setWantsFurfilled(0);
 			setLuxuryFurfilled(0);
-		}
+		*/
 		
 		
 		
@@ -168,18 +169,42 @@ public class Pop {
 	}
 	
 	public void buyTick(Nation nation) {
-
 		setNeedsFurfilled(buy(nation, state, getNeeds()));
 		if(getNeedsFurfilled() > 0.6) {
-			setWantsFurfilled(buy(nation, state, getWants()));			
+			setWantsFurfilled(buy(nation, state, getWants()));
+			if(getWantsFurfilled() > 0.2){
+				setLuxuryFurfilled(buy(nation, state, getLuxury()));
+			}
 		}
+	}
 
-		
-		
+	public void buyExtraTick(Nation nation) {
+
+		double firstMoney = totalCash();
+
+		//spend extra money
+		//while(totalCash() > (firstMoney * 0.5) || Math.random() > 0.5){
+			System.out.println(population +" "+ totalCash());
+			//if(getNeedsFurfilled() > 0.8){
+				setNeedsFurfilled(getNeedsFurfilled() + buy(nation, state, getNeeds()));
+			//}
+			//if(getWantsFurfilled() > 0.8){
+				setWantsFurfilled(getWantsFurfilled() + buy(nation, state, getNeeds()));
+			//}
+			//if(getLuxuryFurfilled() > 0.8){
+				setLuxuryFurfilled(getLuxuryFurfilled() + buy(nation, state, getNeeds()));
+			//}
+		//}
+	}
+
+	public void promoteTick(Nation nation) {
+		if(job == Constants.FARMER || job == Constants.LABORER){
+			farmerLaborControll(populationRandom());
+		}
 		promotionControll(populationRandom());
 		demotionControll(populationRandom(1-getNeedsFurfilled())); //TODO: make number go reverse.
 		birthControll(populationRandom());
-		
+
 	}
 
 
@@ -427,10 +452,6 @@ public class Pop {
 	public double getLuxuryFurfilled() {
 		return popLuxury.getLuxuryFurfilled();
 	}
-	
-	private void setLuxuryFurfilled(double luxuryFurfilled) {
-		popLuxury.setLuxuryFurfilled(luxuryFurfilled);
-	}
 	public void setNeedsFurfilled(double needsFurfilled) {
 		popNeeds.setNeedsFurfilled(needsFurfilled);
 	}
@@ -439,34 +460,49 @@ public class Pop {
 		popWants.setWantsFurfilled(wantsFurfilled);
 	}
 
+	public void setLuxuryFurfilled(double luxuryFurfilled) {
+		popLuxury.setLuxuryFurfilled(luxuryFurfilled);
+	}
+
 	//TODO: make work with inparameter
 	public void birthControll(int popModifier) {
 
 		//if (getStrata() == Constants.LOWER_STRATA) {
-			if (getNeedsFurfilled() >= 1 && growthOMatic > 1) {
-				 
+			if (growthOMatic > 1) {
 				int growth = (int)growthOMatic;
 				growthOMatic -= growth;
 				double toPay = growth * (5000);
 				System.out.println(growth+" BIRTHs of "+Constants.JobToString(job));
-				//takeMoney(getSelfList(), toPay);
+				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
 				population += growth;
 			}
-			/*else if (getNeedsFurfilled() < 0.25 && population > 0 && (job == Constants.FARMER || job == Constants.LABORER)) {
+			else if (getNeedsFurfilled() < 0.25 && population > 0 && (job == Constants.FARMER || job == Constants.LABORER)) {
 				int growth = -1;
 				double toPay = growth * (5000);
 				System.out.println(growth+" DEATHs of "+Constants.JobToString(job));
 				takeMoney(getSelfList(), toPay);
 				state.nation.births += growth;
 				population += growth;
-			}*/
-			else if(getwantsFurfilled() >= 0.75) {
+			}
+			else if(getWantsFurfilled() >= 0.75) {
 				//System.out.println(growthOMatic+" growths of "+Constants.JobToString(job));
-				growthOMatic += fertility*population;
+				growthOMatic += fertility*population* getWantsFurfilled();
 			}
 		//}
 	
+	}
+
+	public void farmerLaborControll(int toPromote){
+
+		if(toPromote == 0) {
+			return;
+		}
+
+		if(getNeedsFurfilled() < 0.25) {
+			promote(toPromote, job == Constants.FARMER ? Constants.LABORER : Constants.FARMER);
+		}
+
 	}
 
 	public void promotionControll(int toPromote) {
@@ -608,14 +644,6 @@ public class Pop {
 		
 		state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
 		
-	}
-
-
-
-
-	private double getwantsFurfilled() {
-		// TODO Auto-generated method stub
-		return popWants.getWantsFurfilled();
 	}
 
 

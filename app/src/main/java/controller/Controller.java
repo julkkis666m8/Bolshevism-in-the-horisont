@@ -99,13 +99,14 @@ public class Controller {
 			double[] allNeeds = new double[Constants.AMOUNT_OF_GOODS];
 			double[] needs1 = p.getNeeds();
 			double[] needs2 = p.getWants();
+			double[] needs3 = p.getLuxury();
 			//TODO: add luxury wants etc here too
 			
 			int i = 0;
 			for (double d : allNeeds) {
 				d = needs1[i];
 				d += needs2[i];
-				//d += needs3[i];
+				d += needs3[i];
 
 				allNeeds[i] += d;
 				
@@ -117,7 +118,7 @@ public class Controller {
 
 			p.setNeedsFurfilled(0);
 			p.setWantsFurfilled(0);
-			//Luxury
+			p.setLuxuryFurfilled(0);
 		}
 		
 		
@@ -237,6 +238,12 @@ public class Controller {
 
 		for(Pop pop : popsA) {
 			pop.buyTick(nation);
+		}
+		for(Pop pop : popsA) {
+			pop.buyExtraTick(nation);
+		}
+		for(Pop pop : popsA) {
+			pop.promoteTick(nation);
 		}
 
 

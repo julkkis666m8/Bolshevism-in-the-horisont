@@ -6,7 +6,7 @@ import constants.Constants;
 
 public class PopParameters {
 	
-	public static LinkedList<Pop> createPops(Nation nation, int totalStatePop, RaceParameters rp, JobParameters jp, State state) {
+	public static LinkedList<Pop> createPops(int totalStatePop, RaceParameters rp, JobParameters jp, State state) {
 		
 		
 		LinkedList<Pop> pops = new LinkedList<>();

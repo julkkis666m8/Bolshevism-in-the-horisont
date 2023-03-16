@@ -1,12 +1,10 @@
 package main;
 
-import com.sun.javafx.stage.EmbeddedWindow;
 import controller.BattleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.BattleGuiController;
 import world.Army;
 import world.Nation;
 import world.Regiment;

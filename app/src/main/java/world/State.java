@@ -44,6 +44,7 @@ public class State {
 	public State(String name, Nation nation, RaceParameters mainRace, JobParameters mainJob, int population) {
 		
 		this.nation = nation;
+		nation.addState(this);
 		
 		//TODO: temp
 		clerkWage = 50;
@@ -66,7 +67,7 @@ public class State {
 
 		//int pop = (int)(Math.random() * 10000 + 1000);
 		
-		pops.addAll(PopParameters.createPops(nation, population, mainRace, mainJob, this));
+		pops.addAll(PopParameters.createPops(population, mainRace, mainJob, this));
 		//pops.addAll(PopParameters.createPops(nation, 1000, main.Main.jewishRace, main.Main.jewishJob, this));
 		
 	}

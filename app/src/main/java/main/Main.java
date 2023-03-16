@@ -3,12 +3,6 @@ import javax.swing.JOptionPane;
 
 import constants.Constants;
 import controller.Controller;
-import javafx.application.Application;
-import javafx.application.Preloader;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import view.NationGuiController;
 import view.PopWindow;
 import world.JobParameters;
@@ -18,16 +12,14 @@ import world.RaceParameters;
 import world.State;
 import world.World;
 
-import java.io.IOException;
-import java.util.Objects;
 
 public class Main{
 
-	public static Controller controller;
-	public static World world;
-	public static int tickAmount;
-	public static Nation germany;
+	public static World world = new World();
+	public static Controller controller = new Controller(world);
+	public static int tickAmount = 10;
 	public static PopWindow popWindow;
+	public static Nation germany;
 	public static NationGuiController nationGuiController;
 	//public static PopWindow popGuiController;
 	
@@ -35,11 +27,16 @@ public class Main{
 	//temp
 	public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
 	public static JobParameters germanJob = new JobParameters(0, 0, 30, 10, 5, 15, 1, 2, 2, 2, 3, 1);
+	public static RaceParameters nordicRace = new RaceParameters(Constants.PROTESTANT, Constants.NORDIC);
+	public static JobParameters nordicJob = new JobParameters(0, 0, 30, 30, 5, 15, 1, 2, 2, 2, 3, 1);
+	public static RaceParameters finnicRace = new RaceParameters(Constants.PROTESTANT, Constants.FINNIC);
+	public static JobParameters finnicJob = new JobParameters(0, 0, 40, 30, 5, 15, 1, 1, 1, 1, 1, 1);
 	public static RaceParameters jewishRace = new RaceParameters(Constants.JEWISH, Constants.ASHKERNAZI);
-	public static JobParameters jewishJob = new JobParameters(0, 100, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
+	public static JobParameters jewishJob = new JobParameters(0, 0, 10, 10, 0, 20, 0, 1, 5, 1, 0, 0);
 	public static RaceParameters polishRace = new RaceParameters(Constants.CATHOLIC, Constants.SLAV);
-	public static JobParameters polishJob = new JobParameters(20, 0, 20, 5, 2, 1, 0, 1, 1, 2, 1, 1);
-	public static Nation poland;
+	public static JobParameters polishJob = new JobParameters(20, 0, 20, 5, 2, 1, 0, 0, 1, 2, 1, 1);
+	public static RaceParameters russianRace = new RaceParameters(Constants.ORTHODOX, Constants.SLAV);
+	public static JobParameters russianJob = new JobParameters(40, 0, 10, 10, 5, 1, 0, 0, 1, 2, 3, 1);
 
 	//public State nullState = new State(null, null);
 	
@@ -50,10 +47,7 @@ public class Main{
 
 
 		
-		
-		world = new World();
-		controller = new Controller(world);
-		tickAmount = 1;
+
 		
 		
 		
@@ -64,52 +58,157 @@ public class Main{
 		germany.addCoreRace(Constants.GERMANIC);
 		germany.addAcceptedRace(Constants.NORDIC);
 		germany.addHatedRace(Constants.ASHKERNAZI);
-		
-		world.addNation(germany);
-		
 
-		poland = new Nation("Poland", "Polish",world);
+
+		Nation poland = new Nation("Poland", "Polish",world);
 
 		poland.addCoreRace(Constants.SLAV);
 		poland.addAcceptedRace(Constants.JEWISH);
 		poland.addHatedRace(Constants.GERMANIC);
-		
-		world.addNation(poland);
-		
+
+
+		Nation finland = new Nation("Finland", "Finnish",world);
+
+		finland.addCoreRace(Constants.FINNIC);
+		finland.addAcceptedRace(Constants.NORDIC);
+		finland.addHatedRace(Constants.SLAV);
+
+
+		Nation sweden = new Nation("Sweden", "Swedish",world);
+
+		sweden.addCoreRace(Constants.NORDIC);
+
+
+		Nation norway = new Nation("Norway", "Norwegian",world);
+
+		norway.addCoreRace(Constants.NORDIC);
+
+
+		Nation denmark = new Nation("Denmark", "Danish",world);
+
+		denmark.addCoreRace(Constants.NORDIC);
+		denmark.addAcceptedRace(Constants.GERMANIC);
+
+
+		Nation russia = new Nation("Russia", "Russian",world);
+
+		russia.addCoreRace(Constants.SLAV);
+
 		//--------------------------
-		
+
+
+		/*
+		 * create states here
+		 */
+
+		State norway1 = new State("norway", norway, nordicRace, nordicJob, 20000);
+		State sweden1 = new State("sweden", sweden, nordicRace, nordicJob, 40000);
+		State denmark1 = new State("denmark", denmark, nordicRace, nordicJob, 20000);
+
+		State finland1 = new State("denmark", finland, finnicRace, finnicJob, 20000);
+		finland1.addPop(PopParameters.createPops(500, nordicRace, nordicJob, finland1));
 
 
 
-		State state1 = new State("State "+1, germany, germanRace, germanJob, 2000);
-		
-		state1.addPop(PopParameters.createPops(germany, 500, polishRace, polishJob, state1));
-		
+
+		State ostproisen = new State("ostproisen", germany, germanRace, germanJob, 20000);
+		ostproisen.addPop(PopParameters.createPops(500, jewishRace, jewishJob, ostproisen));
+		ostproisen.addPop(PopParameters.createPops(1000, polishRace, polishJob, ostproisen));
+
+		State selicia = new State("selicia", germany, germanRace, germanJob, 2000);
+		selicia.addPop(PopParameters.createPops(500, jewishRace, jewishJob, selicia));
+		selicia.addPop(PopParameters.createPops(5000, polishRace, polishJob, selicia));
+
+		State berlin = new State("berlin", germany, germanRace, germanJob, 5000);
+		berlin.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, berlin));
+		berlin.addPop(PopParameters.createPops(100, polishRace, polishJob, berlin));
+
 		//State state2 = new State("State POL "+1, germany, polishRace, polishJob, 100);
 		//State state2 = new State("State "+2, germany, germanRace, germanJob, 3250);
 		//State state3 = new State("State "+3, germany, germanRace, germanJob, 5000);
-		germany.addState(state1);
+
 		//germany.addState(state2);
 		//germany.addState(state3);
-		
+
 		//state1.addNeigbour(state2);
 		//state2.addNeigbour(state3);
 		
 		
-		State statep1 = new State("State "+1, poland, polishRace, polishJob, 10000/*(int)(Math.random() * 10000 + 1000)*/);
-		State statep2 = new State("State "+2, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
-		State statep3 = new State("State "+3, poland, polishRace, polishJob, 100000/*(int)(Math.random() * 10000 + 1000)*/);
-		poland.addState(statep1);
-		poland.addState(statep2);
-		poland.addState(statep3);
+		State westpoland = new State("west poland", poland, polishRace, polishJob, 10000);
+		westpoland.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, westpoland));
+		State warsawa = new State("warsawa", poland, polishRace, polishJob, 100000);
+		warsawa.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, warsawa));
+		State krakow = new State("krakow", poland, polishRace, polishJob, 100000);
+		krakow.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, krakow));
+		State eastpoland = new State("east poland", poland, polishRace, polishJob, 10000);
+		eastpoland.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, eastpoland));
 
 
+		State stpetersburg = new State("st. petersburg", russia, russianRace, russianJob, 10000);
+		stpetersburg.addPop(PopParameters.createPops(5000, finnicRace, finnicJob, stpetersburg));
+		stpetersburg.addPop(PopParameters.createPops(2500, jewishRace, jewishJob, stpetersburg));
+		stpetersburg.addPop(PopParameters.createPops(500, germanRace, germanJob, stpetersburg));
+		State karelia = new State("karelia", russia, russianRace, russianJob, 2500);
+		karelia.addPop(PopParameters.createPops(2500, finnicRace, finnicJob, karelia));
+		State northernrussia = new State("northernrussia", russia, russianRace, russianJob, 2500);
+		northernrussia.addPop(PopParameters.createPops(2500, finnicRace, finnicJob, northernrussia));
+		State moskova = new State("moskova", russia, russianRace, russianJob, 10000);
+		moskova.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, moskova));
+		State volgograd = new State("volgograd", russia, russianRace, russianJob, 10000);
+		State siberia = new State("volgograd", russia, russianRace, russianJob, 10000);
+		siberia.addPop(PopParameters.createPops(5000, finnicRace, finnicJob, siberia));
+		State ukraine = new State("ukraine", russia, russianRace, russianJob, 10000);
+		State belarus = new State("belarus", russia, russianRace, russianJob, 10000);
+		State baltics = new State("baltics", russia, russianRace, russianJob, 2500);
+		baltics.addPop(PopParameters.createPops(5000, finnicRace, finnicJob, baltics));
+		baltics.addPop(PopParameters.createPops(2500, jewishRace, jewishJob, baltics));
+		baltics.addPop(PopParameters.createPops(500, germanRace, germanJob, baltics));
 
-		statep1.addNeigbour(statep2);
-		statep2.addNeigbour(statep3);
-		
-		
-		statep1.addNeigbour(state1);
+
+		//nordics
+		 sweden1.addNeigbour(norway1);
+		 sweden1.addNeigbour(denmark1);
+		 denmark1.addNeigbour(berlin);
+
+		finland1.addNeigbour(sweden1);
+		finland1.addNeigbour(stpetersburg);
+		finland1.addNeigbour(karelia);
+
+		//russia
+		stpetersburg.addNeigbour(karelia);
+		karelia.addNeigbour(northernrussia);
+		stpetersburg.addNeigbour(baltics);
+		stpetersburg.addNeigbour(karelia);
+
+		moskova.addNeigbour(stpetersburg);
+		moskova.addNeigbour(northernrussia);
+		moskova.addNeigbour(ukraine);
+		moskova.addNeigbour(belarus);
+		moskova.addNeigbour(volgograd);
+
+		ukraine.addNeigbour(volgograd);
+		ukraine.addNeigbour(belarus);
+		ukraine.addNeigbour(eastpoland);
+
+		belarus.addNeigbour(baltics);
+		belarus.addNeigbour(eastpoland);
+
+		baltics.addNeigbour(eastpoland);
+
+		siberia.addNeigbour(northernrussia);
+		siberia.addNeigbour(moskova);
+		siberia.addNeigbour(volgograd);
+
+		//germany
+		westpoland.addNeigbour(ostproisen);
+		westpoland.addNeigbour(selicia);
+		selicia.addNeigbour(berlin);
+
+		//poland
+		westpoland.addNeigbour(warsawa);
+		warsawa.addNeigbour(krakow);
+		krakow.addNeigbour(eastpoland);
+
 
 
 
@@ -165,7 +264,7 @@ public class Main{
 		    System.out.println("\n-----------------previous happenings above-----------");
 
 			for(State s : germany.getStates()) {
-				System.out.println("GERMAN MARKET: "+s.localMarket.getStockpileString());
+				System.out.println(s.name+" - MARKET: "+s.localMarket.getStockpileString());
 				System.out.println(s.pops.size());
 				//break;
 			}

@@ -43,7 +43,7 @@ public class Nation {
 	 * @param nameADJ
 	 */
 	public Nation(String name, String nameADJ, World world) {
-		
+		world.addNation(this);
 		
 		
 		//temp
@@ -272,7 +272,7 @@ public class Nation {
 			itterations++;
 			Pop pop = pops.get(i);
 			population += pop.getPopulation();
-			pocketMoneyPerPerson += pop.getAverageWealth();
+			pocketMoneyPerPerson += pop.getAverageWealth()/pop.getPopulation();
 			justSpent += pop.getJustSpent()/pop.getPopulation();
 			incomeTaxable += pop.getIncomeTaxable()/pop.getPopulation();
 			needsFurfilled += pop.getNeedsFurfilled();

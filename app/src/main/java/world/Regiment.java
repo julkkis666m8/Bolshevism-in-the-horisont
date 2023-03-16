@@ -1,7 +1,7 @@
 package world;
 
 public class Regiment {
-    private String name;;
+    private String name;
     private final char shortName;
     private Nation nation;
     private double organization = 1;
@@ -73,7 +73,7 @@ public class Regiment {
     }
 
     public double attack(){
-        return discipline*organization*manpower/10*Math.random();
+        return discipline*organization*manpower/10;//*Math.random();
     }
     public void damage(double damage){
         damage = damage*(2-tactics);

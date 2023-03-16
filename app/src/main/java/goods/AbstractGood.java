@@ -64,7 +64,7 @@ public abstract class AbstractGood {
 		// Return the new price
 
 		double nextPrice = lastPrice + priceChange; //* some modifier
-/*
+
 		if((nextPrice) > MAX_PRICE) {
 			currentPrice = MAX_PRICE;
 			return;
@@ -72,7 +72,7 @@ public abstract class AbstractGood {
 		if((nextPrice) < MIN_PRICE) {
 			currentPrice = MIN_PRICE;
 			return;
-		}*/
+		}
 		setCurrentPrice(nextPrice);
 	}
 
