@@ -4,11 +4,7 @@ import goods.*;
 import world.State;
 
 public class Constants {
-	
-	
-
 	public static final double STUPIDITY_EFFECT_CONSTANT = 10; //how much does stupidity effect stupid choises?
-	
 	
 	//TODO: UPDATE WHEN GOODS ADDED
 	public static final int AMOUNT_OF_GOODS = 10; //should be one larger than the last index
@@ -24,125 +20,42 @@ public class Constants {
     public static final int ANIMAL = 8;
 	public static final int COAL = 9;
 
-
 	//TODO: UPDATE ME AND MY FRIEND DOWN SOUTH TOO
 	public static String GoodToString(int goodIndex) {
-
-		String title = "";
-
-		switch (goodIndex) {
-		case WHEAT:
-			title = "wheat";
-			break;
-		case COTTON:
-			title = "cotton";
-			break;
-		case CLOTHING:
-			title = "clothing";
-			break;
-		case TIMBER:
-			title = "timber";
-			break;
-		case FURNUATURE:
-			title = "furnuature";
-			break;
-		case IRON:
-			title = "iron";
-			break;
-			case STEEL:
-				title = "steel";
-				break;
-			case PAPER:
-				title = "paper";
-				break;
-			case ANIMAL:
-				title = "animal";
-				break;
-			case COAL:
-				title = "coal";
-				break;
-		default:
-			title = "unobtanium";
-			break;
-		}
-
-		return title;
+        return switch (goodIndex) {
+            case WHEAT -> "wheat";
+            case COTTON -> "cotton";
+            case CLOTHING -> "clothing";
+            case TIMBER -> "timber";
+            case FURNUATURE -> "furnuature";
+            case IRON -> "iron";
+            case STEEL -> "steel";
+            case PAPER -> "paper";
+            case ANIMAL -> "animal";
+            case COAL -> "coal";
+            default -> "unobtanium";
+        };
 	}
 	
 	//TODO: UPDATE ME TOO
 	public static AbstractGood getGood(double amount, State originState, int constant) {
-
-		AbstractGood good;
-		
-		switch (constant) {
-		case WHEAT:
-			good = new Wheat(amount, originState);
-			break;
-		case COTTON:
-			good = new Cotton(amount, originState);
-			break;
-		case CLOTHING:
-			good = new Clothing(amount, originState);
-			break;
-		case TIMBER:
-			good = new Timber(amount, originState);
-			break;
-		case FURNUATURE:
-			good = new Furnuature(amount, originState);
-			break;
-		case IRON:
-			good = new Iron(amount, originState);
-			break;
-			case STEEL:
-				good = new Steel(amount, originState);
-				break;
-			case PAPER:
-				good = new Paper(amount, originState);
-				break;
-			case ANIMAL:
-				good = new Animal(amount, originState);
-				break;
-			case COAL:
-				good = new Coal(amount, originState);
-				break;
-		default:
-			System.out.println("ERROR, CONSTANTS OF GOODS ARE NOT GOOD!!!");
-			good = new Wheat(amount, originState); //should never happen
-			break;
-		}
-		
-		
-		return good;
+        return switch (constant) {
+            case WHEAT -> new Wheat(amount, originState);
+            case COTTON -> new Cotton(amount, originState);
+            case CLOTHING -> new Clothing(amount, originState);
+            case TIMBER -> new Timber(amount, originState);
+            case FURNUATURE -> new Furnuature(amount, originState);
+            case IRON -> new Iron(amount, originState);
+            case STEEL -> new Steel(amount, originState);
+            case PAPER -> new Paper(amount, originState);
+            case ANIMAL -> new Animal(amount, originState);
+            case COAL -> new Coal(amount, originState);
+            default -> {
+                System.out.println("ERROR, CONSTANTS OF GOODS ARE NOT GOOD!!!");
+                yield new Wheat(amount, originState);
+            }
+        };
 	}
-	
-	
-	
-
-	// genders (are binary)
-	public final static int MALE = 1;
-	public final static int FEMALE = 0;
-	
-
-
-	public static String sexToString(int sex) {
-
-		String title = "";
-
-		switch (sex) {
-		case MALE:
-			title = "male";
-			break;
-		case FEMALE:
-			title = "female";
-			break;
-		default:
-			title = "GENDER IS BINARY"; //can't happen
-			break;
-		}
-
-		return title;
-	}
-	
 
 	// jobs
 	public final static int SERF = 9;
@@ -157,117 +70,49 @@ public class Constants {
 	public final static int CLERGYMAN = 7;
 	public final static int ARISTOCRAT = 8;
 	public final static int OFFICER = 11;
-	
 
 	public static String JobToString(int job) {
-
-		String title = "";
-
-		switch (job) {
-		case FARMER:
-			title = "farmer";
-			break;
-		case LABORER:
-			title = "laborer";
-			break;
-		case SOLDIER:
-			title = "soldier";
-			break;
-		case ARTISAN:
-			title = "artisan";
-			break;
-		case CRAFTSMAN:
-			title = "craftsman";
-			break;
-		case MERCHANT:
-			title = "merchant";
-			break;
-		case CAPITALIST:
-			title = "capitalist";
-			break;
-		case CLERGYMAN:
-			title = "clergyman";
-			break;
-		case ARISTOCRAT:
-			title = "aristocrat";
-			break;
-		case OFFICER:
-			title = "officer";
-			break;
-		case SERF:
-			title = "serf";
-			break;
-		case SLAVE:
-			title = "slave";
-			break;
-		default:
-			title = "invalid job";
-			break;
-		}
-
-		return title;
+        return switch (job) {
+            case FARMER -> "farmer";
+            case LABORER -> "laborer";
+            case SOLDIER -> "soldier";
+            case ARTISAN -> "artisan";
+            case CRAFTSMAN -> "craftsman";
+            case MERCHANT -> "merchant";
+            case CAPITALIST -> "capitalist";
+            case CLERGYMAN -> "clergyman";
+            case ARISTOCRAT -> "aristocrat";
+            case OFFICER -> "officer";
+            case SERF -> "serf";
+            case SLAVE -> "slave";
+            default -> "invalid job";
+        };
 	}
+
 	public static int jobToClass(int job) {
-
-		int strata = 0;
-
-		switch (job) {
-		case CAPITALIST:
-			strata = UPPER_STRATA;
-			break;
-		case ARISTOCRAT:
-			strata = UPPER_STRATA;
-			break;
-		case OFFICER:
-			strata = MIDDLE_STRATA;
-			break;
-		case ARTISAN:
-			strata = MIDDLE_STRATA;
-			break;
-		case MERCHANT:
-			strata = MIDDLE_STRATA;
-			break;
-		case CLERGYMAN:
-			strata = MIDDLE_STRATA;
-			break;
-		case FARMER:
-			strata = LOWER_STRATA;
-			break;
-		case LABORER:
-			strata = LOWER_STRATA;
-			break;
-		case CRAFTSMAN:
-			strata = LOWER_STRATA;
-			break;
-		case SOLDIER:
-			strata = LOWER_STRATA;
-			break;
-		case SERF:
-			strata = LOWEST_STRATA;
-			break;
-		case SLAVE:
-			strata = LOWEST_STRATA;
-			break;
-		default:
-			strata = LOWEST_STRATA;
-			break;
-		}
-		
-
-		return strata;
+        return switch (job) {
+            case CAPITALIST -> UPPER_STRATA;
+            case ARISTOCRAT -> UPPER_STRATA;
+            case OFFICER -> MIDDLE_STRATA;
+            case ARTISAN -> MIDDLE_STRATA;
+            case MERCHANT -> MIDDLE_STRATA;
+            case CLERGYMAN -> MIDDLE_STRATA;
+            case FARMER -> LOWER_STRATA;
+            case LABORER -> LOWER_STRATA;
+            case CRAFTSMAN -> LOWER_STRATA;
+            case SOLDIER -> LOWER_STRATA;
+            case SERF -> LOWEST_STRATA;
+            case SLAVE -> LOWEST_STRATA;
+            default -> LOWEST_STRATA;
+        };
 	}
 	
 	//Strata
-
 	public final static int UPPER_STRATA = 0;
 	public final static int MIDDLE_STRATA = 1;
 	public final static int LOWER_STRATA = 2;
 	public final static int LOWEST_STRATA = 3;
 	
-	
-	
-	
-
 	// religions
 	// TODO: add more
 	public final static int CATHOLIC = 0;
@@ -276,38 +121,17 @@ public class Constants {
 	public final static int JEWISH = 3;
 	public final static int SUNNI = 4;
 	public final static int PAGAN = 5;
-	
-
 
 	public static String ReligionToString(int religion) {
-
-		String title = "";
-
-		switch (religion) {
-		case CATHOLIC:
-			title = "catholic";
-			break;
-		case PROTESTANT:
-			title = "protestant";
-			break;
-		case ORTHODOX:
-			title = "orthodox";
-			break;
-		case JEWISH:
-			title = "jewish";
-			break;
-		case SUNNI:
-			title = "sunni";
-			break;
-		case PAGAN:
-			title = "pagan";
-			break;
-		default:
-			title = "invalid religion";
-			break;
-		}
-
-		return title;
+        return switch (religion) {
+            case CATHOLIC -> "catholic";
+            case PROTESTANT -> "protestant";
+            case ORTHODOX -> "orthodox";
+            case JEWISH -> "jewish";
+            case SUNNI -> "sunni";
+            case PAGAN -> "pagan";
+            default -> "invalid religion";
+        };
 	}
 
 	// race
@@ -321,60 +145,25 @@ public class Constants {
 	public final static int EAST_ASIAN = 6;
 	public final static int SOUTH_ASIAN = 7;
 	public final static int ARABIAN = 8;
-	public final static int BLACK = 9;
+	public final static int SUB_SAHARAN = 9;
 	public final static int NATIVE_AMERICAN = 10;
-
 
 	public static final double TRADE_MARGIN_MERCHANT_CONSTANT = 0.9; //1 - this = what he's left with.
 
-
-
-
-
 	public static String raceToString(int race) {
-
-		String title = "";
-
-		switch (race) {
-		case GERMANIC:
-			title = "Germanic";
-			break;
-		case NORDIC:
-			title = "Nordic";
-			break;
-		case FINNIC:
-			title = "Finnic";
-			break;
-		case MEDETERANIAN:
-			title = "Medeteranian";
-			break;
-		case SLAV:
-			title = "Slav";
-			break;
-		case ASHKERNAZI:
-			title = "Ashkenazi";
-			break;
-		case EAST_ASIAN:
-			title = "East Asian";
-			break;
-		case SOUTH_ASIAN:
-			title = "South Asian";
-			break;
-		case ARABIAN:
-			title = "Arabian";
-			break;
-		case BLACK:
-			title = "Black";
-			break;
-		case NATIVE_AMERICAN:
-			title = "Native American";
-			break;
-		default:
-			title = "Alien";
-			break;
-		}
-
-		return title;
+        return switch (race) {
+            case GERMANIC -> "Germanic";
+            case NORDIC -> "Nordic";
+            case FINNIC -> "Finnic";
+            case MEDETERANIAN -> "Medeteranian";
+            case SLAV -> "Slav";
+            case ASHKERNAZI -> "Ashkenazi";
+            case EAST_ASIAN -> "East Asian";
+            case SOUTH_ASIAN -> "South Asian";
+            case ARABIAN -> "Arabian";
+            case SUB_SAHARAN -> "Black";
+            case NATIVE_AMERICAN -> "Native American";
+            default -> "Alien";
+        };
 	}
-	
 }

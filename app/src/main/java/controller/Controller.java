@@ -70,23 +70,14 @@ public class Controller {
 				
 				Nation nation = nations.get(nationInt);
 				nation.tick();
-				
-				
 
-				
 				List<State> states = (nation.getStates());
-				
-				
 
 				for(State state : states){
 
 					tickState(nation, state);	
 				}
-				
 			}
-			
-			
-			
 		}
 	}
 
@@ -113,16 +104,12 @@ public class Controller {
 				i++;
 			}
 			
-			
 			p.getState().localMarket.modMarketNeeds(allNeeds);
 
 			p.setNeedsFurfilled(0);
 			p.setWantsFurfilled(0);
 			p.setLuxuryFurfilled(0);
 		}
-		
-		
-		
 	}
 	
 	/**

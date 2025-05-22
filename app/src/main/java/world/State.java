@@ -304,8 +304,8 @@ public class State {
 		System.out.println(Constants.JobToString(pop.job)+" people of that job "+popJobs.size());
 		
 		for (Pop exPop : popJobs) {
-			if (exPop.comparePop(pop)) {
-				exPop.combinePop(pop);
+			if (exPop.compare(pop)) {
+				exPop.combine(pop);
 				return;
 			}
 		}

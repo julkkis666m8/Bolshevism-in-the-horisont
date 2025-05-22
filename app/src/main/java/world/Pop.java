@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-//import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-
 import constants.Constants;
 import goods.AbstractGood;
 import market.Taxes;
@@ -16,7 +14,6 @@ public class Pop {
 	private static final double POPULATION_FLUIDITY_CONSTANT = 0.01;
 	public int population;
 	public int religion;
-	public int sex;
 	public int race;
 	public float age;
 	public int job;
@@ -41,12 +38,11 @@ public class Pop {
 		return Constants.raceToString(race)+" "+Constants.ReligionToString(religion)+
 				" "+Constants.JobToString(job)+" from "+state.toString();
 	}
-	public Pop(int population, int sex, int race, int religion, float age, int job, Ideology ideology,
+	public Pop(int population, int race, int religion, float age, int job, Ideology ideology,
 			double averageWealth, State state) {
 		this.state = state;
 		goods = new LinkedList<AbstractGood>();
 		this.population = population;
-		this.sex = sex;
 		this.race = race;
 		this.religion = religion;
 		this.age = age;
@@ -99,9 +95,6 @@ public class Pop {
 	}
 	private String getAverageWealthString() {
 		return ""+averageWealth;
-	}
-	private String getGenderString() {
-		return Constants.sexToString(sex);
 	}
 	private String getRaceString() {
 		return Constants.raceToString(race);
@@ -624,7 +617,7 @@ public class Pop {
 		
 		System.out.println(promotablePopulation+" "+ Constants.JobToString(this.job) + " promote to "+ Constants.JobToString(job));
 		//JOptionPane.showMessageDialog(null, "PROMOTION");
-		state.addPop(new Pop(promotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
+		state.addPop(new Pop(promotablePopulation, race, religion, age, job, ideology, averageWealth, state));
 		
 	}
 
@@ -642,7 +635,7 @@ public class Pop {
 		
 		System.out.println(demotablePopulation+" "+ Constants.JobToString(this.job) + " demote to "+ Constants.JobToString(job));
 		
-		state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
+		state.addPop(new Pop(demotablePopulation, race, religion, age, job, ideology, averageWealth, state));
 		
 	}
 
@@ -697,15 +690,6 @@ public class Pop {
 
 
 	//state.addPop(new Pop(demotablePopulation, sex, race, religion, age, job, ideology, averageWealth, state));
-
-	/**
-	 * Legacy, use "compare(Pop pop)".
-	 * @param pop
-	 * @return
-	 */
-	public boolean comparePop(Pop pop) {
-		return compare(pop);
-	}
 	
 	/**
 	 * compare if pop is combinable
@@ -713,7 +697,7 @@ public class Pop {
 	 * @return
 	 */
 	public boolean compare(Pop pop) {
-		if(this.sex == pop.sex && this.race == pop.race && this.religion == pop.religion && this.age == pop.age && this.job == pop.job) {
+		if(this.race == pop.race && this.religion == pop.religion && this.age == pop.age && this.job == pop.job) {
 			return true;
 		}
 		return false;
@@ -736,14 +720,6 @@ public class Pop {
 		this.giveCash(pop.getTotalWealth());
 		
 	}
-	/**
-	 * legacy, use "combine(Pop pop)".
-	 * @param pop
-	 */
-	public void combinePop(Pop pop) {
-		combine(pop);
-	}
-	
 
 	//LEGACY?
 	/*
@@ -757,8 +733,6 @@ public class Pop {
 	 * @param newGoods
 	 */
 	public void addGoods(List<AbstractGood> newGoods) {
-
-		
 		List<AbstractGood> newGoodsAddList = new ArrayList<>();
 		
 		for (AbstractGood newGood : newGoods) {
@@ -772,13 +746,10 @@ public class Pop {
 			}
 			
 			if (!has) {
-				//System.out.println("has "+(goods.size()+1));
 				newGoodsAddList.add(newGood);				
 			}
 		}
-		
 		goods.addAll(newGoodsAddList);
-		
 	}
 
 	public double getStanding(Nation nation) {
@@ -797,12 +768,4 @@ public class Pop {
 		//replaces this from controller:
 		//return o1.getAverageWealth() > o2.getAverageWealth() ? -1 : o1.getAverageWealth() == o2.getAverageWealth() ? 0 : 1;
 	}
-
-
-
-	
-	
-	
-	
-
 }
