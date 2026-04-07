@@ -1,6 +1,8 @@
 import constants.Constants;
 import controller.Controller;
+import main.Main;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import world.*;
 
 
@@ -16,7 +18,7 @@ public class PriceTest {
 
     public static RaceParameters germanRace = new RaceParameters(Constants.PROTESTANT, Constants.GERMANIC);
     public static JobParameters germanJob = new JobParameters(0, 0, 30, 10, 5, 15, 1, 2, 2, 2, 3, 1);
-
+/*
     @Test
     public void getStatesTest() {
 
@@ -39,6 +41,59 @@ public class PriceTest {
         System.out.println(s.pops.size());
 
         System.out.println(testia.getInfo());
+
+    }*/
+
+    @Test
+    public void economyStabilityTest() {
+
+        World world = new World();
+        Controller controller = new Controller(world);
+        Main.controller = controller;
+        Main.world = world;
+        Nation testia = new Nation("Testia", "Testian", world);
+        world.addNation(testia);
+        State s = new State("testonia", testia, germanRace, germanJob, 1000);
+        testia.addState(s);
+
+        double beforeCash = 0;
+        for (Pop p : world.getAllPops()) {
+            beforeCash += p.totalCash();
+        }
+
+        int ticks = 1000;
+
+        // check stability each tick to catch transient instabilities
+        double prevCash = beforeCash;
+        for (int t = 0; t < ticks; t++) {
+            controller.tick(1);
+
+            if(t % 100 == 0 || t >= ticks - 1) {
+                System.out.println(t+" TICKS!!!!");
+                System.out.println(s.name+" - MARKET: "+s.localMarket.getStockpileString());
+                System.out.println(s.pops.size());
+                System.out.println(testia.getInfo());
+            }
+            
+
+            double currentCash = 0;
+            for (Pop p : world.getAllPops()) {
+                currentCash += p.totalCash();
+            }
+
+            // sanity checks
+            assertFalse(Double.isNaN(currentCash) || Double.isInfinite(currentCash));
+
+            if (beforeCash <= 0) {
+                // if nothing to start with, ensure economy doesn't explode
+                assertTrue(currentCash < 1e8, "Economy exploded at tick " + t + " to " + currentCash);
+            } else {
+                double ratio = (prevCash == 0) ? (currentCash / beforeCash) : (currentCash / prevCash);
+                assertTrue(ratio > 0.1 && ratio < 10.0, "Economy unstable at tick " + t + ": cash ratio=" + ratio);
+            }
+
+            prevCash = currentCash;
+        }
 
     }
 }

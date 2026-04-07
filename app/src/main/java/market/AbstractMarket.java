@@ -14,6 +14,7 @@ import goods.*;
 public class AbstractMarket {
 
 	protected List<AbstractGood> stockPile;
+	protected java.util.List<Listing> listings = new java.util.ArrayList<>();
 	private double[] marketDemands = new double[Constants.AMOUNT_OF_GOODS];
 	private double[] marketSupplys = new double[Constants.AMOUNT_OF_GOODS];
 	private List<AbstractMarket> subMarkets = new LinkedList<>();
@@ -21,6 +22,29 @@ public class AbstractMarket {
 	public AbstractMarket() {
 		stockPile = new ArrayList<>();
 		initializeStockpile();
+	}
+
+
+	/**
+	 * Post a seller listing to this market. The listing holds the goods
+	 * and the seller will be paid only when the listing is bought.
+	 */
+	public void postListing(Listing listing) {
+		synchronized(listings) {
+			listings.add(listing);
+		}
+	}
+
+	/**
+	 * Called by a Listing when some or all of its amount is sold;
+	 * remove empty listings.
+	 */
+	public void onListingSold(Listing listing) {
+		if (listing.getAmount() <= 0) {
+			synchronized(listings) {
+				listings.remove(listing);
+			}
+		}
 	}
 	
 	private void initializeStockpile() {
@@ -218,6 +242,19 @@ public class AbstractMarket {
 				}
 			}
 		}
+
+		// also consider active seller listings
+		synchronized(listings) {
+			for (Listing listing : listings) {
+				if (listing.isGoodToBuy(goodConst) && listing.getAmount() > 0) {
+					stillNeeded -= listing.getAmount();
+					goods.add(listing);
+					if (stillNeeded <= 0) {
+						return goods;
+					}
+				}
+			}
+		}
 		
 			//if no more goods in market then look at sub markets
 		
@@ -256,6 +293,15 @@ public class AbstractMarket {
 		for(AbstractGood good : stockPile) {
 			if(good.isGoodToBuy(goodConst)) {
 				goods.add(good);
+			}
+		}
+
+		// include listings
+		synchronized(listings) {
+			for (Listing listing : listings) {
+				if (listing.isGoodToBuy(goodConst) && listing.getAmount() > 0) {
+					goods.add(listing);
+				}
 			}
 		}
 		

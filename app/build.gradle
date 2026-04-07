@@ -7,23 +7,59 @@ plugins {
 group 'org.example'
 version 'unspecified'
 
+// Target Java 17 to match modern JavaFX requirements
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
 repositories {
     mavenCentral()
 }
 application {
     mainClass = 'main.Launcher'
+    // keep legacy property for older Gradle versions that expect `mainClassName`
+    mainClassName = 'main.Launcher'
 }
 javafx {
     version = "19"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
+// Ensure source sets include the standard test directory explicitly
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
+
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.22'
+    // Lombok should be compileOnly with an annotation processor
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {
     useJUnitPlatform()
+
+    // Use Gradle defaults for test discovery and classpath — custom settings
+    // were interfering with test detection in some environments.
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
+// Ensure Java compilation uses UTF-8 and targets the declared Java version
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Use release to avoid mismatches between compiler and runtime
+    options.release = 21
 }

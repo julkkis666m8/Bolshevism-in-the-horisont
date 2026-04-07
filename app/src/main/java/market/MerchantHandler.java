@@ -34,7 +34,7 @@ public class MerchantHandler {
 				System.out.println(needed);
 				nothing = true;
 				times++;
-				income =+ costBenefitAnalysis(OGstate, neigbours, nation, goodConst, needed, pop);
+				income += costBenefitAnalysis(OGstate, neigbours, nation, goodConst, needed, pop);
 			}
 			
 		}
