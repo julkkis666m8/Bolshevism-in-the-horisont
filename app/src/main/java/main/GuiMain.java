@@ -36,13 +36,21 @@ public class GuiMain extends Application {
             nationGuiStage.show();
 
             final Stage popGuiStage = new Stage(); //stage.setScene(popGuiScene); stage.show();
-            Parent popGuiRoot =
-                    FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("gui for thing.fxml")));
+                Parent popGuiRoot =
+                    FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("popGui.fxml")));
             Scene popGuiScene = new Scene(popGuiRoot);
             popGuiStage.setScene(popGuiScene);
             popGuiStage.setTitle("PopGui");
             popGuiStage.setResizable(false);
             popGuiStage.show();
+
+            final Stage marketGuiStage = new Stage();
+            Parent marketGuiRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("marketGui.fxml")));
+            Scene marketGuiScene = new Scene(marketGuiRoot);
+            marketGuiStage.setScene(marketGuiScene);
+            marketGuiStage.setTitle("MarketGui");
+            marketGuiStage.setResizable(false);
+            marketGuiStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

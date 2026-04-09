@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import constants.Constants;
 import controller.Controller;
 import view.NationGuiController;
+import view.PopGuiController;
 import view.PopWindow;
 import world.JobParameters;
 import world.Nation;
@@ -21,7 +22,7 @@ public class Main{
 	public static PopWindow popWindow;
 	public static Nation germany;
 	public static NationGuiController nationGuiController;
-	//public static PopWindow popGuiController;
+	public static PopGuiController popGuiController;
 	
 	
 	//temp
@@ -105,7 +106,7 @@ public class Main{
 		State sweden1 = new State("sweden", sweden, nordicRace, nordicJob, 40000);
 		State denmark1 = new State("denmark", denmark, nordicRace, nordicJob, 20000);
 
-		State finland1 = new State("denmark", finland, finnicRace, finnicJob, 20000);
+		State finland1 = new State("finland", finland, finnicRace, finnicJob, 20000);
 		finland1.addPop(PopParameters.createPops(500, nordicRace, nordicJob, finland1));
 
 
@@ -292,6 +293,11 @@ public class Main{
 			}catch (NullPointerException e){
 
 			}
+			try{
+				popGuiController.setTickUpdate(true);
+			}catch (NullPointerException e){
+
+			}
 			JOptionPane.showMessageDialog(null, germany.getInfo());
 
 			/*
@@ -313,8 +319,7 @@ public class Main{
 	public void setNationGui(NationGuiController nationGuiController) {
 		this.nationGuiController = nationGuiController;
 	}
-/*
-	public void setPopGui(PopGuiController popGuiController) {
-		this.popGuiController = popGuiController;
-	}*/
+	    public void setPopGui(PopGuiController popGuiController) {
+	        this.popGuiController = popGuiController;
+	    }
 }

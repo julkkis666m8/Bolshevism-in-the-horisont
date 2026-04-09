@@ -78,6 +78,9 @@ public class Controller {
 					tickState(nation, state);	
 				}
 			}
+
+			// advance world date by one day per iteration
+			if (this.world != null) this.world.advanceOneDay();
 		}
 	}
 

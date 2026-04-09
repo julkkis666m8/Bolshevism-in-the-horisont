@@ -72,8 +72,11 @@ public class State {
 		
 	}
 	
-	public void addPop(List<Pop> pops) {
-		pops.addAll(pops);
+	public void addPop(List<Pop> newPops) {
+		if (newPops == null || newPops.isEmpty()) return;
+		for (Pop p : newPops) {
+			addPop(p);
+		}
 	}
 	
 	/**

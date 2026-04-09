@@ -16,8 +16,8 @@ public class PopWindowMain extends Application {
     public void start(Stage nationGuiStage) {
 
         try {
-            Parent popGuiRoot =
-                    FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("gui for thing.fxml")));
+                Parent popGuiRoot =
+                    FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("popGui.fxml")));
             Scene popGuiScene = new Scene(popGuiRoot);
             nationGuiStage.setScene(popGuiScene);
             nationGuiStage.setTitle("PopGui");

@@ -147,7 +147,7 @@ public class ArtesanJobs {
 	
 	
 	/**
-	 * TODO: WORK NEEDS TO BE DONE HERE½!!!!
+	 * TODO: WORK NEEDS TO BE DONE HERE!!!!
 	 * @param state
 	 * @return
 	 */

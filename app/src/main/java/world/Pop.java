@@ -29,6 +29,7 @@ public class Pop {
 	private double incomeTaxable = 0;
 	
 	private State state;
+	private List<AbstractGood> lastProducedGoods = new ArrayList<>();
 	private double fertility = 0.001;
 	private double growthOMatic = 0;
 
@@ -37,6 +38,18 @@ public class Pop {
 	public String toString() {
 		return Constants.raceToString(race)+" "+Constants.ReligionToString(religion)+
 				" "+Constants.JobToString(job)+" from "+state.toString();
+	}
+
+	public void setLastProducedGoods(List<AbstractGood> goods) {
+		if (goods == null) {
+			this.lastProducedGoods = new ArrayList<>();
+		} else {
+			this.lastProducedGoods = new ArrayList<>(goods);
+		}
+	}
+
+	public List<AbstractGood> getLastProducedGoods() {
+		return new ArrayList<>(this.lastProducedGoods);
 	}
 	public Pop(int population, int race, int religion, float age, int job, Ideology ideology,
 			double averageWealth, State state) {

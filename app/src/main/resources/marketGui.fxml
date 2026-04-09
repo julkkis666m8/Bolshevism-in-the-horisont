@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MarketGuiController" prefWidth="1000.0" prefHeight="700.0">
+    <left>
+        <VBox prefWidth="260.0">
+            <Label text="Market Hierarchy" />
+            <TreeView fx:id="worldMarketTree" prefWidth="250.0" />
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="8.0">
+            <Label text="Market Goods" />
+            <TableView fx:id="goodsTable" prefHeight="260.0">
+                <columns>
+                    <TableColumn fx:id="colGood" text="Good" prefWidth="180.0" />
+                    <TableColumn fx:id="colTotal" text="Total" prefWidth="90.0" />
+                    <TableColumn fx:id="colMin" text="Min Price" prefWidth="110.0" />
+                    <TableColumn fx:id="colMax" text="Max Price" prefWidth="110.0" />
+                    <TableColumn fx:id="colAvgLocal" text="Avg Local" prefWidth="110.0" />
+                    <TableColumn fx:id="colAvgGlobal" text="Avg Global" prefWidth="110.0" />
+                </columns>
+            </TableView>
+
+            <Label text="Active Listings" />
+            <TableView fx:id="listingsTable" prefHeight="300.0">
+                <columns>
+                    <TableColumn fx:id="colLGood" text="Good" prefWidth="160.0" />
+                    <TableColumn fx:id="colSeller" text="Seller" prefWidth="200.0" />
+                    <TableColumn fx:id="colLAmount" text="Amount" prefWidth="90.0" />
+                    <TableColumn fx:id="colLPrice" text="Unit Price" prefWidth="120.0" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

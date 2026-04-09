@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.PopGuiController" prefWidth="1100.0" prefHeight="700.0">
+    <left>
+        <VBox prefWidth="260.0">
+            <Label text="World Hierarchy" />
+            <Label fx:id="dateLabel" text="Date: 1900-01-01" />
+            <TreeView fx:id="worldTree" prefWidth="250.0" />
+        </VBox>
+    </left>
+    <center>
+        <SplitPane orientation="VERTICAL">
+            <items>
+                <AnchorPane prefHeight="360.0">
+                    <children>
+                        <TableView fx:id="popTable" layoutX="10.0" layoutY="10.0" prefHeight="340.0" prefWidth="800.0">
+                            <columns>
+                                <TableColumn fx:id="colName" text="Pop" prefWidth="180.0" />
+                                <TableColumn fx:id="colJob" text="Job" prefWidth="90.0" />
+                                <TableColumn fx:id="colProduced" text="Produced" prefWidth="140.0" />
+                                <TableColumn fx:id="colPopulation" text="Population" prefWidth="90.0" />
+                                <TableColumn fx:id="colAvgWealth" text="Avg Wealth" prefWidth="110.0" />
+                                <TableColumn fx:id="colNeeds" text="Needs %" prefWidth="80.0" />
+                                <TableColumn fx:id="colWants" text="Wants %" prefWidth="80.0" />
+                                <TableColumn fx:id="colLuxury" text="Luxury %" prefWidth="80.0" />
+                                <TableColumn fx:id="colJustSpent" text="Just Spent" prefWidth="110.0" />
+                                <TableColumn fx:id="colIncomeTaxable" text="IncomeTaxable" prefWidth="110.0" />
+                                <TableColumn fx:id="colInventory" text="Inventory" prefWidth="300.0" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefHeight="300.0">
+                    <children>
+                        <HBox spacing="8.0" layoutX="10.0" layoutY="10.0">
+                            <PieChart fx:id="raceChart" prefWidth="320.0" prefHeight="260.0" />
+                            <PieChart fx:id="jobChart" prefWidth="320.0" prefHeight="260.0" />
+                            <VBox>
+                                <Label text="Details" />
+                                <TextArea fx:id="detailsArea" prefWidth="320.0" prefHeight="260.0" editable="false" wrapText="true" />
+                            </VBox>
+                        </HBox>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>

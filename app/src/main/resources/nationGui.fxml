@@ -68,6 +68,7 @@
                   <Font size="25.0" />
                </font>
             </Text>
+            <Text fx:id="dateText" layoutX="12.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1900-01-01" />
             <Button fx:id="setButton" layoutX="17.0" layoutY="67.0" mnemonicParsing="false" onAction="#setButtonPress" text="Set" />
             <Text fx:id="incomeLabel" layoutX="161.0" layoutY="150.0" text="income" />
          </children>

@@ -26,6 +26,8 @@ public class NationGuiController {
     @FXML
     private Text nationName;
     @FXML
+    private Text dateText;
+    @FXML
     private Slider taxesSlider;
     @FXML
     private Slider tarrifSlider;
@@ -78,6 +80,10 @@ public class NationGuiController {
 
         this.income = mainNation.getIncome();
         incomeLabel.setText(Functions.formatNum(income));
+
+        try {
+            if (dateText != null) dateText.setText(main.world.getCurrentDateString());
+        } catch (Exception ignored) {}
 
         int moneyIndex = moneySeries.getData().size()+1;
         moneySeries.getData().add(new XYChart.Data(Integer.toString(moneyIndex),mainNation.coffers));
