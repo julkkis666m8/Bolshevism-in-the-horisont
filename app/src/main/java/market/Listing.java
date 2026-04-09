@@ -32,6 +32,43 @@ public class Listing extends AbstractGood {
         }
     }
 
+    public Pop getSeller() {
+        return seller;
+    }
+
+    @Override
+    public void advancedCalculatePrice(AbstractMarket market) {
+        // Base market-driven price movement
+        super.advancedCalculatePrice(market);
+
+        // Additionally nudge listing price based on seller's personal surplus
+        try {
+            if (seller != null) {
+                double personalNeed = 0;
+                double[] needs = seller.getNeeds();
+                if (needs != null && constant >= 0 && constant < needs.length) {
+                    personalNeed = needs[constant];
+                }
+
+                double surplus = this.getAmount() - personalNeed;
+
+                if (surplus > 0) {
+                    double discountRatio = Math.min(0.5, 0.2 * surplus / (personalNeed + 1));
+                    double newPrice = getCurrentPrice() * (1 - discountRatio);
+                    if (newPrice < MIN_PRICE) newPrice = MIN_PRICE;
+                    setCurrentPrice(newPrice);
+                } else if (surplus < 0) {
+                    double premiumRatio = Math.min(0.2, 0.1 * (-surplus) / (personalNeed + 1));
+                    double newPrice = getCurrentPrice() * (1 + premiumRatio);
+                    if (newPrice > MAX_PRICE) newPrice = MAX_PRICE;
+                    setCurrentPrice(newPrice);
+                }
+            }
+        } catch (Exception e) {
+            // best-effort; don't break the tick
+        }
+    }
+
     @Override
     public void removeAmount(double amount) {
         double before = getAmount();
@@ -44,6 +81,11 @@ public class Listing extends AbstractGood {
         double money = amount * getCurrentPrice();
         if (seller != null) {
             seller.giveCash(money);
+        }
+
+        // decrement market supply for the sold amount
+        if (ownerMarket != null) {
+            ownerMarket.adjustMarketSupply(this.getConstant(), -amount);
         }
 
         // notify market to clean up listing if empty

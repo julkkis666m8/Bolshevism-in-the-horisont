@@ -15,8 +15,8 @@ public abstract class AbstractGood {
 	public double valueMultiplyer = 1;
 	public double sumModifier = 0;
 	public double MAX_PRICE = 1000;
-	public double MIN_PRICE = 1;
-	public double NON_PRICE = 0.99; //must be smaller than MIN_PRICE
+	public double MIN_PRICE = 0.01;
+	public double NON_PRICE = 0.0099; //must be smaller than MIN_PRICE
 	public State originState;
 	private double amount;
 	public String goodName;
@@ -138,7 +138,7 @@ public abstract class AbstractGood {
 	
 	@Override
 	public String toString() {
-		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"£ price, "
+		return "\n---"+goodName+": "+Functions.formatNum(getValue(1))+"ï¿½ price, "
 				+Functions.formatNum(amount)+" units";
 	}
 
@@ -282,27 +282,35 @@ public abstract class AbstractGood {
 
 
 	public double buyForMoney(double money) {
-		
-		double canAfordAmount = money/getValue(1);
-		removeAmount(canAfordAmount);
+		if (!Double.isFinite(money) || money <= 0) return 0;
+		double unitPrice = getValue(1);
+		if (!Double.isFinite(unitPrice) || unitPrice <= 0) return 0;
 
+		double canAfordAmount = money / unitPrice;
+		if (canAfordAmount > this.amount) canAfordAmount = this.amount;
+		if (!Double.isFinite(canAfordAmount) || canAfordAmount <= 0) return 0;
+
+		removeAmount(canAfordAmount);
 		return canAfordAmount;
 	}
 	public double buyForMaxMoney(double amount, double money) {
-		
-		
-		double canAfordAmount = money/getValue(1);
-		
-		if(canAfordAmount > amount) {
+		if (!Double.isFinite(money) || money <= 0) return 0;
+		double unitPrice = getValue(1);
+		if (!Double.isFinite(unitPrice) || unitPrice <= 0) return 0;
 
-			if(amount > this.amount) {
+		double canAfordAmount = money / unitPrice;
+
+		if (canAfordAmount > amount) {
+			if (amount > this.amount) {
 				amount = this.amount;
 			}
 			canAfordAmount = amount;
 		}
-		
-		removeAmount(canAfordAmount);
 
+		if (canAfordAmount > this.amount) canAfordAmount = this.amount;
+		if (!Double.isFinite(canAfordAmount) || canAfordAmount <= 0) return 0;
+
+		removeAmount(canAfordAmount);
 		return canAfordAmount;
 	}
 

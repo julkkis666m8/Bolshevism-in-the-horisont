@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import constants.Constants;
-import goods.AbstractGood;
 import market.Taxes;
+import goods.*;
 
 public class Pop {
 
@@ -61,6 +61,7 @@ public class Pop {
 	public Pop(int population, int religion, int race, int job, double averageWealth, State state) {
 		this.state = state;
 		goods = new LinkedList<AbstractGood>();
+		initializeStockpile();
 		this.population = population;
 		this.religion = religion;
 		this.race = race;
@@ -77,6 +78,19 @@ public class Pop {
 		}
 	}
 
+	private void initializeStockpile() {
+		goods.add(new Wheat(1, null));
+		goods.add(new Cotton(1, null));
+		goods.add(new Iron(1, null));
+		goods.add(new Timber(1, null));
+		goods.add(new Steel(1, null));
+		goods.add(new Clothing(1, null));
+		goods.add(new Furnuature(1, null));
+		goods.add(new Paper(1, null));
+		goods.add(new Animal(1, null));
+		goods.add(new Coal(1, null));
+	}
+
 	/**
 	 * gives information about a pop
 	 * @return
@@ -88,7 +102,7 @@ public class Pop {
 		string += getReligionString()+", ";
 		string += getRaceString()+", ";
 		string += getJobString()+", ";
-		string += getAverageWealthString()+"�, ";
+		string += getAverageWealthString()+"€, ";
 
 
 		return string;
@@ -223,12 +237,12 @@ public class Pop {
 	}
 	
 	public void taxMe(double percentage, Nation nation) {
-		
-		double taxMoney = (averageWealth*population)*percentage * nation.taxEfficency * (1-this.taxEvasion);
-		
-		averageWealth -= taxMoney/population;
-		
-		
+		double taxMoney = (averageWealth * population) * percentage * nation.taxEfficency * (1 - this.taxEvasion);
+
+		if (population > 0) {
+			averageWealth -= taxMoney / population;
+		}
+
 		nation.addToCoffers(taxMoney);
 	}
 	
@@ -249,7 +263,10 @@ public class Pop {
 	public double getJustSpent() {
 		double temp = justSpent;
 		justSpent = 0;
-		return temp/population;
+		if (!Double.isFinite(temp) || population <= 0) {
+			return 0;
+		}
+		return temp / population;
 	}
 
 
@@ -307,35 +324,36 @@ public class Pop {
 
 
 	public static double takeMoney(List<Pop> pops, double payThis) {
-		
-		
 		int populationThatPays = countTotalPopulation(pops);
+		if (populationThatPays <= 0) return 0;
+
 		double money = 0;
-		
-		for(int i = 0; i < pops.size(); i++) {
-			Pop pop = pops.get(i);
-			double percentage = 0;
-			try {
-				percentage = pop.getPopulation() / populationThatPays;
-			} catch (Exception e) {
-				System.out.println("someone's dead");
+
+		for (Pop pop : pops) {
+			double percentage = (double) pop.getPopulation() / populationThatPays;
+
+			if (!Double.isFinite(percentage) || percentage <= 0) {
+				continue;
 			}
-			
 
 			double toPay = percentage * payThis;
-			double payed = 0;
-			
-			if (toPay > pop.totalCash()) {
-				payed += pop.bankrupt();
-			}
-			else {
-				payed += pop.pay(toPay);
+			double paid = 0;
+
+			double popTotal = pop.totalCash();
+			if (!Double.isFinite(toPay) || toPay <= 0) {
+				paid = 0;
+			} else if (toPay > popTotal) {
+				paid = pop.bankrupt();
+			} else {
+				paid = pop.pay(toPay);
 			}
 
-			pop.justSpent += payed;
-			money += payed;
+			if (!Double.isFinite(paid)) paid = 0;
+
+			pop.justSpent += paid;
+			money += paid;
 		}
-		
+
 		return money;
 	}
 
@@ -346,10 +364,16 @@ public class Pop {
 	 * @return
 	 */
 	public double pay(double toPay) {
-		
-		double money = averageWealth * population;
-		money -= toPay;
-		averageWealth = money * population;
+		double totalCash = averageWealth * population;
+		totalCash -= toPay;
+
+		if (!Double.isFinite(totalCash) || totalCash <= 0) {
+			averageWealth = 0;
+		} else if (population > 0) {
+			averageWealth = totalCash / population;
+		} else {
+			averageWealth = 0;
+		}
 
 		justSpent += toPay;
 		return toPay;
@@ -374,16 +398,30 @@ public class Pop {
 	}
 	
 	public double takeTotalCash() {
-		double temp = averageWealth;
+		double total = averageWealth * population;
 		averageWealth = 0;
-		return temp * population;
+		if (!Double.isFinite(total) || total <= 0) {
+			return 0;
+		}
+		return total;
 	}
 	public void returnTotalCash(double totalCash) {
-		averageWealth = totalCash/population;
+		if (!Double.isFinite(totalCash)) {
+			averageWealth = 0;
+			return;
+		}
+		if (population > 0) {
+			averageWealth = totalCash / population;
+		} else {
+			averageWealth = 0;
+		}
 	}
-	
+
 	public void giveCash(double totalCash) {
-		averageWealth = averageWealth + (totalCash/population); //TODO: CHEK IF THIS ACTUALLY WORKS
+		if (!Double.isFinite(totalCash)) return;
+		if (population > 0) {
+			averageWealth = averageWealth + (totalCash / population);
+		}
 	}
 
 
@@ -712,13 +750,34 @@ public class Pop {
 	 * @param pop
 	 */
 	public void combine(Pop pop) {
-		
-		//TODO: handle ideology
-		
-		this.population += pop.population;
-		
-		this.giveCash(pop.getTotalWealth());
-		
+		// TODO: handle ideology
+
+		if (pop == null) return;
+
+		int oldThisPop = this.population;
+		int otherPop = pop.population;
+		int newPopulation = oldThisPop + otherPop;
+
+		double thisTotalWealth = this.getTotalWealth();
+		double otherTotalWealth = pop.getTotalWealth();
+
+		// combine population
+		this.population = newPopulation;
+
+		// calculate weighted average wealth safely
+		if (this.population > 0) {
+			this.averageWealth = (thisTotalWealth + otherTotalWealth) / this.population;
+		} else {
+			this.averageWealth = 0;
+		}
+
+		// merge goods and economic counters
+		if (pop.getGoods() != null) {
+			this.addGoods(pop.getGoods());
+		}
+
+		this.justSpent += pop.justSpent;
+		this.incomeTaxable += pop.incomeTaxable;
 	}
 
 	//LEGACY?

@@ -31,8 +31,19 @@ public class AbstractMarket {
 	 */
 	public void postListing(Listing listing) {
 		synchronized(listings) {
+			// try to merge with an existing listing from the same seller for the same good
+			for (Listing l : listings) {
+				if (l.getSeller() == listing.getSeller() && l.getConstant() == listing.getConstant()) {
+					l.addAmount(listing.getAmount());
+					// only account the delta
+					adjustMarketSupply(listing.getConstant(), listing.getAmount());
+					return;
+				}
+			}
 			listings.add(listing);
 		}
+		// account this listing in market supply
+		adjustMarketSupply(listing.getConstant(), listing.getAmount());
 	}
 
 	/**
@@ -71,8 +82,26 @@ public class AbstractMarket {
 			i++;
 		}
 		
-		return "size is "+ Functions.formatNum(stockPile.size())+" and string is: "+stockPile.toString() + 
-				"\nneeds are"+ marketNeedsString;
+		// build stockpile string
+		StringBuilder sb = new StringBuilder();
+		sb.append("size is ").append(Functions.formatNum(stockPile.size()));
+		sb.append(" and string is: ");
+		sb.append(stockPile.toString());
+
+		// include active seller listings (what pops put for sale)
+		sb.append("\nlistings are: [");
+		synchronized(listings) {
+			boolean first = true;
+			for (Listing l : listings) {
+				if (!first) sb.append(", ");
+				sb.append(l.toString());
+				first = false;
+			}
+		}
+		sb.append("]");
+
+		sb.append("\nneeds are").append(marketNeedsString);
+		return sb.toString();
 	}
 	
 	public void tick() {
@@ -135,6 +164,13 @@ public class AbstractMarket {
 			
 			g.advancedCalculatePrice(this);
 			
+		}
+
+		// update prices for active listings as well so they move independently
+		synchronized(listings) {
+			for (Listing l : listings) {
+				l.advancedCalculatePrice(this);
+			}
 		}
 
 		for(int i = 0; i < Constants.AMOUNT_OF_GOODS; i++) {
@@ -317,6 +353,14 @@ public class AbstractMarket {
 	private void marketSupply(int goodConst, double supply) {
 		getSupplys()[goodConst] += supply;
 		//System.out.println(goodConst +" "+ marketNeeds[goodConst]);
+	}
+
+	/**
+	 * Public adjustment for market supply (used for listings and sales).
+	 */
+	public void adjustMarketSupply(int goodConst, double delta) {
+		// reuse internal array to keep single source of truth
+		getSupplys()[goodConst] += delta;
 	}
 
 	public void resetDemandAndCalculatePricesForTheTurn() {
