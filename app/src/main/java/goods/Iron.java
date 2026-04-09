@@ -10,7 +10,7 @@ public class Iron extends AbstractGood {
 
 		baseValue = 7;
 		MAX_PRICE = 20;
-		MIN_PRICE = 5;
+		//MIN_PRICE = 0.5;
 		//NON_PRICE = MIN_PRICE-0.01; //must be smaller than MIN_PRICE
 		this.goodName = "iron";
 		this.constant = Constants.IRON;

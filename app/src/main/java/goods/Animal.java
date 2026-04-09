@@ -9,7 +9,7 @@ public class Animal extends AbstractGood {
 
         baseValue = 15;
         MAX_PRICE = 50;
-        MIN_PRICE = 3;
+        //MIN_PRICE = 3;
         //NON_PRICE = MIN_PRICE-0.01; //must be smaller than MIN_PRICE
 
         this.goodName = "animal";

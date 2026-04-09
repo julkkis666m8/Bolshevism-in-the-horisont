@@ -52,75 +52,87 @@ public class MerchantHandler {
 	private static double costBenefitAnalysis(State OGstate, List<State> neigbours, Nation nation, int goodConst, double needed, Pop pop) {
 
 		double income = 0;
+		double neededRemaining = needed;
 
-		
-		List<State> deals = new LinkedList<State>();
-		
-		for (State neigbour : neigbours) {
-			double importPrice = neigbour.localMarket.getGoodMinPrice(goodConst, needed);
-			double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, needed);
-			double profit = importPrice - localPrice;
-			if (profit <= 0) {
-				if(neigbour.localMarket.goodTotalAmount(goodConst) > 0) {
-					deals.add(neigbour);	
+		// First, look for private listings in neighbouring markets (preferred)
+		for (State neighbour : neigbours) {
+			if (neededRemaining <= 0) break;
+			List<AbstractGood> available = new LinkedList<>(neighbour.localMarket.getAllOfGood(goodConst));
+			// sort available listings by unit price ascending so cheapest first
+			Collections.sort(available, new Comparator<AbstractGood>() {
+				public int compare(AbstractGood a, AbstractGood b) {
+					double pa = a.getValue(1);
+					double pb = b.getValue(1);
+					return Double.compare(pa, pb);
+				}
+			});
+
+			for (AbstractGood aGood : available) {
+				if (neededRemaining <= 0) break;
+				if (!(aGood instanceof Listing)) continue; // prefer private listings
+				Listing listing = (Listing) aGood;
+				double unitPrice = listing.getValue(1);
+				double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, 1);
+				// only trade if there's profit margin
+				if (localPrice <= unitPrice) continue;
+
+				double qty = Math.min(neededRemaining, listing.getAmount());
+				if (qty <= 0) continue;
+
+				// remove from listing (pays seller)
+				try {
+					listing.removeAmount(qty);
+				} catch (Exception e) {
+					continue;
+				}
+
+				// build a transferable good representing what was bought and give it the unit price
+				AbstractGood bought = Constants.getGood(qty, listing.originState, goodConst);
+				try {
+					bought.setCurrentPrice(unitPrice);
+				} catch (Exception ignored) {}
+
+				double profit = PopSellHandler.trade(bought, OGstate.localMarket);
+				if (OGstate.isForigen(bought.originState)) {
+					profit = nation.payTarrif(profit);
+				}
+				income += profit;
+				neededRemaining -= qty;
+			}
+		}
+
+		// If still need goods, fall back to buying from public stockpiles (non-listing goods)
+		if (neededRemaining > 0) {
+			for (State neighbour : neigbours) {
+				if (neededRemaining <= 0) break;
+				List<AbstractGood> available = new LinkedList<>(neighbour.localMarket.getAllOfGood(goodConst));
+				Collections.sort(available, new Comparator<AbstractGood>() {
+					public int compare(AbstractGood a, AbstractGood b) {
+						return Double.compare(a.getValue(1), b.getValue(1));
+					}
+				});
+				for (AbstractGood aGood : available) {
+					if (neededRemaining <= 0) break;
+					if (aGood instanceof Listing) continue; // already handled
+					double unitPrice = aGood.getValue(1);
+					double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, 1);
+					if (localPrice <= unitPrice) continue;
+					double qty = Math.min(neededRemaining, aGood.getAmount());
+					if (qty <= 0) continue;
+					// remove from market
+					aGood.removeAmount(qty);
+					AbstractGood bought = Constants.getGood(qty, aGood.originState, goodConst);
+					try { bought.setCurrentPrice(unitPrice); } catch (Exception ignored) {}
+					double profit = PopSellHandler.trade(bought, OGstate.localMarket);
+					if (OGstate.isForigen(bought.originState)) profit = nation.payTarrif(profit);
+					income += profit;
+					neededRemaining -= qty;
 				}
 			}
 		}
-		
-		//sort everything in "deals"
-		Collections.sort(deals, new Comparator<State>() {
-			public int compare(State o1, State o2) {
-				return o1.localMarket.getGoodMinPrice(goodConst, needed)
-						> o2.localMarket.getGoodMinPrice(goodConst, needed)
-						? -1 : o1.localMarket.getGoodMinPrice(goodConst, needed)
-						== o2.localMarket.getGoodMinPrice(goodConst, needed)
-						? 0 : 1;
-			}
-		});
-		
-		//List<AbstractGood> wrangelings = new LinkedList<>();
 
-		double[] neededArray = new double[Constants.AMOUNT_OF_GOODS];
-		neededArray[goodConst] = needed;
-		double neededITEM_TEMP = needed;
-		
-		//System.out.println("fag"+needed);
-		
-		for(State deal : deals) {
-			System.out.println("deal "+deal.localMarket.getAllOfGood(goodConst).toString());
-			System.out.println("neededArray"+neededArray[goodConst]);
-			neededArray = PopSellHandler.buy(pop, neededArray, pop.takeTotalCash(), deal.localMarket); //deals.get(i).localMarket. //TODO: i think this method is bad, and should be fixed
-			System.out.println(neededArray[goodConst]);
-			System.out.println("BUY? "+(neededArray[goodConst] - neededITEM_TEMP)+ " " + neededITEM_TEMP);
-			
-			List<AbstractGood>goods = deal.localMarket.getGood(goodConst, needed);
-			
-			for (AbstractGood good : goods) {
-				double thisTrade = PopSellHandler.trade(good, OGstate.localMarket);
-				if(OGstate.isForigen(good.originState)){
-					thisTrade = nation.payTarrif(thisTrade);
-				}
-				income += thisTrade;
-			}
-			
-			
-			if (neededArray[goodConst] <= 0) {
-				System.out.println("BREAK");
-				break;
-			}
-		}
-		
-		//System.out.println("GOODS"+pop.getGoods().toString());
-		//income += PopSellHandler.sell(pop, OGstate.localMarket, nation);
-		
-		
-		
-		
-		
-		
 		return income;
 
-		
 	}
 
 }

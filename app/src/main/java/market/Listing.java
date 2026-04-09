@@ -3,6 +3,7 @@ package market;
 import goods.AbstractGood;
 import world.Pop;
 import world.State;
+import constants.Constants;
 
 /**
  * Listing is a market-held representation of a seller's offer.
@@ -77,10 +78,32 @@ public class Listing extends AbstractGood {
         }
         super.removeAmount(amount);
 
-        // pay the seller for what was sold
+        // compute sale proceeds and allocate aristocrat share based on seller's status
         double money = amount * getCurrentPrice();
-        if (seller != null) {
-            seller.giveCash(money);
+        double toSeller = money;
+        try {
+            if (seller != null) {
+                int job = seller.job;
+                double ariFraction = 0.0;
+                if (job == Constants.LABORER || job == Constants.FARMER) {
+                    ariFraction = 0.10;
+                } else if (job == Constants.SERF) {
+                    ariFraction = 0.75;
+                } else if (job == Constants.SLAVE) {
+                    ariFraction = 0.99;
+                }
+
+                if (ariFraction > 0 && seller.getState() != null) {
+                    double ariMoney = money * ariFraction;
+                    seller.getState().getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
+                    toSeller = money - ariMoney;
+                }
+
+                seller.giveCash(toSeller);
+            }
+        } catch (Exception e) {
+            // best-effort, ensure seller still gets paid if possible
+            if (seller != null) seller.giveCash(money);
         }
 
         // decrement market supply for the sold amount

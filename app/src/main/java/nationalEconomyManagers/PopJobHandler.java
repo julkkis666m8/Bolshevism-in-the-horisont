@@ -65,12 +65,6 @@ public class PopJobHandler {
 			pop.setLastProducedGoods(produced);
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 			
-			
-			double ariMoney = income*0.1;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
 		}
 		else if (pop.job == Constants.FARMER) {
 			//goods.addAll(PopSellHandler.farmerJob(this, state));
@@ -78,12 +72,6 @@ public class PopJobHandler {
 			List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.farmJobs));
 			pop.setLastProducedGoods(produced);
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.1;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
 			
 		}
 		else if (pop.job == Constants.ARISTOCRAT) {
@@ -96,12 +84,6 @@ public class PopJobHandler {
 			pop.setLastProducedGoods(produced);
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 			
-			
-			double ariMoney = income*0.75;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
-			
 		}
 		else if (pop.job == Constants.SLAVE) {
 
@@ -109,12 +91,6 @@ public class PopJobHandler {
 			List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.farmJobs));
 			pop.setLastProducedGoods(produced);
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
-			
-			
-			double ariMoney = income*0.99;
-			income = income-ariMoney;
-			
-			state.getAristocratCashPool().giveMoneyToAristocrats(ariMoney);
 			
 		}
 		

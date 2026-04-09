@@ -10,7 +10,7 @@ public class Timber extends AbstractGood {
 
 		baseValue = 3;
 		MAX_PRICE = 10;
-		MIN_PRICE = 1;
+		//MIN_PRICE = 1;
 		//NON_PRICE = MIN_PRICE-0.01; //must be smaller than MIN_PRICE
 		this.goodName = "timber";
 		
