@@ -115,7 +115,11 @@ public class PopSellHandler {
     }
 
 
-    public static double trade(AbstractGood good, AbstractMarket target, Pop merchant) {
+    public static double dropship(AbstractGood good, AbstractMarket target, Pop merchant) {
+        if (merchant != null && merchant.getState() != null) {
+            target = merchant.getState().localMarket;
+            if (good.getOriginState() == merchant.getState()) return 0;
+        }
 
         double minPrice = target.getGoodMinPrice(good.getConstant(), 1);
 
@@ -126,6 +130,48 @@ public class PopSellHandler {
         good.setCurrentPrice(finalPrice);
         target.postListing(new Listing(good.getAmount(), good.originState, merchant, target, good));
         return 0;
+    }
+
+    public static double dropship(AbstractGood good, AbstractMarket target, Pop merchant,
+                                  Listing supplierListing, double supplierUnitPrice,
+                                  boolean supplierAlreadySettled) {
+        if (merchant != null && merchant.getState() != null) {
+            target = merchant.getState().localMarket;
+            if (supplierListing.hasVisitedState(merchant.getState())) return 0;
+        }
+
+        double salePrice = Math.min(Math.max(good.getValue(1), target.getGoodMinPrice(good.getConstant(), 1)),
+                supplierUnitPrice * 1.10);
+        good.setCurrentPrice(salePrice);
+        target.postListing(new Listing(good.getAmount(), good.originState, merchant, target, good,
+                supplierListing, supplierUnitPrice, supplierAlreadySettled));
+        return 0;
+    }
+
+    public static double dropship(AbstractGood good, AbstractMarket target, Pop merchant,
+                                  Listing supplierListing, double supplierUnitPrice) {
+        if (merchant != null && merchant.getState() != null) {
+            target = merchant.getState().localMarket;
+            if (supplierListing.hasVisitedState(merchant.getState())) return 0;
+        }
+
+        double salePrice = Math.min(Math.max(good.getValue(1), target.getGoodMinPrice(good.getConstant(), 1)),
+                supplierUnitPrice * 1.05);
+        good.setCurrentPrice(salePrice);
+        target.postListing(new Listing(good.getAmount(), good.originState, merchant, target, good,
+                supplierListing, supplierUnitPrice));
+        return (salePrice - supplierUnitPrice) * good.getAmount();
+    }
+
+    @Deprecated
+    public static double trade(AbstractGood good, AbstractMarket target, Pop merchant) {
+        return dropship(good, target, merchant);
+    }
+
+    @Deprecated
+    public static double brokerTrade(AbstractGood good, AbstractMarket target, Pop merchant,
+                                      Listing supplierListing, double supplierUnitPrice) {
+        return dropship(good, target, merchant, supplierListing, supplierUnitPrice);
     }
 
 

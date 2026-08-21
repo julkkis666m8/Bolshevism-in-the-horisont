@@ -26,6 +26,10 @@ public abstract class AbstractGood {
 	public int getConstant() {
 		return constant;
 	}
+
+	public State getOriginState() {
+		return originState;
+	}
 	private double daysOnNeg = 0;
 	private double daysOnPos = 0;
 	private double maxDaysOnNeg = 10;

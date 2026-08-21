@@ -28,6 +28,10 @@
             <TableView fx:id="listingsTable" prefHeight="300.0">
                 <columns>
                     <TableColumn fx:id="colLGood" text="Good" prefWidth="160.0" />
+                    <TableColumn fx:id="colLOrigin" text="Origin State" prefWidth="150.0" />
+                    <TableColumn fx:id="colLSaleType" text="Sale Type" prefWidth="140.0" />
+                    <TableColumn fx:id="colLChainLength" text="Dropship Hops" prefWidth="100.0" />
+                    <TableColumn fx:id="colLRoute" text="Route" prefWidth="220.0" />
                     <TableColumn fx:id="colSeller" text="Seller" prefWidth="200.0" />
                     <TableColumn fx:id="colLAmount" text="Amount" prefWidth="90.0" />
                     <TableColumn fx:id="colLPrice" text="Unit Price" prefWidth="120.0" />

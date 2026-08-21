@@ -35,6 +35,10 @@ public class MarketGuiController implements Initializable {
 
     @FXML private TableView<Map<String, Object>> listingsTable;
     @FXML private TableColumn<Map<String, Object>, String> colLGood;
+    @FXML private TableColumn<Map<String, Object>, String> colLOrigin;
+    @FXML private TableColumn<Map<String, Object>, String> colLSaleType;
+    @FXML private TableColumn<Map<String, Object>, Number> colLChainLength;
+    @FXML private TableColumn<Map<String, Object>, String> colLRoute;
     @FXML private TableColumn<Map<String, Object>, String> colSeller;
     @FXML private TableColumn<Map<String, Object>, Number> colLAmount;
     @FXML private TableColumn<Map<String, Object>, String> colLPrice;
@@ -74,6 +78,10 @@ public class MarketGuiController implements Initializable {
         colAvgGlobal.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().getOrDefault("avgGlobal", "")));
 
         colLGood.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("good")));
+        colLOrigin.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().getOrDefault("origin", "Unknown")));
+        colLSaleType.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().getOrDefault("saleType", "Unknown")));
+        colLChainLength.setCellValueFactory(c -> new SimpleIntegerProperty(((Number) c.getValue().getOrDefault("chainLength", 0)).intValue()));
+        colLRoute.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().getOrDefault("route", "Unknown")));
         colSeller.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("seller")));
         colLAmount.setCellValueFactory(c -> new SimpleIntegerProperty(((Number) c.getValue().getOrDefault("amount", 0)).intValue()));
         colLPrice.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().getOrDefault("price", "")));
@@ -151,6 +159,11 @@ public class MarketGuiController implements Initializable {
                     Listing l = (Listing) g;
                     Map<String, Object> row = new HashMap<>();
                     row.put("good", Constants.GoodToString(i));
+                    State originState = l.getOriginState();
+                    row.put("origin", originState == null ? "Unknown" : originState.name);
+                    row.put("saleType", l.getSaleType());
+                    row.put("chainLength", l.getDropshipChainLength());
+                    row.put("route", l.getDropshipRoute());
                     Pop seller = l.getSeller();
                     row.put("seller", seller == null ? "(unknown)" : seller.toString());
                     row.put("amount", (int) Math.round(l.getAmount()));

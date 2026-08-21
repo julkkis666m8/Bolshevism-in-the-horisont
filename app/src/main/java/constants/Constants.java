@@ -149,6 +149,7 @@ public class Constants {
 	public final static int NATIVE_AMERICAN = 10;
 
 	public static final double TRADE_MARGIN_MERCHANT_CONSTANT = 0.9; //1 - this = what he's left with.
+    public static final double MERCHANT_DROPSHIPPING_CAPACITY_PER_TURN = 100.0;
 
 	public static String raceToString(int race) {
         return switch (race) {

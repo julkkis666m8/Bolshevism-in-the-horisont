@@ -19,6 +19,7 @@ public class MerchantHandler {
 		//return 1; //Did this to make warangeling work for now. gonna implement it in the goods themselves.
 		
 		List<State> neigbours = OGstate.getNeigbours();
+		double remainingCapacity = merchantCapacity(pop, OGstate);
 		
 		double income = 0;
 
@@ -34,7 +35,11 @@ public class MerchantHandler {
 				System.out.println(needed);
 				nothing = true;
 				times++;
-				income += costBenefitAnalysis(OGstate, neigbours, nation, goodConst, needed, pop);
+				if (remainingCapacity <= 0) break;
+				DropshipResult result = costBenefitAnalysis(OGstate, neigbours, nation,
+						goodConst, Math.min(needed, remainingCapacity), pop);
+				income += result.income;
+				remainingCapacity -= result.amount;
 			}
 			
 		}
@@ -49,7 +54,7 @@ public class MerchantHandler {
 		return income;
 	}
 
-	private static double costBenefitAnalysis(State OGstate, List<State> neigbours, Nation nation, int goodConst, double needed, Pop pop) {
+	private static DropshipResult costBenefitAnalysis(State OGstate, List<State> neigbours, Nation nation, int goodConst, double needed, Pop pop) {
 
 		double income = 0;
 		double neededRemaining = needed;
@@ -77,7 +82,16 @@ public class MerchantHandler {
 				if (localPrice <= unitPrice) continue;
 
 				double qty = Math.min(neededRemaining, listing.getAmount());
-					qty = Math.min(qty, pop.totalCash() / unitPrice);
+				if (pop.totalCash() < qty * unitPrice) {
+					double reserved = listing.reserveForDropshipping(qty);
+					if (reserved <= 0) continue;
+					AbstractGood brokered = Constants.getGood(reserved, listing.originState, goodConst);
+					brokered.setCurrentPrice(unitPrice);
+					income += PopSellHandler.dropship(brokered, OGstate.localMarket, pop, listing, unitPrice);
+					neededRemaining -= reserved;
+					continue;
+				}
+				qty = Math.min(qty, pop.totalCash() / unitPrice);
 				if (qty <= 0) continue;
 
 					pop.pay(qty * unitPrice);
@@ -93,7 +107,8 @@ public class MerchantHandler {
 					bought.setCurrentPrice(unitPrice);
 				} catch (Exception ignored) {}
 
-					double profit = PopSellHandler.trade(bought, OGstate.localMarket, pop);
+					double profit = PopSellHandler.dropship(bought, OGstate.localMarket, pop,
+						listing, unitPrice, true);
 				if (OGstate.isForigen(bought.originState)) {
 					profit = nation.payTarrif(profit);
 				}
@@ -102,8 +117,26 @@ public class MerchantHandler {
 			}
 		}
 
-		return income;
+		return new DropshipResult(income, needed - neededRemaining);
 
+	}
+
+	private static double merchantCapacity(Pop pop, State state) {
+		// TODO: Add infrastructure, roads, ports, and state logistics modifiers.
+		// TODO: Add merchant skills, transport technology, and transport costs.
+		// TODO: Replace the linear population scaling with the state's eventual
+		// infrastructure capacity once that system exists.
+		return Constants.MERCHANT_DROPSHIPPING_CAPACITY_PER_TURN * pop.getPopulation();
+	}
+
+	private static class DropshipResult {
+		private final double income;
+		private final double amount;
+
+		private DropshipResult(double income, double amount) {
+			this.income = income;
+			this.amount = amount;
+		}
 	}
 
 }

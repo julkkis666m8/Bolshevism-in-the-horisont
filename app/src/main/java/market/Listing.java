@@ -15,6 +15,9 @@ public class Listing extends AbstractGood {
 
     private Pop seller;
     private AbstractMarket ownerMarket;
+    private Listing supplierListing;
+    private double supplierUnitPrice;
+    private boolean supplierAlreadySettled;
 
     public Listing(double amount, State originState, Pop seller, AbstractMarket ownerMarket, AbstractGood prototype) {
         super(amount, originState);
@@ -33,8 +36,65 @@ public class Listing extends AbstractGood {
         }
     }
 
+    public Listing(double amount, State originState, Pop seller, AbstractMarket ownerMarket,
+                   AbstractGood prototype, Listing supplierListing, double supplierUnitPrice) {
+        this(amount, originState, seller, ownerMarket, prototype, supplierListing, supplierUnitPrice, false);
+    }
+
+    public Listing(double amount, State originState, Pop seller, AbstractMarket ownerMarket,
+                   AbstractGood prototype, Listing supplierListing, double supplierUnitPrice,
+                   boolean supplierAlreadySettled) {
+        this(amount, originState, seller, ownerMarket, prototype);
+        this.supplierListing = supplierListing;
+        this.supplierUnitPrice = supplierUnitPrice;
+        this.supplierAlreadySettled = supplierAlreadySettled;
+    }
+
     public Pop getSeller() {
         return seller;
+    }
+
+    public String getSaleType() {
+        if (supplierListing != null) return "Dropship chain (" + getDropshipChainLength() + " hops)";
+        if (seller != null && seller.job == Constants.MERCHANT) return "Merchant-owned";
+        if (seller != null) return "Original creator";
+        return "Unknown";
+    }
+
+    public int getDropshipChainLength() {
+        return supplierListing == null ? 0 : supplierListing.getDropshipChainLength() + 1;
+    }
+
+    public boolean hasVisitedState(State state) {
+        if (state == null) return false;
+        if (originState == state || (seller != null && seller.getState() == state)) return true;
+        return supplierListing != null && supplierListing.hasVisitedState(state);
+    }
+
+    public String getDropshipRoute() {
+        String route;
+        if (supplierListing != null) {
+            route = supplierListing.getDropshipRoute();
+        } else {
+            route = stateName(originState);
+            if (seller != null && seller.getState() != null) {
+                route = appendRoute(route, stateName(seller.getState()));
+            }
+        }
+
+        if (supplierListing != null && seller != null && seller.getState() != null) {
+            route = appendRoute(route, stateName(seller.getState()));
+        }
+        return route;
+    }
+
+    private static String stateName(State state) {
+        return state == null || state.name == null ? "Unknown" : state.name;
+    }
+
+    private static String appendRoute(String route, String nextState) {
+        if (route.equals(nextState) || route.endsWith(" -> " + nextState)) return route;
+        return route + " -> " + nextState;
     }
 
     public synchronized double purchase(double requestedAmount, Pop buyer, double availableMoney) {
@@ -51,6 +111,20 @@ public class Listing extends AbstractGood {
         if (actualPayment <= 0) return 0;
         removeAmount(quantity);
         return quantity;
+    }
+
+    public synchronized double reserveForDropshipping(double requestedAmount) {
+        double reserved = Math.min(requestedAmount, getAmount());
+        if (reserved <= 0) return 0;
+        super.removeAmount(reserved);
+        if (ownerMarket != null) ownerMarket.adjustMarketSupply(getConstant(), -reserved);
+        if (ownerMarket != null) ownerMarket.onListingSold(this);
+        return reserved;
+    }
+
+    @Deprecated
+    public double reserveForBrokerage(double requestedAmount) {
+        return reserveForDropshipping(requestedAmount);
     }
 
     @Override
@@ -101,6 +175,12 @@ public class Listing extends AbstractGood {
         double money = amount * getCurrentPrice();
         double toSeller = money;
         try {
+            if (supplierListing != null) {
+                if (!supplierAlreadySettled) {
+                    supplierListing.settleDropshipSale(amount, supplierUnitPrice);
+                }
+                toSeller = Math.max(0, money - amount * supplierUnitPrice);
+            }
             if (seller != null) {
                 int job = seller.job;
                 double ariFraction = 0.0;
@@ -133,6 +213,19 @@ public class Listing extends AbstractGood {
         // notify market to clean up listing if empty
         if (ownerMarket != null) {
             ownerMarket.onListingSold(this);
+        }
+    }
+
+    private void settleDropshipSale(double amount, double saleUnitPrice) {
+        double upstreamMoney = 0;
+        if (supplierListing != null) {
+            upstreamMoney = amount * supplierUnitPrice;
+            if (!supplierAlreadySettled) {
+                supplierListing.settleDropshipSale(amount, supplierUnitPrice);
+            }
+        }
+        if (seller != null) {
+            seller.giveCash(Math.max(0, amount * saleUnitPrice - upstreamMoney));
         }
     }
 
