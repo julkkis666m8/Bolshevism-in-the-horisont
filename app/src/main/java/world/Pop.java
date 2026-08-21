@@ -5,6 +5,7 @@ import java.util.List;
 
 import constants.Constants;
 import market.Taxes;
+import market.Listing;
 import goods.*;
 
 public class Pop {
@@ -30,6 +31,8 @@ public class Pop {
 	
 	private State state;
 	private List<AbstractGood> lastProducedGoods = new ArrayList<>();
+	private List<RecentPurchase> recentPurchases = new ArrayList<>();
+	private List<RecentSale> recentSales = new ArrayList<>();
 	private double fertility = 0.001;
 	private double growthOMatic = 0;
 
@@ -50,6 +53,95 @@ public class Pop {
 
 	public List<AbstractGood> getLastProducedGoods() {
 		return new ArrayList<>(this.lastProducedGoods);
+	}
+
+	public void clearRecentPurchases() {
+		recentPurchases.clear();
+	}
+
+	public void clearRecentSales() {
+		recentSales.clear();
+	}
+
+	public void recordPurchase(Listing listing, double amount) {
+		recordPurchase(listing, amount, "Need");
+	}
+
+	public void recordPurchase(Listing listing, double amount, String needType) {
+		if (listing == null || amount <= 0) return;
+		recentPurchases.add(new RecentPurchase(
+				listing.getName(), amount, listing.getCurrentPrice(), listing.getOriginState(),
+				listing.getSaleType(), listing.getDropshipRoute(), needType));
+	}
+
+	public List<RecentPurchase> getRecentPurchases() {
+		return new ArrayList<>(recentPurchases);
+	}
+
+	public void recordSale(Listing listing, double amount, double unitPrice) {
+		if (listing == null || amount <= 0) return;
+		recentSales.add(new RecentSale(
+				listing.getName(), amount, unitPrice, listing.getOriginState(),
+				listing.getSaleType(), listing.getDropshipRoute()));
+	}
+
+	public List<RecentSale> getRecentSales() {
+		return new ArrayList<>(recentSales);
+	}
+
+	public static class RecentPurchase {
+		private final String goodName;
+		private final double amount;
+		private final double unitPrice;
+		private final State originState;
+		private final String saleType;
+		private final String route;
+		private final String needType;
+
+		private RecentPurchase(String goodName, double amount, double unitPrice,
+						State originState, String saleType, String route, String needType) {
+			this.goodName = goodName;
+			this.amount = amount;
+			this.unitPrice = unitPrice;
+			this.originState = originState;
+			this.saleType = saleType;
+			this.route = route;
+			this.needType = needType;
+		}
+
+		public String getGoodName() { return goodName; }
+		public double getAmount() { return amount; }
+		public double getUnitPrice() { return unitPrice; }
+		public State getOriginState() { return originState; }
+		public String getSaleType() { return saleType; }
+		public String getRoute() { return route; }
+		public String getNeedType() { return needType; }
+	}
+
+	public static class RecentSale {
+		private final String goodName;
+		private final double amount;
+		private final double unitPrice;
+		private final State originState;
+		private final String saleType;
+		private final String route;
+
+		private RecentSale(String goodName, double amount, double unitPrice,
+						State originState, String saleType, String route) {
+			this.goodName = goodName;
+			this.amount = amount;
+			this.unitPrice = unitPrice;
+			this.originState = originState;
+			this.saleType = saleType;
+			this.route = route;
+		}
+
+		public String getGoodName() { return goodName; }
+		public double getAmount() { return amount; }
+		public double getUnitPrice() { return unitPrice; }
+		public State getOriginState() { return originState; }
+		public String getSaleType() { return saleType; }
+		public String getRoute() { return route; }
 	}
 	public Pop(int population, int race, int religion, float age, int job, Ideology ideology,
 			double averageWealth, State state) {
@@ -143,6 +235,8 @@ public class Pop {
 	
 	public void tick(Nation nation) {
 
+		clearRecentPurchases();
+		clearRecentSales();
 
 		popStockpileRotter();
 		cleanGoods(); //removes items with size 0.000000001
@@ -189,11 +283,11 @@ public class Pop {
 	}
 	
 	public void buyTick(Nation nation) {
-		setNeedsFurfilled(buy(nation, state, getNeeds()));
+		setNeedsFurfilled(buy(nation, state, getNeeds(), "Need"));
 		if(getNeedsFurfilled() > 0.6) {
-			setWantsFurfilled(buy(nation, state, getWants()));
+			setWantsFurfilled(buy(nation, state, getWants(), "Want"));
 			if(getWantsFurfilled() > 0.2){
-				setLuxuryFurfilled(buy(nation, state, getLuxury()));
+				setLuxuryFurfilled(buy(nation, state, getLuxury(), "Luxury"));
 			}
 		}
 	}
@@ -206,13 +300,13 @@ public class Pop {
 		//while(totalCash() > (firstMoney * 0.5) || Math.random() > 0.5){
 			System.out.println(population +" "+ totalCash());
 			//if(getNeedsFurfilled() > 0.8){
-				setNeedsFurfilled(getNeedsFurfilled() + buy(nation, state, getNeeds()));
+				setNeedsFurfilled(getNeedsFurfilled() + buy(nation, state, getNeeds(), "Need"));
 			//}
 			//if(getWantsFurfilled() > 0.8){
-				setWantsFurfilled(getWantsFurfilled() + buy(nation, state, getNeeds()));
+				setWantsFurfilled(getWantsFurfilled() + buy(nation, state, getWants(), "Want"));
 			//}
 			//if(getLuxuryFurfilled() > 0.8){
-				setLuxuryFurfilled(getLuxuryFurfilled() + buy(nation, state, getNeeds()));
+				setLuxuryFurfilled(getLuxuryFurfilled() + buy(nation, state, getLuxury(), "Luxury"));
 			//}
 		//}
 	}
@@ -449,6 +543,10 @@ public class Pop {
 
 
 	public double buy(Nation nation, State state, double[] needs) {
+		return buy(nation, state, needs, "Need");
+	}
+
+	public double buy(Nation nation, State state, double[] needs, String needType) {
 		
 		
 		double[] buyTheseNeeds = new double[needs.length];
@@ -461,11 +559,11 @@ public class Pop {
 		buyTheseNeeds = PopSellHandler.buyFromSelf(this, buyTheseNeeds);
 		
 		//buy from local market
-		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), state.localMarket);
+		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), state.localMarket, needType);
 		
 
 		//buy from national market
-		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), nation.getNationalMarket());
+		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), nation.getNationalMarket(), needType);
 		
 		
 		//TODO: add global market

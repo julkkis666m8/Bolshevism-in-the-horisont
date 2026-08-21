@@ -46,6 +46,11 @@ public class MarketMechanismTest {
         assertEquals(10 - price, buyer.totalCash(), 1e-9);
         assertEquals(price, seller.totalCash(), 1e-9);
         assertEquals(1, listing.getAmount(), 1e-9);
+        assertEquals(1, buyer.getRecentPurchases().size());
+        assertEquals(1, buyer.getRecentPurchases().get(0).getAmount(), 1e-9);
+        assertEquals("Need", buyer.getRecentPurchases().get(0).getNeedType());
+        assertEquals(1, seller.getRecentSales().size());
+        assertEquals(1, seller.getRecentSales().get(0).getAmount(), 1e-9);
     }
 
     @Test

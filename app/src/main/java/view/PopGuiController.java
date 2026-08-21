@@ -23,6 +23,7 @@ import javafx.concurrent.Task;
 import javafx.application.Platform;
 import main.Main;
 import main.GuiMain;
+import market.Listing;
 import world.Nation;
 import world.Pop;
 import world.State;
@@ -57,7 +58,7 @@ public class PopGuiController implements Initializable {
         });
 
         popTable.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            if (n != null) detailsArea.setText(n.getInfo());
+            if (n != null) detailsArea.setText(buildDetailedInfo(n));
             else detailsArea.setText("");
         });
         // disable chart animations and register with main for tick-driven updates
@@ -181,18 +182,13 @@ public class PopGuiController implements Initializable {
         });
 
         colNeeds.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getNeedsFurfilled() * 100).asObject());
-        colNeeds.setCellFactory(tc -> new TableCell<Pop, Double>() {
-            @Override protected void updateItem(Double v, boolean empty) {
-                super.updateItem(v, empty);
-                setText(empty || v == null ? null : Functions.formatNum(v) + "%" );
-            }
-        });
+        colNeeds.setCellFactory(tc -> percentageCell("Need fulfillment", "Essential goods this pop requires", tc));
 
         colWants.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getWantsFurfilled() * 100).asObject());
-        colWants.setCellFactory(colNeeds.getCellFactory());
+        colWants.setCellFactory(tc -> percentageCell("Want fulfillment", "Non-essential goods this pop desires", tc));
 
         colLuxury.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getLuxuryFurfilled() * 100).asObject());
-        colLuxury.setCellFactory(colNeeds.getCellFactory());
+        colLuxury.setCellFactory(tc -> percentageCell("Luxury fulfillment", "Luxury goods this pop desires", tc));
 
         colJustSpent.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getJustSpent()).asObject());
         colJustSpent.setCellFactory(tc -> new TableCell<Pop, Double>() {
@@ -236,10 +232,29 @@ public class PopGuiController implements Initializable {
                     int popCount = s.getPops().stream().mapToInt(Pop::getPopulation).sum();
                     setText(s.name + " (" + popCount + ")");
                 } else {
-                    setText(item.toString());
+                    int worldPopulation = Main.world.getAllPops().stream()
+                            .mapToInt(Pop::getPopulation).sum();
+                    setText("World (" + worldPopulation + ")");
                 }
             }
         });
+    }
+
+    private TableCell<Pop, Double> percentageCell(String title, String description,
+                                                   TableColumn<Pop, Double> column) {
+        return new TableCell<Pop, Double>() {
+            @Override protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                if (empty || value == null) {
+                    setText(null);
+                    setTooltip(null);
+                } else {
+                    setText(Functions.formatNum(value) + "%");
+                    setTooltip(new Tooltip(title + ": " + Functions.formatNum(value)
+                            + "%\n" + description));
+                }
+            }
+        };
     }
 
     private void populateTable(List<Pop> pops) {
@@ -306,8 +321,64 @@ public class PopGuiController implements Initializable {
 
     private String buildDetailedInfo(Pop p) {
         StringBuilder sb = new StringBuilder();
-        sb.append(p.getInfo()).append("\nInventory: ").append(buildInventoryString(p));
+        sb.append(p.getInfo());
+        sb.append("\nState: ").append(p.getState() == null ? "Unknown" : p.getState().name);
+        sb.append("\nInventory: ").append(buildInventoryString(p));
+        sb.append("\nLast produced: ").append(buildProducedString(p));
+        sb.append("\nRecent purchases:\n").append(buildRecentPurchasesString(p));
+        sb.append("\nRecent sales:\n").append(buildRecentSalesString(p));
+        sb.append("\nActive listings:\n").append(buildListingsString(p));
         return sb.toString();
+    }
+
+    private String buildListingsString(Pop pop) {
+        if (pop.getState() == null || pop.getState().localMarket == null) return "None";
+
+        List<String> listings = new ArrayList<>();
+        for (int goodConst = 0; goodConst < Constants.AMOUNT_OF_GOODS; goodConst++) {
+            for (AbstractGood good : pop.getState().localMarket.getAllOfGood(goodConst)) {
+                if (!(good instanceof Listing)) continue;
+                Listing listing = (Listing) good;
+                if (listing.getSeller() != pop) continue;
+                State origin = listing.getOriginState();
+                listings.add(Constants.GoodToString(goodConst)
+                        + " | " + Functions.formatNum(listing.getAmount())
+                        + " @ " + Functions.formatNum(listing.getValue(1))
+                        + " | " + listing.getSaleType()
+                        + " | origin: " + (origin == null ? "Unknown" : origin.name)
+                        + " | route: " + listing.getDropshipRoute());
+            }
+        }
+        return listings.isEmpty() ? "None" : String.join("\n", listings);
+    }
+
+    private String buildRecentPurchasesString(Pop pop) {
+        List<String> purchases = new ArrayList<>();
+        for (Pop.RecentPurchase purchase : pop.getRecentPurchases()) {
+            State origin = purchase.getOriginState();
+                purchases.add(purchase.getGoodName()
+                    + " | " + purchase.getNeedType()
+                    + " | " + Functions.formatNum(purchase.getAmount())
+                    + " @ " + Functions.formatNum(purchase.getUnitPrice())
+                    + " | " + purchase.getSaleType()
+                    + " | origin: " + (origin == null ? "Unknown" : origin.name)
+                    + " | route: " + purchase.getRoute());
+        }
+        return purchases.isEmpty() ? "None" : String.join("\n", purchases);
+    }
+
+    private String buildRecentSalesString(Pop pop) {
+        List<String> sales = new ArrayList<>();
+        for (Pop.RecentSale sale : pop.getRecentSales()) {
+            State origin = sale.getOriginState();
+            sales.add(sale.getGoodName()
+                    + " | " + Functions.formatNum(sale.getAmount())
+                    + " @ " + Functions.formatNum(sale.getUnitPrice())
+                    + " | " + sale.getSaleType()
+                    + " | origin: " + (origin == null ? "Unknown" : origin.name)
+                    + " | route: " + sale.getRoute());
+        }
+        return sales.isEmpty() ? "None" : String.join("\n", sales);
     }
 
     private String buildSummary(List<Pop> pops) {

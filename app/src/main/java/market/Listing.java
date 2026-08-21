@@ -199,6 +199,7 @@ public class Listing extends AbstractGood {
                 }
 
                 seller.giveCash(toSeller);
+                seller.recordSale(this, amount, getCurrentPrice());
             }
         } catch (Exception e) {
             // best-effort, ensure seller still gets paid if possible
@@ -226,6 +227,7 @@ public class Listing extends AbstractGood {
         }
         if (seller != null) {
             seller.giveCash(Math.max(0, amount * saleUnitPrice - upstreamMoney));
+            seller.recordSale(this, amount, saleUnitPrice);
         }
     }
 

@@ -42,6 +42,7 @@ public class Controller {
 		farmJobs.add(new FarmAnimal());
 		labourJobs.add(new LabourIron());
 		labourJobs.add(new LabourTimber());
+		labourJobs.add(new LabourCoal());
 		artesanJobs.add(new ArtesanSteel());
 		artesanJobs.add(new ArtesanFurnature());
 		artesanJobs.add(new ArtesanClothing());

@@ -75,6 +75,11 @@ public class PopSellHandler {
 
 
     public static double[] buy(Pop pop, double[] buyTheseNeeds, double totalMoney, AbstractMarket market) {
+        return buy(pop, buyTheseNeeds, totalMoney, market, "Need");
+    }
+
+    public static double[] buy(Pop pop, double[] buyTheseNeeds, double totalMoney,
+                               AbstractMarket market, String needType) {
 
         double money = Math.max(0, totalMoney);
 
@@ -100,6 +105,7 @@ public class PopSellHandler {
                             double bought = listing.purchase(adjustedAmount, pop, purchaseMoney);
                             money -= bought * listing.getCurrentPrice();
                             buyTheseNeeds[goodConst] -= bought;
+                            pop.recordPurchase(listing, bought, needType);
                             if (money <= 0) money = 0;
                         }
                     }
