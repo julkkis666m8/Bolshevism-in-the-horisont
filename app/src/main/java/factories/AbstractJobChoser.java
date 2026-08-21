@@ -69,6 +69,34 @@ public class AbstractJobChoser {
 		}
 		return jobList.get(index);
 	}
+
+	public AbstractJob chooseArtisanJob(Pop pop, State state, List<AbstractJob> jobList) {
+		AbstractJob bestJob = null;
+		double bestReturn = Double.NEGATIVE_INFINITY;
+
+		for (AbstractJob job : jobList) {
+			if (hasUnsoldOutputLimit(job, pop, state)) continue;
+			double jobReturn = costBenefit(job.inAmounts, job.inGoodsConst,
+					job.outAmounts, job.outGoodsConst, state);
+			if (bestJob == null || jobReturn > bestReturn) {
+				bestJob = job;
+				bestReturn = jobReturn;
+			}
+		}
+
+		return bestJob == null ? new Unemployed() : bestJob;
+	}
+
+	private boolean hasUnsoldOutputLimit(AbstractJob job, Pop pop, State state) {
+		for (int i = 0; i < job.outGoodsConst.length; i++) {
+			double dailyProduction = pop.getPopulation() * job.outAmounts[i] * 0.9;
+			if (dailyProduction > 0
+					&& state.localMarket.listedAmount(job.outGoodsConst[i], pop) >= dailyProduction * 10) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	
 	

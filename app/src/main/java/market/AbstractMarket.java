@@ -238,6 +238,18 @@ public class AbstractMarket {
 		
 		return totalAmount;
 	}
+
+	public double listedAmount(int goodConst, world.Pop seller) {
+		double amount = 0;
+		synchronized (listings) {
+			for (Listing listing : listings) {
+				if (listing.getConstant() == goodConst && listing.getSeller() == seller) {
+					amount += listing.getAmount();
+				}
+			}
+		}
+		return amount;
+	}
 	
 	
 	/**

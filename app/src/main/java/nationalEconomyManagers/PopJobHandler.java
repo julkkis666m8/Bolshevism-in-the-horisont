@@ -47,10 +47,13 @@ public class PopJobHandler {
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*pop.population);
 		}
 		else if (pop.job == Constants.ARTISAN) {
-			//goodAdder(ArtesanJobs.artesanJob(this, state));
-			List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.artesanJobs));
-			pop.setLastProducedGoods(produced);
-			income = PopSellHandler.sell(pop, state.localMarket, nation);
+			factories.AbstractJob artisanJob = main.Main.controller.jobChoser
+					.chooseArtisanJob(pop, state, main.Main.controller.artesanJobs);
+			if (!artisanJob.unemployed) {
+				List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, artisanJob);
+				pop.setLastProducedGoods(produced);
+				income = PopSellHandler.sell(pop, state.localMarket, nation);
+			}
 		}
 		else if (pop.job == Constants.SOLDIER) {
 			income = nation.getSoldierPay().paySoldier(pop.population, false);
