@@ -461,11 +461,11 @@ public class Pop {
 		buyTheseNeeds = PopSellHandler.buyFromSelf(this, buyTheseNeeds);
 		
 		//buy from local market
-		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), state.localMarket);
+		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), state.localMarket);
 		
 
 		//buy from national market
-		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, takeTotalCash(), nation.getNationalMarket());
+		buyTheseNeeds = PopSellHandler.buy(this, buyTheseNeeds, totalCash(), nation.getNationalMarket());
 		
 		
 		//TODO: add global market

@@ -76,7 +76,7 @@ public class PopSellHandler {
 
     public static double[] buy(Pop pop, double[] buyTheseNeeds, double totalMoney, AbstractMarket market) {
 
-        double money = totalMoney;
+        double money = Math.max(0, totalMoney);
 
         for (int goodConst = 0; goodConst < Constants.AMOUNT_OF_GOODS; goodConst++) {
             if (money > 0) {
@@ -93,15 +93,14 @@ public class PopSellHandler {
                                 adjustedAmount = good.getAmount();
                             }
 
-                            double goodPrice = good.getValue(adjustedAmount);
-                            if (goodPrice < money) {
-                                money -= goodPrice;
-                                buyTheseNeeds[goodConst] -= adjustedAmount;
-                                good.removeAmount(adjustedAmount);
-                            } else {
-                                buyTheseNeeds[goodConst] -= good.buyForMoney(money);
-                                money = 0;
-                            }
+                            if (!(good instanceof Listing)) continue;
+                            Listing listing = (Listing) good;
+                            double goodPrice = listing.getValue(adjustedAmount);
+                            double purchaseMoney = Math.min(money, goodPrice);
+                            double bought = listing.purchase(adjustedAmount, pop, purchaseMoney);
+                            money -= bought * listing.getCurrentPrice();
+                            buyTheseNeeds[goodConst] -= bought;
+                            if (money <= 0) money = 0;
                         }
                     }
                 } catch (NullPointerException e) {
@@ -116,25 +115,17 @@ public class PopSellHandler {
     }
 
 
-    //TODO: FINNISH
-    public static double trade(AbstractGood good, AbstractMarket target) {
+    public static double trade(AbstractGood good, AbstractMarket target, Pop merchant) {
 
         double minPrice = target.getGoodMinPrice(good.getConstant(), 1);
 
         double myPrice = good.getValue(1);
 
-        double income = (minPrice - myPrice) * Constants.TRADE_MARGIN_MERCHANT_CONSTANT;
-
-        double finalPrice = myPrice + income;
-        good.setValue(finalPrice);
-
-        target.add(good, good.getAmount());
-        //TODO: NEEDED STUFF
-
-        target.modMarketNeed(good.getAmount(), good.getConstant());
-
-        income = income * good.getAmount();
-        return income;
+        double targetPrice = Math.max(myPrice, minPrice);
+        double finalPrice = Math.min(targetPrice, myPrice * 1.10);
+        good.setCurrentPrice(finalPrice);
+        target.postListing(new Listing(good.getAmount(), good.originState, merchant, target, good));
+        return 0;
     }
 
 

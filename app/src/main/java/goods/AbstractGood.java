@@ -50,16 +50,14 @@ public abstract class AbstractGood {
 
 		double lastPrice = getCurrentPrice();
 
-		double supply = market.getMarketSupplys(constant) - market.getMarketDemand(constant); //market.getMarketDemand(constant);//market.getMarketSupplys(constant);// / market.getMarketDemand(constant);
+		double supply = market.getMarketSupplys(constant);
+		double demand = market.getMarketDemand(constant);
+		double netSupply = supply - demand;
 		double priceChange = 0;
-		if (supply > 0) {
-			// If supply is greater than 0, the price will decrease by a percentage
-			// equal to the supply divided by the production rate
-			priceChange = -supply /  market.getMarketSupplys(constant) * lastPrice;
-		} else if (supply < 0) {
-			// If supply is less than 0, the price will increase by a percentage
-			// equal to the absolute value of the supply divided by the consumption rate
-			priceChange = Math.abs(supply / market.getMarketDemand(constant) * lastPrice);
+		if (netSupply != 0) {
+			double scale = Math.max(1, Math.max(supply, demand));
+			double changeRatio = Math.min(0.05, Math.abs(netSupply) / scale);
+			priceChange = Math.copySign(changeRatio * lastPrice, -netSupply);
 		}
 		// Return the new price
 

@@ -37,8 +37,25 @@ public class Listing extends AbstractGood {
         return seller;
     }
 
+    public synchronized double purchase(double requestedAmount, Pop buyer, double availableMoney) {
+        if (buyer == null || requestedAmount <= 0 || availableMoney <= 0 || getAmount() <= 0) {
+            return 0;
+        }
+
+        double quantity = Math.min(requestedAmount, getAmount());
+        quantity = Math.min(quantity, availableMoney / getCurrentPrice());
+        if (quantity <= 0) return 0;
+
+        double paid = quantity * getCurrentPrice();
+        double actualPayment = buyer.pay(paid);
+        if (actualPayment <= 0) return 0;
+        removeAmount(quantity);
+        return quantity;
+    }
+
     @Override
     public void advancedCalculatePrice(AbstractMarket market) {
+        double priceAtStart = getCurrentPrice();
         // Base market-driven price movement
         super.advancedCalculatePrice(market);
 
@@ -56,11 +73,13 @@ public class Listing extends AbstractGood {
                 if (surplus > 0) {
                     double discountRatio = Math.min(0.5, 0.2 * surplus / (personalNeed + 1));
                     double newPrice = getCurrentPrice() * (1 - discountRatio);
+                    newPrice = Math.max(priceAtStart * 0.95, newPrice);
                     if (newPrice < MIN_PRICE) newPrice = MIN_PRICE;
                     setCurrentPrice(newPrice);
                 } else if (surplus < 0) {
                     double premiumRatio = Math.min(0.2, 0.1 * (-surplus) / (personalNeed + 1));
                     double newPrice = getCurrentPrice() * (1 + premiumRatio);
+                    newPrice = Math.min(priceAtStart * 1.05, newPrice);
                     if (newPrice > MAX_PRICE) newPrice = MAX_PRICE;
                     setCurrentPrice(newPrice);
                 }

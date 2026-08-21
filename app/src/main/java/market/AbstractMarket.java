@@ -4,6 +4,7 @@ import constants.Constants;
 import constants.Functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -185,6 +186,10 @@ public class AbstractMarket {
 			marketDemands[i] = 1;
 			marketSupplys[i] = 1+(needNudger * 0.01);
 		}
+
+		// Demand is measured for one turn; retaining it would make prices
+		// increasingly reflect every historical purchase.
+		Arrays.fill(marketDemands, 0);
 		
 	}
 
@@ -261,64 +266,21 @@ public class AbstractMarket {
 
 
 	public List<AbstractGood> getGood(int goodConst, double amount) {
-		
 		List<AbstractGood> goods = new ArrayList<>();
-		
 		double stillNeeded = amount;
-		
-		for(AbstractGood good : stockPile) {
-			if(good.isGoodToBuy(goodConst)) {
-				
-				stillNeeded -= good.getAmount();
-				
-				goods.add(good);
-				
-				if(stillNeeded <= 0) {
-					return goods;
-				}
-			}
-		}
 
-		// also consider active seller listings
-		synchronized(listings) {
+		// The market connects buyers to posted seller listings. Its own
+		// stockpile is not an autonomous seller.
+		synchronized (listings) {
 			for (Listing listing : listings) {
 				if (listing.isGoodToBuy(goodConst) && listing.getAmount() > 0) {
 					stillNeeded -= listing.getAmount();
 					goods.add(listing);
-					if (stillNeeded <= 0) {
-						return goods;
-					}
+					if (stillNeeded <= 0) return goods;
 				}
 			}
 		}
-		
-			//if no more goods in market then look at sub markets
-		
-		if(stillNeeded > 0) {
-			List<AbstractGood> goods2Sort = this.getSubGoodType(goodConst);
-			Collections.sort(goods2Sort, new Comparator<AbstractGood>() {
-				public int compare(AbstractGood o1, AbstractGood o2) {
-					return o1.getValue(1) < o2.getValue(1) ? -1 : o1.getValue(1) == o2.getValue(1) ? 0 : 1;
-				}
-			});
-			
-			for(AbstractGood good : goods2Sort) {
-				if(good.isGoodToBuy(goodConst)) {
-					
-					stillNeeded -= good.getAmount();
-					
-					goods.add(good);
-					
-					if(stillNeeded <= 0) {
-						return goods;
-					}
-				}
-			}
-			
-		}
-		
-		
-		
+
 		marketDemand(goodConst, amount);
 		return goods;
 	}
@@ -326,13 +288,6 @@ public class AbstractMarket {
 	public List<AbstractGood> getAllOfGood(int goodConst){
 
 		List<AbstractGood> goods = new ArrayList<>();
-		for(AbstractGood good : stockPile) {
-			if(good.isGoodToBuy(goodConst)) {
-				goods.add(good);
-			}
-		}
-
-		// include listings
 		synchronized(listings) {
 			for (Listing listing : listings) {
 				if (listing.isGoodToBuy(goodConst) && listing.getAmount() > 0) {

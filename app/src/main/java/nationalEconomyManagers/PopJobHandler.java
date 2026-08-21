@@ -97,9 +97,9 @@ public class PopJobHandler {
 		
 
 		pop.setIncomeTaxable(income);
-		if (pop.population > 0) {
+		if (pop.job != Constants.MERCHANT && pop.population > 0) {
 			pop.averageWealth = income / pop.population;
-		} else {
+		} else if (pop.job != Constants.MERCHANT) {
 			pop.averageWealth = 0;
 		}
 		

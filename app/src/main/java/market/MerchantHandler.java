@@ -77,9 +77,10 @@ public class MerchantHandler {
 				if (localPrice <= unitPrice) continue;
 
 				double qty = Math.min(neededRemaining, listing.getAmount());
+					qty = Math.min(qty, pop.totalCash() / unitPrice);
 				if (qty <= 0) continue;
 
-				// remove from listing (pays seller)
+					pop.pay(qty * unitPrice);
 				try {
 					listing.removeAmount(qty);
 				} catch (Exception e) {
@@ -92,42 +93,12 @@ public class MerchantHandler {
 					bought.setCurrentPrice(unitPrice);
 				} catch (Exception ignored) {}
 
-				double profit = PopSellHandler.trade(bought, OGstate.localMarket);
+					double profit = PopSellHandler.trade(bought, OGstate.localMarket, pop);
 				if (OGstate.isForigen(bought.originState)) {
 					profit = nation.payTarrif(profit);
 				}
 				income += profit;
 				neededRemaining -= qty;
-			}
-		}
-
-		// If still need goods, fall back to buying from public stockpiles (non-listing goods)
-		if (neededRemaining > 0) {
-			for (State neighbour : neigbours) {
-				if (neededRemaining <= 0) break;
-				List<AbstractGood> available = new LinkedList<>(neighbour.localMarket.getAllOfGood(goodConst));
-				Collections.sort(available, new Comparator<AbstractGood>() {
-					public int compare(AbstractGood a, AbstractGood b) {
-						return Double.compare(a.getValue(1), b.getValue(1));
-					}
-				});
-				for (AbstractGood aGood : available) {
-					if (neededRemaining <= 0) break;
-					if (aGood instanceof Listing) continue; // already handled
-					double unitPrice = aGood.getValue(1);
-					double localPrice = OGstate.localMarket.getGoodMaxPrice(goodConst, 1);
-					if (localPrice <= unitPrice) continue;
-					double qty = Math.min(neededRemaining, aGood.getAmount());
-					if (qty <= 0) continue;
-					// remove from market
-					aGood.removeAmount(qty);
-					AbstractGood bought = Constants.getGood(qty, aGood.originState, goodConst);
-					try { bought.setCurrentPrice(unitPrice); } catch (Exception ignored) {}
-					double profit = PopSellHandler.trade(bought, OGstate.localMarket);
-					if (OGstate.isForigen(bought.originState)) profit = nation.payTarrif(profit);
-					income += profit;
-					neededRemaining -= qty;
-				}
 			}
 		}
 
