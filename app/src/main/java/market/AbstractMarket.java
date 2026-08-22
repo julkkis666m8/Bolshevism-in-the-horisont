@@ -218,7 +218,8 @@ public class AbstractMarket {
 		return minPrice;
 		}
 		else {
-			return 9999; //to make artesans make one of each to start the economic calc. 
+			return Constants.getGood(0, null, goodConst).MIN_PRICE;
+			//return 9999; //to make artesans make one of each to start the economic calc. 
 		}
 
 	}
@@ -284,7 +285,8 @@ public class AbstractMarket {
 			return maxPrice;
 		}
 		else {
-			return 9999; //to make artesans make one of each to start the economic calc.
+			return Constants.getGood(0, null, goodConst).MAX_PRICE;
+			//return 9999; //to make artesans make one of each to start the economic calc.
 		}
 	}
 

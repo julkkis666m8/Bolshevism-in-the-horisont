@@ -11,8 +11,8 @@ import world.Pop;
 import world.State;
 
 public class Factory {
-    public static final double HEALTH_LOSS_PER_TICK = 0.0025;
-    public static final int INITIAL_INPUT_STOCK_TICKS = 50;
+    public static final double HEALTH_LOSS_PER_TICK = 0.0005;
+    public static final int INITIAL_INPUT_STOCK_TICKS = 500;
     private final State state;
     private final FactoryRecipe recipe;
     private int level;

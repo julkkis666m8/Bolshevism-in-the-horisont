@@ -12,6 +12,7 @@ public class PopLuxury {
 	private double cotton = 0.010000;
 	private double paper = 0.009;
 	private double animal = 0.1;
+	private double machineParts = 0;
 	
 	private double modifier = 1;
 	
@@ -33,6 +34,7 @@ public class PopLuxury {
 			paper = paper * 15;
 			steel += 0.01;
 			//iron += 0.49;
+			machineParts += 0.01;
 			break;
 		case Constants.MIDDLE_STRATA:
 			//middle ppl needs
@@ -43,6 +45,7 @@ public class PopLuxury {
 			break;
 		case Constants.LOWER_STRATA:
 			//low ppl needs
+			paper = paper * 5;
 			//iron += +0.0001;
 			break;
 		case Constants.LOWEST_STRATA:
@@ -73,6 +76,7 @@ public class PopLuxury {
 		needs[Constants.COTTON] = cotton * population * modifier;
 		needs[Constants.PAPER] = paper * population * modifier;
 		needs[Constants.ANIMAL] = animal * population * modifier;
+		needs[Constants.MACHINE_PARTS] = machineParts * population * modifier;
 		
 		return needs;	
 	}
