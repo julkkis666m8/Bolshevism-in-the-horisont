@@ -44,6 +44,7 @@ public class PopJobHandler {
 			income = MerchantHandler.wrangle(state, pop, nation);
 		}
 		else if (pop.job == Constants.CRAFTSMAN) {
+			//TODO: handle craftsman job selection here and not in "factory manager"
 			income = state.getCraftsmanPay(state.getCraftsmankWage()*pop.population);
 		}
 		else if (pop.job == Constants.ARTISAN) {
@@ -53,6 +54,7 @@ public class PopJobHandler {
 				List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, artisanJob);
 				pop.setLastProducedGoods(produced);
 				income = PopSellHandler.sell(pop, state.localMarket, nation);
+				pop.giveCash(pop.population * 1); // to keep artesans productive
 			}
 		}
 		else if (pop.job == Constants.SOLDIER) {
@@ -83,7 +85,7 @@ public class PopJobHandler {
 		else if (pop.job == Constants.SERF) {
 
 			//goods.addAll(PopSellHandler.serfJob(this, state));
-			List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.farmJobs));
+			List<AbstractGood> produced = main.Main.controller.jobDoer.doJob(pop, state, main.Main.controller.jobChoser.choseEfficentJob(pop, state, main.Main.controller.serfJobs));
 			pop.setLastProducedGoods(produced);
 			income = PopSellHandler.sell(pop, state.localMarket, nation);
 			

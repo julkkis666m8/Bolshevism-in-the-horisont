@@ -184,18 +184,18 @@ public class Pop {
 	}
 
 	private void initializeStockpile() {
-		goods.add(new Wheat(1, null));
-		goods.add(new Cotton(1, null));
-		goods.add(new Iron(1, null));
-		goods.add(new Timber(1, null));
-		goods.add(new Steel(1, null));
-		goods.add(new Clothing(1, null));
-		goods.add(new Furnuature(1, null));
-		goods.add(new Paper(1, null));
-		goods.add(new Animal(1, null));
-		goods.add(new Coal(1, null));
-		goods.add(new Cement(1, null));
-		goods.add(new MachineParts(1, null));
+		goods.add(new Wheat(1, this.state));
+		goods.add(new Cotton(1, this.state));
+		goods.add(new Iron(1, this.state));
+		goods.add(new Timber(1, this.state));
+		goods.add(new Steel(1, this.state));
+		goods.add(new Clothing(1, this.state));
+		goods.add(new Furnuature(1, this.state));
+		goods.add(new Paper(1, this.state));
+		goods.add(new Animal(1, this.state));
+		goods.add(new Coal(1, this.state));
+		goods.add(new Cement(1, this.state));
+		goods.add(new MachineParts(1, this.state));
 	}
 
 	/**

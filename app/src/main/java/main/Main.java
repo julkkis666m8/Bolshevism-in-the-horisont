@@ -145,19 +145,6 @@ public class Main{
 		westpoland.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, westpoland));
 		State warsawa = new State("warsawa", poland, polishRace, polishJob, 100000);
 		warsawa.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, warsawa));
-
-		new Factory(berlin, FactoryRecipe.machineParts(), 1, null);
-		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
-		new Factory(berlin, FactoryRecipe.cement(), 1, null);
-		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
-		new Factory(finland1, FactoryRecipe.paper(), 1, null);
-		finland1.addPop(PopParameters.createPops(2000, finnicRace, craftsmanJob, finland1));
-		new Factory(selicia, FactoryRecipe.steel(), 1, null);
-		selicia.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, selicia));
-		new Factory(sweden1, FactoryRecipe.furniture(), 1, null);
-		sweden1.addPop(PopParameters.createPops(2000, nordicRace, craftsmanJob, sweden1));
-		new Factory(warsawa, FactoryRecipe.clothing(), 1, null);
-		warsawa.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, warsawa));
 		State krakow = new State("krakow", poland, polishRace, polishJob, 100000);
 		krakow.addPop(PopParameters.createPops(2000, jewishRace, jewishJob, krakow));
 		State eastpoland = new State("east poland", poland, polishRace, polishJob, 10000);
@@ -184,6 +171,25 @@ public class Main{
 		baltics.addPop(PopParameters.createPops(2500, jewishRace, jewishJob, baltics));
 		baltics.addPop(PopParameters.createPops(500, germanRace, germanJob, baltics));
 
+		//factories
+
+
+		new Factory(berlin, FactoryRecipe.machineParts(), 1, null);
+		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
+		new Factory(berlin, FactoryRecipe.cement(), 1, null);
+		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
+		new Factory(denmark1, FactoryRecipe.cement(), 1, null);
+		denmark1.addPop(PopParameters.createPops(2000, nordicRace, craftsmanJob, denmark1));
+		new Factory(finland1, FactoryRecipe.paper(), 1, null);
+		finland1.addPop(PopParameters.createPops(2000, finnicRace, craftsmanJob, finland1));
+		new Factory(selicia, FactoryRecipe.steel(), 1, null);
+		selicia.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, selicia));
+		new Factory(moskova, FactoryRecipe.steel(), 1, null);
+		moskova.addPop(PopParameters.createPops(2000, russianRace, craftsmanJob, moskova));
+		new Factory(sweden1, FactoryRecipe.furniture(), 1, null);
+		sweden1.addPop(PopParameters.createPops(2000, nordicRace, craftsmanJob, sweden1));
+		new Factory(warsawa, FactoryRecipe.clothing(), 1, null);
+		warsawa.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, warsawa));
 
 		//nordics
 		 sweden1.addNeigbour(norway1);
@@ -198,7 +204,6 @@ public class Main{
 		stpetersburg.addNeigbour(karelia);
 		karelia.addNeigbour(northernrussia);
 		stpetersburg.addNeigbour(baltics);
-		stpetersburg.addNeigbour(karelia);
 
 		moskova.addNeigbour(stpetersburg);
 		moskova.addNeigbour(northernrussia);
@@ -214,6 +219,7 @@ public class Main{
 		belarus.addNeigbour(eastpoland);
 
 		baltics.addNeigbour(eastpoland);
+		baltics.addNeigbour(ostproisen);
 
 		siberia.addNeigbour(northernrussia);
 		siberia.addNeigbour(moskova);
@@ -222,10 +228,13 @@ public class Main{
 		//germany
 		westpoland.addNeigbour(ostproisen);
 		westpoland.addNeigbour(selicia);
+		krakow.addNeigbour(selicia);
 		selicia.addNeigbour(berlin);
+		westpoland.addNeigbour(berlin);
 
 		//poland
 		westpoland.addNeigbour(warsawa);
+		westpoland.addNeigbour(krakow);
 		warsawa.addNeigbour(krakow);
 		krakow.addNeigbour(eastpoland);
 

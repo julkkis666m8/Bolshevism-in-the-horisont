@@ -26,6 +26,7 @@ public class Controller {
 	public PopJobHandler popJobHandler;
 	public World world;
 	public List<AbstractJob> farmJobs = new ArrayList<>();
+	public List<AbstractJob> serfJobs = new ArrayList<>();
 	public List<AbstractJob> labourJobs = new ArrayList<>();
 	public List<AbstractJob> artesanJobs = new ArrayList<>();
 	public AbstractJobChoser jobChoser = new AbstractJobChoser();
@@ -40,6 +41,7 @@ public class Controller {
 		farmJobs.add(new FarmCotton());
 		farmJobs.add(new FarmWheat());
 		farmJobs.add(new FarmAnimal());
+		serfJobs.add(new FarmWheat());
 		labourJobs.add(new LabourIron());
 		labourJobs.add(new LabourTimber());
 		labourJobs.add(new LabourCoal());
@@ -48,6 +50,7 @@ public class Controller {
 		artesanJobs.add(new ArtesanClothing());
 		artesanJobs.add(new ArtesanPaper());
 		artesanJobs.add(new ArtesanCement());
+		artesanJobs.add(new ArtesanMachineParts());
 		
 	}
 	

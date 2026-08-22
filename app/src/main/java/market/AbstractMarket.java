@@ -185,7 +185,7 @@ public class AbstractMarket {
 			}
 
 
-			marketDemands[i] = 1;
+			marketDemands[i] = 100;
 			marketSupplys[i] = 1+(needNudger * 0.01);
 		}
 

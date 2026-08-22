@@ -216,7 +216,7 @@ public class Factory {
         double throughput = recipe.throughput() * machineryHealth;
         for (int i = 0; i < recipe.inputGoods().length; i++) {
             double amount = getWorkerCapacity() * throughput * recipe.inputAmounts()[i]
-                    * recipe.inputModifier() * INITIAL_INPUT_STOCK_TICKS;
+                    * recipe.inputModifier() * INITIAL_INPUT_STOCK_TICKS / 10;
             inputInventory.merge(recipe.inputGoods()[i], amount, Double::sum);
         }
     }
