@@ -7,7 +7,7 @@ public class Constants {
 	public static final double STUPIDITY_EFFECT_CONSTANT = 10; //how much does stupidity effect stupid choises?
 	
 	//TODO: UPDATE WHEN GOODS ADDED
-	public static final int AMOUNT_OF_GOODS = 10; //should be one larger than the last index
+    public static final int AMOUNT_OF_GOODS = 12; //should be one larger than the last index
 	
 	public static final int WHEAT = 0;
 	public static final int COTTON = 1;
@@ -19,6 +19,8 @@ public class Constants {
 	public static final int PAPER = 7;
     public static final int ANIMAL = 8;
 	public static final int COAL = 9;
+    public static final int CEMENT = 10;
+    public static final int MACHINE_PARTS = 11;
 
 	//TODO: UPDATE ME AND MY FRIEND DOWN SOUTH TOO
 	public static String GoodToString(int goodIndex) {
@@ -33,6 +35,8 @@ public class Constants {
             case PAPER -> "paper";
             case ANIMAL -> "animal";
             case COAL -> "coal";
+            case CEMENT -> "cement";
+            case MACHINE_PARTS -> "machine parts";
             default -> "unobtanium";
         };
 	}
@@ -50,6 +54,8 @@ public class Constants {
             case PAPER -> new Paper(amount, originState);
             case ANIMAL -> new Animal(amount, originState);
             case COAL -> new Coal(amount, originState);
+            case CEMENT -> new Cement(amount, originState);
+            case MACHINE_PARTS -> new MachineParts(amount, originState);
             default -> {
                 System.out.println("ERROR, CONSTANTS OF GOODS ARE NOT GOOD!!!");
                 yield new Wheat(amount, originState);

@@ -10,7 +10,7 @@ public class Clothing extends AbstractGood {
 
 		baseValue = 15;
 		MAX_PRICE = 25;
-		MIN_PRICE = 5;
+		//MIN_PRICE = 5;
 		//NON_PRICE = MIN_PRICE-0.01; //must be smaller than MIN_PRICE
 		this.goodName = "clothing";
 		

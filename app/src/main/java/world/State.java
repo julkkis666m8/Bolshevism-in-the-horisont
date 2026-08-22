@@ -5,6 +5,7 @@ import java.util.List;
 import constants.*;
 import market.LocalMarket;
 import nationalEconomyManagers.AristocratCashPool;
+import factories.Factory;
 
 
 
@@ -21,6 +22,7 @@ public class State {
 	private AristocratCashPool aristocratCashPool;
 	public List<State> neigbours = new LinkedList<>();
 	public List<Army> armies = new LinkedList<>();
+	private final List<Factory> factories = new LinkedList<>();
 
 	@Override
 	public String toString() {
@@ -340,6 +342,14 @@ public class State {
 
 	public List<State> getNeigbours() {
 		return neigbours;
+	}
+
+	public List<Factory> getFactories() {
+		return factories;
+	}
+
+	public void addFactory(Factory factory) {
+		if (factory != null && !factories.contains(factory)) factories.add(factory);
 	}
 	
 

@@ -3,9 +3,12 @@ import javax.swing.JOptionPane;
 
 import constants.Constants;
 import controller.Controller;
+import factories.Factory;
+import factories.FactoryRecipe;
 import view.NationGuiController;
 import view.PopGuiController;
 import view.PopWindow;
+import view.MarketGuiController;
 import world.JobParameters;
 import world.Nation;
 import world.PopParameters;
@@ -23,6 +26,7 @@ public class Main{
 	public static Nation germany;
 	public static NationGuiController nationGuiController;
 	public static PopGuiController popGuiController;
+	public static MarketGuiController marketGuiController;
 	
 	
 	//temp
@@ -38,6 +42,8 @@ public class Main{
 	public static JobParameters polishJob = new JobParameters(20, 0, 20, 5, 2, 1, 0, 0, 1, 2, 1, 1);
 	public static RaceParameters russianRace = new RaceParameters(Constants.ORTHODOX, Constants.SLAV);
 	public static JobParameters russianJob = new JobParameters(40, 0, 10, 10, 5, 1, 0, 0, 1, 2, 3, 1);
+
+	public static JobParameters craftsmanJob = new JobParameters(0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0);
 
 	//public State nullState = new State(null, null);
 	
@@ -139,10 +145,23 @@ public class Main{
 		westpoland.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, westpoland));
 		State warsawa = new State("warsawa", poland, polishRace, polishJob, 100000);
 		warsawa.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, warsawa));
+
+		new Factory(berlin, FactoryRecipe.machineParts(), 1, null);
+		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
+		new Factory(berlin, FactoryRecipe.cement(), 1, null);
+		berlin.addPop(PopParameters.createPops(2000, germanRace, craftsmanJob, berlin));
+		new Factory(finland1, FactoryRecipe.paper(), 1, null);
+		finland1.addPop(PopParameters.createPops(2000, finnicRace, craftsmanJob, finland1));
+		new Factory(selicia, FactoryRecipe.steel(), 1, null);
+		selicia.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, selicia));
+		new Factory(sweden1, FactoryRecipe.steel(), 1, null);
+		sweden1.addPop(PopParameters.createPops(2000, nordicRace, craftsmanJob, sweden1));
+		new Factory(warsawa, FactoryRecipe.clothing(), 1, null);
+		warsawa.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, warsawa));
 		State krakow = new State("krakow", poland, polishRace, polishJob, 100000);
-		krakow.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, krakow));
+		krakow.addPop(PopParameters.createPops(2000, jewishRace, jewishJob, krakow));
 		State eastpoland = new State("east poland", poland, polishRace, polishJob, 10000);
-		eastpoland.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, eastpoland));
+		eastpoland.addPop(PopParameters.createPops(2000, jewishRace, jewishJob, eastpoland));
 
 
 		State stpetersburg = new State("st. petersburg", russia, russianRace, russianJob, 10000);
@@ -156,7 +175,7 @@ public class Main{
 		State moskova = new State("moskova", russia, russianRace, russianJob, 10000);
 		moskova.addPop(PopParameters.createPops(1000, jewishRace, jewishJob, moskova));
 		State volgograd = new State("volgograd", russia, russianRace, russianJob, 10000);
-		State siberia = new State("volgograd", russia, russianRace, russianJob, 10000);
+		State siberia = new State("siberia", russia, russianRace, russianJob, 10000);
 		siberia.addPop(PopParameters.createPops(5000, finnicRace, finnicJob, siberia));
 		State ukraine = new State("ukraine", russia, russianRace, russianJob, 10000);
 		State belarus = new State("belarus", russia, russianRace, russianJob, 10000);
@@ -295,6 +314,11 @@ public class Main{
 			}
 			try{
 				popGuiController.setTickUpdate(true);
+			}catch (NullPointerException e){
+
+			}
+			try{
+				marketGuiController.setTickUpdate(true);
 			}catch (NullPointerException e){
 
 			}

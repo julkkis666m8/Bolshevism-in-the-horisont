@@ -1,0 +1,88 @@
+we need to make buildings for my game.
+
+buildings are state level objects, such as 
+factories (which follow a fixed recepie, employ craftsmen, are payed, operated and owned by capitalists, meaning they get all profit, after wagess and input goods and maintenance are payed.) 
+maintenance for factories is steel and cement (create the good, and recepie (just coal)), and machine parts, which is a recepie only created in a machine parts factory (not artisanaly). 
+the machine parts factory does not require machine parts for maintenance, but steel, animals (for the lubricant) and some wood. 
+we will add one machine parts factory in the state of berlin, one paper mill in the state of finland1. one steel mill in Silesia and Sweden, and one clothing factory in Warsawa. 
+the recepies will be similar to the ones the artesans use, but per worker, they will be 5 - 20 times more efficient due to having macines. 
+factories have an operative capacity that is capped at 1000 workers per factory level. 
+the productivity result is affected by the maintenance level on the factory. 
+if the machines break down, the factory will not be able to give the same "machinery multiplier". 
+it is reduced by the percentage of the maintenance level. 
+a factory, just like people, consume the goods needed for their maintance (concreet, steel and machinery). 
+the healthbar reduces by 0.25% for now (a constant) each tick if they don't get all the goods. 
+there is a seperate health bar for each maintanance good. the maintenance health affects how much the machinery multiplier affects the throughput.
+if mainenance healthbars are not at 100% as a result of missing maintenance goods the last tick, it can compensate lost maintenance by increasing maintenance by up to 2x that tick. everything over 1x is counted to healing the health bar multiplied by the healthbar reduction constant.
+concrete and steel healthbars affect the maximum worker cap.
+
+there are 3 important modifiers: thorughput, input and output. these will be affected by technology, factory modernization and the like, but we will ignore those for now (add a todo).
+input affects how much input goods are needed (modifies the input goods list values multiplicative)
+throughput affects how much can get done per worker
+output affects how much the output goods are affected same as the inputgoods.
+
+the factory produces the goods, and the factory lists the goods on the market. the sale of these goods gives the profit after expenses, and the capitalist that owns the factory (a specific pop in the state owns it, or the nation itself) gets all the profit after expenses are covered.
+the factory has a money pool forbuying the neccesary goods, aka input goods and maintenance goods. it tries it's best first to buy the maintenance goods, but if none are in market, it just buys input goods
+the money pool is capped by the estimated cost of the input and maintenance goods and wages.
+if the factory gets input goods, it can operate, if it has workers. for now, workers always work at the factory that has the highest wage value.
+factory wage value is calculated much like supply and demand of goods, with the productivity and the worker defecit playing the biggest role in the wage. ofcourse profitability takes a hit when wages are increased, meaning htere is an equalibrium.
+
+other building types will be infrastructure, such as railways, roads, ports, byrocracy, etc, but those are meant for a later date.
+
+
+cement: cement is created by for now by just usage of coal. input coal: 1 -> output 0.25 cement. this recepie shoul be aviable as a factory and artesan job. cement factories in additon to having a better throughput (10x) also are 20% more efficient on the output modifier.
+steel factories: same as steel artesans, but more efficient in output by 50% and throughput 50x, but input for coal is slightly smaller (10%) (due to square cube law)
+paper mill: 25x more throughput than artesan paper makers.
+machine parts factory: for 5 steel, 10 coal (heating, if we had electricity, or a power mechanism, we could replace it here), 3 animals, we output 1 machine part. througput of this should be enough to satisfy 10 factories per level. the cannonical name is "machine parts"
+furnuature factory: lumber: 10, iron: 2 output: 9 furnuature. 10x more throughput than artesans.
+
+factories do not hire, they only adjust the recepies. craftsmen in turn choose their job just like farmers, artesans, etc. craftsmen have the state's factories listed as possible work places in addition to being unemployed. they choose which ever is the most profitable decision for themselves.
+to keep it simpler, factories buy input goods when all pops have chosen their job, to know how many workers work the factory. just like with other work, the factory puts the goods for sale on the same step it produces it. 
+
+we will look at factory building later, but in theory, it should require a capitalist, or state to start a building project, which has initial capital to buy 50% of the goods for the project, but will require further re-investment according to how the goods prices change and if the investment was enough. the invesmtnet will come from the owner pop.
+
+
+for now we need to also clone the market/pop gui to show the factories. if possible, it would be nice if we were to combine the guis, so that all information is shown in one window, as they all have essentually the same herarchy. there should be an additional button to select the market, factory list or pops.
+
+craftsment will need to be able to fractionally (a fraction of a pop, not fractional people) choose their workplace, as a crafstsmen pop will not always be 1k or less. some might be unemployed, some might work one factory or an other.
+
+factories have macinery, machinery has health. machinery efficiency (througput multiplier) will be multiplied by the machinery health to give the throughput multiplier.
+throughput multiplier is multiplied by amount of workers, which then gives the multiplier for the input and output goods (after the input and output modifiers have been applied).
+after these are calculated, the factory then buys the goods it needs, if it can buy 100% of the goods, it will produce at max throughput, but if it can only buy say 50% of the iron and 100% of the coal, it will only buy 50% of the coal and produce at 50% efficiency. a factory is not a magician.
+
+maintenance costs are a fixed cost. if a factory is too large and doesn't have enough workers, the factory sitll decays at the same rate.
+maintenance can not be over 100%, unless the factory's level is above level 1. if the owner pop has the capital, the factory is performing well, and it is at worker cap, a decision to expand the factory can be made.
+the decicion to expand the facory depends on if the pop is a capitalist. if it's a capitalist, then start the expansion project (same way as building a new factory would work), the expansion project happens inside the factory object itself. the factory takes money from the owner to finance the purchase of neccesary expansion goods. expansion works with a 0.25% per tick speed. if expansion goods are satisfied (can be collected over multiple ticks for slower progress, collecting at max the goods for 2-5 ticks of progress), the factory expansion ticker grows by 0.25%. when it reaches 100%, the factory has expanded, and can employ an other level worth of employees (1k more). the maintenance health bars will also get additioned by the expansion progress amount, and the level increasing means the maintenance percentage is now also 200% (assuming level 1 -> level 2.)
+if the owner is an ordinary pop (not capitalist), the decision requires that the pop has reached at least 50% in all categories of needs wants and luxuries.
+if the factory has more than 100 ticks of production unsold, it will not expand.
+
+
+factory owns the listings, the profit eventually reaches the owner pop. the listings are up untill someone buys them.
+
+if abstractJobDoer.java has output, throughput and input efficiency modifiers, these will be overwritten by the factories themselves.
+
+write tests to test each feature.
+
+machine parts health affects only throughput modifier
+concrete/steel healthbar should be combined, so there are only two healthbars (machine parts and structural). this affects the worker capacity of the building. if it "starts collapsing", the factory can not house as many workers. this number should be rounded up. i think the effect should be linear. WORKERS_PER_FACTORY_LEVEL * factory.level * factory.structuralHealth <-- for how many workers are allowed to work. this capacity is relevant for workers choosing to work during their work selection stage.
+factory production will get limited to the "lowest input good supply" each tick.
+maintenance is bought before input goods, just like needs are bought before wants for pops, but maintenance will be affected after production is done and maintenance goods are not applied. make it possible in the code to change a parameter (Constants.java) to change if factory througput affects the mahcinery health (when not supplied with all maintenance goods) and the same for worker capacity and structural health.
+
+wage floor is nation mandated, defaulted at 0.01. it is a variable in the nation the state and factory are a part of.
+
+workers value factories owned by pops more similar to themselves. same pop type: 25% modifier, same "race": 10%, same religion: 10%. these are modifiers to "percieved value" when comparing factories to work at. if the worker is a part of the nation's main "race", it will value negatively "hated race" owned factories by 25%.
+
+factories work the same way as sellers as pops do. use a java interface if class types become an issue for "Seller" or something. same for "Buyer", if that's neccesary.
+
+factories have to pay capital gains tax to the state. this is defined in the nation, and defaults to 1%. capital gains happen before the owner is payed, but after the net income is calculated (After maintenance, input goods and wages).
+
+max factory level for now is 999.
+
+factory maintenance cap can excede 100% after the factory is above level 1. in fact, the cap is equal to the factory level.
+
+factory upgrade related healthbar rises only happen once the factory upgrade is 100% done. 
+
+if owner pop becomes extinct, for now, the largest working pop in the factory at that time become the owning pop. in the future, an auction feature should be implemented (TODO).
+
+if the owner looses required needs treshold during expansion, it will not put money into the project. the money is put forward after needs are payed if the pop is not a capitalist. if it is a capitalist, it is done before. the money is added to an expansion pool on the factory object, which then is used to buy the goods needed for expansion.
+

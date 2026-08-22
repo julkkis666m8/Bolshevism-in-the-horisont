@@ -37,6 +37,31 @@
                     <TableColumn fx:id="colLPrice" text="Unit Price" prefWidth="120.0" />
                 </columns>
             </TableView>
+
+            <Label text="Factories" />
+            <TableView fx:id="factoriesTable" prefHeight="300.0">
+                <columns>
+                    <TableColumn fx:id="colFactoryState" text="State" prefWidth="110.0" />
+                    <TableColumn fx:id="colFactoryName" text="Factory" prefWidth="150.0" />
+                    <TableColumn fx:id="colFactoryRecipe" text="Recipe" prefWidth="130.0" />
+                    <TableColumn fx:id="colFactoryLevel" text="Level" prefWidth="65.0" />
+                    <TableColumn fx:id="colFactoryOwner" text="Owner" prefWidth="180.0" />
+                    <TableColumn fx:id="colFactoryWorkers" text="Workers" prefWidth="90.0" />
+                    <TableColumn fx:id="colFactoryHiringCap" text="Hiring Cap" prefWidth="90.0" />
+                    <TableColumn fx:id="colFactoryWorkerMap" text="Worker Allocation" prefWidth="280.0" />
+                    <TableColumn fx:id="colFactoryCapacity" text="Capacity" prefWidth="90.0" />
+                    <TableColumn fx:id="colFactoryWage" text="Wage" prefWidth="80.0" />
+                    <TableColumn fx:id="colFactoryMoney" text="Money Pool" prefWidth="100.0" />
+                    <TableColumn fx:id="colFactoryRevenue" text="Revenue" prefWidth="90.0" />
+                    <TableColumn fx:id="colFactoryExpenses" text="Expenses" prefWidth="90.0" />
+                    <TableColumn fx:id="colFactoryInputInventory" text="Input Stock" prefWidth="180.0" />
+                    <TableColumn fx:id="colFactoryInventory" text="Maintenance Stock" prefWidth="180.0" />
+                    <TableColumn fx:id="colFactoryProduced" text="Produced Last Tick" prefWidth="180.0" />
+                    <TableColumn fx:id="colFactoryMissingInputs" text="Missing Inputs" prefWidth="180.0" />
+                    <TableColumn fx:id="colFactoryHealth" text="Health" prefWidth="330.0" />
+                    <TableColumn fx:id="colFactoryExpansion" text="Expansion" prefWidth="100.0" />
+                </columns>
+            </TableView>
         </VBox>
     </center>
 </BorderPane>

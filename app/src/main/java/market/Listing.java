@@ -4,6 +4,7 @@ import goods.AbstractGood;
 import world.Pop;
 import world.State;
 import constants.Constants;
+import factories.Factory;
 
 /**
  * Listing is a market-held representation of a seller's offer.
@@ -14,6 +15,7 @@ import constants.Constants;
 public class Listing extends AbstractGood {
 
     private Pop seller;
+    private Factory factorySeller;
     private AbstractMarket ownerMarket;
     private Listing supplierListing;
     private double supplierUnitPrice;
@@ -36,6 +38,18 @@ public class Listing extends AbstractGood {
         }
     }
 
+    public Listing(double amount, State originState, Factory seller, AbstractMarket ownerMarket, AbstractGood prototype) {
+        super(amount, originState);
+        this.factorySeller = seller;
+        this.ownerMarket = ownerMarket;
+        this.constant = prototype.getConstant();
+        this.goodName = prototype.getName();
+        this.baseValue = prototype.baseValue;
+        this.MAX_PRICE = prototype.MAX_PRICE;
+        this.MIN_PRICE = prototype.MIN_PRICE;
+        setCurrentPrice(prototype.getCurrentPrice());
+    }
+
     public Listing(double amount, State originState, Pop seller, AbstractMarket ownerMarket,
                    AbstractGood prototype, Listing supplierListing, double supplierUnitPrice) {
         this(amount, originState, seller, ownerMarket, prototype, supplierListing, supplierUnitPrice, false);
@@ -54,8 +68,13 @@ public class Listing extends AbstractGood {
         return seller;
     }
 
+    public Object getSellerObject() {
+        return factorySeller == null ? seller : factorySeller;
+    }
+
     public String getSaleType() {
         if (supplierListing != null) return "Dropship chain (" + getDropshipChainLength() + " hops)";
+        if (factorySeller != null) return "Factory-owned";
         if (seller != null && seller.job == Constants.MERCHANT) return "Merchant-owned";
         if (seller != null) return "Original creator";
         return "Unknown";
@@ -109,6 +128,16 @@ public class Listing extends AbstractGood {
         double paid = quantity * getCurrentPrice();
         double actualPayment = buyer.pay(paid);
         if (actualPayment <= 0) return 0;
+        removeAmount(quantity);
+        return quantity;
+    }
+
+    public synchronized double purchase(double requestedAmount, Factory buyer, double availableMoney) {
+        if (buyer == null || requestedAmount <= 0 || availableMoney <= 0 || getAmount() <= 0) return 0;
+        double quantity = Math.min(Math.min(requestedAmount, getAmount()), availableMoney / getCurrentPrice());
+        if (quantity <= 0) return 0;
+        double paid = quantity * getCurrentPrice();
+        buyer.pay(paid);
         removeAmount(quantity);
         return quantity;
     }
@@ -201,6 +230,7 @@ public class Listing extends AbstractGood {
                 seller.giveCash(toSeller);
                 seller.recordSale(this, amount, getCurrentPrice());
             }
+            if (factorySeller != null) factorySeller.receiveSale(toSeller);
         } catch (Exception e) {
             // best-effort, ensure seller still gets paid if possible
             if (seller != null) seller.giveCash(money);

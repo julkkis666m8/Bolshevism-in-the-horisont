@@ -194,6 +194,8 @@ public class Pop {
 		goods.add(new Paper(1, null));
 		goods.add(new Animal(1, null));
 		goods.add(new Coal(1, null));
+		goods.add(new Cement(1, null));
+		goods.add(new MachineParts(1, null));
 	}
 
 	/**
@@ -910,6 +912,9 @@ public class Pop {
 			for (AbstractGood good : goods) {
 				if (newGood.compare(good)) {
 					good.addAmount(newGood.getAmount());
+					if (good.getOriginState() == null && newGood.getOriginState() != null) {
+						good.originState = newGood.getOriginState();
+					}
 					has = true;
 					break;
 				}

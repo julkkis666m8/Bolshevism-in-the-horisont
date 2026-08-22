@@ -47,6 +47,7 @@ public class Controller {
 		artesanJobs.add(new ArtesanFurnature());
 		artesanJobs.add(new ArtesanClothing());
 		artesanJobs.add(new ArtesanPaper());
+		artesanJobs.add(new ArtesanCement());
 		
 	}
 	
@@ -213,7 +214,10 @@ public class Controller {
 
 		long temp = System.nanoTime();
 		
+		FactoryManager.prepareEmployment(state);
 		singlethreadTickPops(nation, state, pops);
+		FactoryManager.produce(state);
+		FactoryManager.tick(state);
 		
 		System.out.println("\nSTATE OF"+nation.toString()+": "+(((long) System.nanoTime() - temp)/1000000) +"ms\n");
 

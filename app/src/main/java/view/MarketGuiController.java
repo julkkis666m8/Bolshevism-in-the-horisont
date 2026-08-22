@@ -2,6 +2,7 @@ package view;
 
 import constants.Constants;
 import constants.Functions;
+import factories.Factory;
 import goods.AbstractGood;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeItem;
 import main.Main;
@@ -22,7 +25,6 @@ import java.net.URL;
 import java.util.*;
 
 public class MarketGuiController implements Initializable {
-
     @FXML private TreeView<Object> worldMarketTree;
 
     @FXML private TableView<Map<String, Object>> goodsTable;
@@ -43,14 +45,72 @@ public class MarketGuiController implements Initializable {
     @FXML private TableColumn<Map<String, Object>, Number> colLAmount;
     @FXML private TableColumn<Map<String, Object>, String> colLPrice;
 
+    @FXML private TableView<Map<String, Object>> factoriesTable;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryState;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryName;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryRecipe;
+    @FXML private TableColumn<Map<String, Object>, Number> colFactoryLevel;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryOwner;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryWorkers;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryHiringCap;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryWorkerMap;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryCapacity;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryWage;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryMoney;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryRevenue;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryExpenses;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryInputInventory;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryInventory;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryProduced;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryMissingInputs;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryHealth;
+    @FXML private TableColumn<Map<String, Object>, String> colFactoryExpansion;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Main.marketGuiController = this;
         buildTree();
         setupColumns();
+        setupFactoryColumns();
 
         worldMarketTree.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
             onTreeSelectionChanged((TreeItem<?>) n);
         });
+        tickUpdate();
+    }
+
+    private volatile boolean tickRequested;
+
+    public synchronized void setTickUpdate(boolean update) {
+        tickRequested = update;
+    }
+
+    private void tickUpdate() {
+        Task<Void> updateTask = new Task<>() {
+            @Override
+            protected Void call() {
+                while (!isCancelled()) {
+                    if (tickRequested) {
+                        setTickUpdate(false);
+                        Platform.runLater(() -> {
+                            TreeItem<?> selected = worldMarketTree.getSelectionModel().getSelectedItem();
+                            if (selected == null) selected = worldMarketTree.getRoot();
+                            onTreeSelectionChanged(selected);
+                        });
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException exception) {
+                        cancel();
+                        break;
+                    }
+                }
+                return null;
+            }
+        };
+        Thread updater = new Thread(updateTask, "MarketGuiTickUpdater");
+        updater.setDaemon(true);
+        updater.start();
     }
 
     private void buildTree() {
@@ -61,6 +121,9 @@ public class MarketGuiController implements Initializable {
             for (State state : nation.getStates()) {
                 TreeItem<Object> stateItem = new TreeItem<>(state);
                 nationItem.getChildren().add(stateItem);
+                for (Factory factory : state.getFactories()) {
+                    stateItem.getChildren().add(new TreeItem<>(factory));
+                }
             }
             root.getChildren().add(nationItem);
         }
@@ -95,6 +158,13 @@ public class MarketGuiController implements Initializable {
             states.addAll(((Nation) ud).getStates());
         } else if (ud instanceof State) {
             states.add((State) ud);
+        } else if (ud instanceof Factory) {
+            Factory factory = (Factory) ud;
+            State state = factory.getState();
+            populateGoodsTable(state);
+            populateListingsTable(state);
+            populateFactoryTable(state, Collections.singletonList(factory));
+            return;
         } else {
             states.addAll(Main.world.getAllStates());
         }
@@ -104,8 +174,8 @@ public class MarketGuiController implements Initializable {
         State state = states.get(0);
         populateGoodsTable(state);
         populateListingsTable(state);
+        populateFactoryTable(state, state.getFactories());
     }
-
     private void populateGoodsTable(State state) {
         AbstractMarket market = state.localMarket;
         List<Map<String, Object>> rows = new ArrayList<>();
@@ -164,7 +234,7 @@ public class MarketGuiController implements Initializable {
                     row.put("saleType", l.getSaleType());
                     row.put("chainLength", l.getDropshipChainLength());
                     row.put("route", l.getDropshipRoute());
-                    Pop seller = l.getSeller();
+                    Object seller = l.getSellerObject();
                     row.put("seller", seller == null ? "(unknown)" : seller.toString());
                     row.put("amount", (int) Math.round(l.getAmount()));
                     double unit = l.getValue(1);
@@ -176,5 +246,68 @@ public class MarketGuiController implements Initializable {
 
         ObservableList<Map<String, Object>> items = FXCollections.observableArrayList(rows);
         listingsTable.setItems(items);
+    }
+    private void setupFactoryColumns() {
+        colFactoryState.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("state")));
+        colFactoryName.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("name")));
+        colFactoryRecipe.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("recipe")));
+        colFactoryLevel.setCellValueFactory(c -> new SimpleIntegerProperty(((Number) c.getValue().get("level")).intValue()));
+        colFactoryOwner.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("owner")));
+        colFactoryWorkers.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("workers")));
+        colFactoryHiringCap.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("hiringCap")));
+        colFactoryWorkerMap.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("workerMap")));
+        colFactoryCapacity.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("capacity")));
+        colFactoryWage.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("wage")));
+        colFactoryMoney.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("money")));
+        colFactoryRevenue.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("revenue")));
+        colFactoryExpenses.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("expenses")));
+        colFactoryInputInventory.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("inputInventory")));
+        colFactoryInventory.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("inventory")));
+        colFactoryProduced.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("produced")));
+        colFactoryMissingInputs.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("missingInputs")));
+        colFactoryHealth.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("health")));
+        colFactoryExpansion.setCellValueFactory(c -> new SimpleStringProperty((String) c.getValue().get("expansion")));
+    }
+
+    private void populateFactoryTable(State state, List<Factory> factories) {
+        List<Map<String, Object>> rows = new ArrayList<>();
+        for (Factory factory : factories) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("state", factory.getState().name);
+            row.put("name", factory.getName());
+            row.put("recipe", factory.getRecipe().name());
+            row.put("level", factory.getLevel());
+            row.put("owner", factory.getOwner() == null ? "State" : factory.getOwner().toString());
+            row.put("workers", Functions.formatNum(factory.getWorkerCount()));
+            row.put("hiringCap", Functions.formatNum(factory.getHiringCap()));
+                row.put("workerMap", factory.getWorkers().entrySet().stream()
+                    .map(entry -> entry.getKey() + "=" + Functions.formatNum(entry.getValue()))
+                    .collect(java.util.stream.Collectors.joining(", ")));
+            row.put("capacity", Functions.formatNum(factory.getWorkerCapacity()));
+            row.put("wage", Functions.formatNum(factory.getWageValue()));
+            row.put("money", Functions.formatNum(factory.getMoneyPool()));
+            row.put("revenue", Functions.formatNum(factory.getSalesRevenue()));
+            row.put("expenses", Functions.formatNum(factory.getOperatingExpenses()));
+                    row.put("inputInventory", factory.getInputInventory().entrySet().stream()
+                        .map(entry -> Constants.GoodToString(entry.getKey()) + "=" + Functions.formatNum(entry.getValue()))
+                        .collect(java.util.stream.Collectors.joining(", ")));
+                    row.put("inventory", factory.getMaintenanceInventory().entrySet().stream()
+                    .map(entry -> Constants.GoodToString(entry.getKey()) + "=" + Functions.formatNum(entry.getValue()))
+                    .collect(java.util.stream.Collectors.joining(", ")));
+                    row.put("produced", factory.getLastProduced().entrySet().stream()
+                        .map(entry -> Constants.GoodToString(entry.getKey()) + "=" + Functions.formatNum(entry.getValue()))
+                        .collect(java.util.stream.Collectors.joining(", ")));
+                    row.put("missingInputs", factory.getMissingInputs().entrySet().stream()
+                        .map(entry -> Constants.GoodToString(entry.getKey()) + "=" + Functions.formatNum(entry.getValue()))
+                        .collect(java.util.stream.Collectors.joining(", ")));
+            row.put("health", "cement " + Functions.formatNum(factory.getCementHealth())
+                    + ", steel " + Functions.formatNum(factory.getSteelHealth())
+                    + ", machinery " + Functions.formatNum(factory.getMachineryHealth()));
+            row.put("expansion", factory.isExpanding()
+                    ? Functions.formatNum(factory.getExpansionProgress() * 100) + "%"
+                    : "inactive");
+            rows.add(row);
+        }
+        factoriesTable.setItems(FXCollections.observableArrayList(rows));
     }
 }

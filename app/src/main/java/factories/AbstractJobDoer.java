@@ -28,7 +28,7 @@ public class AbstractJobDoer {
 
 			double amount = population * job.inAmounts[i];
 			amountNeeded += amount;
-			List<AbstractGood> buyGoods = state.localMarket.getGood(constants.Constants.IRON, job.inAmounts[i]);
+			List<AbstractGood> buyGoods = state.localMarket.getGood(job.inGoodsConst[i], amount);
 
 			for(AbstractGood good : buyGoods) {
 				

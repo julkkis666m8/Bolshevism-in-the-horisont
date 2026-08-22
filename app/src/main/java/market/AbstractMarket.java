@@ -34,7 +34,7 @@ public class AbstractMarket {
 		synchronized(listings) {
 			// try to merge with an existing listing from the same seller for the same good
 			for (Listing l : listings) {
-				if (l.getSeller() == listing.getSeller() && l.getConstant() == listing.getConstant()) {
+				if (l.getSellerObject() == listing.getSellerObject() && l.getConstant() == listing.getConstant()) {
 					l.addAmount(listing.getAmount());
 					// only account the delta
 					adjustMarketSupply(listing.getConstant(), listing.getAmount());
@@ -70,6 +70,8 @@ public class AbstractMarket {
 		stockPile.add(new Paper(0, null));
 		stockPile.add(new Animal(0, null));
 		stockPile.add(new Coal(0, null));
+		stockPile.add(new Cement(0, null));
+		stockPile.add(new MachineParts(0, null));
 	}
 	
 
@@ -239,6 +241,16 @@ public class AbstractMarket {
 		return totalAmount;
 	}
 
+	public double goodTotalListedAmount(int goodConst) {
+		double totalAmount = 0;
+		synchronized (listings) {
+			for (Listing listing : listings) {
+				if (listing.getConstant() == goodConst) totalAmount += listing.getAmount();
+			}
+		}
+		return totalAmount;
+	}
+
 	public double listedAmount(int goodConst, world.Pop seller) {
 		double amount = 0;
 		synchronized (listings) {
@@ -280,6 +292,7 @@ public class AbstractMarket {
 	public List<AbstractGood> getGood(int goodConst, double amount) {
 		List<AbstractGood> goods = new ArrayList<>();
 		double stillNeeded = amount;
+		marketDemand(goodConst, amount);
 
 		// The market connects buyers to posted seller listings. Its own
 		// stockpile is not an autonomous seller.
@@ -293,7 +306,6 @@ public class AbstractMarket {
 			}
 		}
 
-		marketDemand(goodConst, amount);
 		return goods;
 	}
 	
