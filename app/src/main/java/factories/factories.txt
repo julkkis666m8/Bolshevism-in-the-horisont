@@ -86,3 +86,9 @@ if owner pop becomes extinct, for now, the largest working pop in the factory at
 
 if the owner looses required needs treshold during expansion, it will not put money into the project. the money is put forward after needs are payed if the pop is not a capitalist. if it is a capitalist, it is done before. the money is added to an expansion pool on the factory object, which then is used to buy the goods needed for expansion.
 
+
+
+
+--------TODO:
+
+Factories are currently producing, but there is no force moving machine parts out of berlin. this is bad, because it means that spread of goods is not happening, propably because merchants have no mechanism currently in place to make them want to buy or dropship machineparts from berlin even though their price is 0.01€, when neigbouring places have null price. should be relatively easy fix.

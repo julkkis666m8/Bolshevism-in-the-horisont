@@ -154,7 +154,7 @@ public class Main{
 		finland1.addPop(PopParameters.createPops(2000, finnicRace, craftsmanJob, finland1));
 		new Factory(selicia, FactoryRecipe.steel(), 1, null);
 		selicia.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, selicia));
-		new Factory(sweden1, FactoryRecipe.steel(), 1, null);
+		new Factory(sweden1, FactoryRecipe.furniture(), 1, null);
 		sweden1.addPop(PopParameters.createPops(2000, nordicRace, craftsmanJob, sweden1));
 		new Factory(warsawa, FactoryRecipe.clothing(), 1, null);
 		warsawa.addPop(PopParameters.createPops(2000, polishRace, craftsmanJob, warsawa));

@@ -293,6 +293,7 @@ public class Factory {
     }
 
     private boolean recipeIsProfitable() {
+        return true;/*
         double inputCost = 0;
         double throughput = recipe.throughput() * machineryHealth;
         for (int i = 0; i < recipe.inputGoods().length; i++) {
@@ -309,7 +310,7 @@ public class Factory {
                 : state.localMarket.getGoodMinPrice(recipe.outputGoods()[i], 1);
             outputRevenue += throughput * recipe.outputAmounts()[i] * recipe.outputModifier() * outputPrice;
         }
-        return outputRevenue > inputCost + getWageValue();
+        return outputRevenue > inputCost + getWageValue();*/
     }
     private double buy(int constant, double amount) {
         double bought = 0;

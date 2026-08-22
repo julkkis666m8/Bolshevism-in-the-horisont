@@ -28,7 +28,7 @@ public record FactoryRecipe(String name, double[] inputAmounts, int[] inputGoods
                 new int[]{Constants.FURNUATURE}, 1.0, 1, 1);
     }
     public static FactoryRecipe machineParts() {
-        return new FactoryRecipe("machine parts", new double[]{5, 10, 3},
+        return new FactoryRecipe("machine parts", new double[]{5, 5, 3},
                 new int[]{Constants.STEEL, Constants.COAL, Constants.ANIMAL},
                 new double[]{1}, new int[]{Constants.MACHINE_PARTS}, 1.0, 1, 1);
     }
